@@ -5,7 +5,7 @@ EAPI=6
 
 FORTRAN_NEEDED=fortran
 
-inherit cmake-utils fortran-2 toolchain-funcs flag-o-matic
+inherit fortran-2 toolchain-funcs flag-o-matic
 
 DESCRIPTION="Parallel matrix preconditioners library"
 HOMEPAGE="

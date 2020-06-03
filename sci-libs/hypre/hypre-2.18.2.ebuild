@@ -19,13 +19,13 @@ SLOT="0/${PV}"
 KEYWORDS="amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="debug examples fortran int64 openmp mpi"
 
+BDEPEND="virtual/pkgconfig"
 RDEPEND="
 	sci-libs/superlu:=
 	virtual/blas
 	virtual/lapack
 	mpi? ( virtual/mpi )"
-DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+DEPEND="${RDEPEND}"
 
 DOCS=( CHANGELOG COPYRIGHT README )
 

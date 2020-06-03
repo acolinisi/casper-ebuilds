@@ -9,8 +9,11 @@ FORTRAN_STANDARD=90
 inherit autotools fortran-2
 
 DESCRIPTION="Arbitrary precision float arithmetics and functions"
-HOMEPAGE="https://crd-legacy.lbl.gov/~dhbailey/mpdist/"
-SRC_URI="https://crd.lbl.gov/~dhbailey/mpdist/${P}.tar.gz"
+HOMEPAGE="
+	https://www.davidhbailey.com/dhbsoftware/
+	https://crd-legacy.lbl.gov/~dhbailey/mpdist/
+"
+SRC_URI="https://www.davidhbailey.com/dhbsoftware/${P}.tar.gz"
 
 SLOT="0"
 LICENSE="BSD"

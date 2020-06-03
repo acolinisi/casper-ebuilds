@@ -63,6 +63,11 @@ src_prepare() {
 		-e "s:^\s*\(SCOTCH_LIB\s*?=.*\)lib:\1$(get_libdir):" \
 		config/LINUX-GNU.in > config.in || die
 	sed -e 's/__SO_NAME__,$@/__SO_NAME__,$(notdir $@)/g' -i Makefile || die
+	# MPI-3 API changes
+	find sopalin -type f -execdir \
+		sed -i -e 's/MPI_Address/MPI_Get_address/g' \
+			-e 's/MPI_Type_struct/MPI_Type_create_struct/g' \
+			{} \;
 }
 
 src_configure() {

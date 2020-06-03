@@ -1,10 +1,10 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 FORTRAN_NEEDED="test"
-inherit cmake-utils cuda fortran-2
+inherit cmake cuda fortran-2
 
 DESCRIPTION="C++ template library for linear algebra"
 HOMEPAGE="http://eigen.tuxfamily.org/"
@@ -54,7 +54,7 @@ src_unpack() {
 }
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	sed -e 's:-g2::g' \
 		-i cmake/EigenConfigureTesting.cmake || die
@@ -76,9 +76,13 @@ src_prepare() {
 	use cuda && cuda_src_prepare
 }
 
+src_configure() {
+	cmake_src_configure
+}
+
 src_compile() {
-	cmake-utils_src_compile
-	use doc && cmake-utils_src_compile doc
+	cmake_src_compile
+	use doc && cmake_src_compile doc
 }
 
 src_test() {
@@ -90,15 +94,15 @@ src_test() {
 		-DEIGEN_TEST_OPENMP="$(usex openmp)"
 		-DEIGEN_TEST_NEON64="$(usex cpu_flags_arm_neon)"
 	)
-	cmake-utils_src_configure
-	cmake-utils_src_compile blas
-	cmake-utils_src_compile buildtests
-	cmake-utils_src_test
+	cmake_src_configure
+	cmake_src_compile blas
+	cmake_src_compile buildtests
+	cmake_src_test
 }
 
 src_install() {
 	use doc && local HTML_DOCS=( "${BUILD_DIR}"/doc/html/. )
-	cmake-utils_src_install
+	cmake_src_install
 
 	# Debian installs it and some projects started using it.
 	insinto /usr/share/cmake/Modules/

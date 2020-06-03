@@ -1,0 +1,34 @@
+--- a/config/BuildSystem/config/package.py	2020-04-25 00:36:05.572408269 -0000
++++ b/config/BuildSystem/config/package.py	2020-04-25 00:35:53.931049027 -0000
+@@ -470,10 +470,27 @@
+         else: path = None
+         os.environ['PKG_CONFIG_PATH'] = self.argDB['with-'+self.package+'-pkg-config']
+ 
+-      l,err,ret  = config.base.Configure.executeShellCommand('pkg-config '+self.pkgname+' --libs', timeout=60, log = self.log)
+-      l = l.strip()
+-      i,err,ret  = config.base.Configure.executeShellCommand('pkg-config '+self.pkgname+' --cflags', timeout=60, log = self.log)
+-      i = i.strip()
++      def runPkgConfig(pkgname, *args):
++        def check(cmd, status, output, error):
++          if status:
++            self.log.write('"' + ' '.join(cmd) + '" failed with rc '+ str(status) + \
++                ', stdout: ' + output + ', stderr: ' + error + '\n')
++            raise RuntimeError("pkg-config failed")
++        cmd = 'pkg-config '+ pkgname + ' ' + ' '.join(args)
++        r, err, ret = config.base.Configure.executeShellCommand(cmd, \
++            checkCommand=check, timeout=60, log=self.log)
++        return r.strip()
++      def resolvePkgConfig(pkgname):
++        return runPkgConfig(pkgname, '--libs'), runPkgConfig(pkgname, '--cflags')
++
++      try:
++        l, i = resolvePkgConfig(self.pkgname)
++      except RuntimeError:
++        try:
++          l, i = resolvePkgConfig(self.package) # try lowercase
++        except RuntimeError:
++          l, i = '', ''
++
+       if self.argDB['with-'+self.package+'-pkg-config']:
+         if path: os.environ['PKG_CONFIG_PATH'] = path
+         else: os.environ['PKG_CONFIG_PATH'] = ''

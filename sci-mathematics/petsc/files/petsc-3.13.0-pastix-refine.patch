@@ -1,0 +1,24 @@
+--- a/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-08 00:38:36.284984341 -0000
++++ b/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-08 00:41:14.041852694 -0000
+@@ -302,7 +302,7 @@
+   /* solve phase */
+   /*-------------*/
+   lu->iparm[IPARM_START_TASK] = API_TASK_SOLVE;
+-  lu->iparm[IPARM_END_TASK]   = API_TASK_REFINE;
++  lu->iparm[IPARM_END_TASK]   = lu->iparm[IPARM_REFINEMENT] >= 0 ? API_TASK_REFINE : API_TASK_SOLVE;
+ #if PASTIX_VERSION_MAJOR <= 5
+   /* In v6 this field index is -1: b is always taken from argument */
+   lu->iparm[IPARM_RHS_MAKING] = API_RHS_B;
+--- a/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-08 01:38:06.523169249 -0000
++++ b/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-08 01:39:25.666613006 -0000
+@@ -429,8 +429,8 @@
+     }
+ 
+     icntl=-1;
+-    ierr = PetscOptionsInt("-mat_pastix_refinement","iparm[IPARM_REFINEMENT] : Refinement mode","None",lu->iparm[IPARM_REFINEMENT],&icntl,&flg);CHKERRQ(ierr);
+-    if ((flg && icntl > 0)) {
++    ierr = PetscOptionsInt("-mat_pastix_refinement","iparm[IPARM_REFINEMENT] : Refinement mode (-1 for no refinement)","None",lu->iparm[IPARM_REFINEMENT],&icntl,&flg);CHKERRQ(ierr);
++    if (flg) {
+       lu->iparm[IPARM_REFINEMENT] = icntl;
+     }
+     icntl=-1;

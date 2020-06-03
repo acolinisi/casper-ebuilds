@@ -1,0 +1,14 @@
+--- a/config/BuildSystem/config/packages/MPI.py	2020-04-03 21:37:57.095933472 -0000
++++ b/config/BuildSystem/config/packages/MPI.py	2020-04-03 21:38:11.876388227 -0000
+@@ -211,10 +211,7 @@
+       # Support for spaces and () in executable names; also needs to handle optional arguments at the end
+       # TODO: This support for spaces and () should be moved to core BuildSystem
+       self.mpiexec = self.mpiexec.replace(' ', '\\ ').replace('(', '\\(').replace(')', '\\)').replace('\ -',' -')
+-      if (hasattr(self, 'ompi_major_version') and int(self.ompi_major_version) >= 3):
+-        (out, err, ret) = Configure.executeShellCommand(self.mpiexec+' -help all', checkCommand = noCheck, timeout = 60, log = self.log, threads = 1)
+-        if out.find('--oversubscribe') >=0:
+-          self.mpiexec = self.mpiexec + ' --oversubscribe'
++      self.mpiexec = self.mpiexec + ' --oversubscribe'
+ 
+     # using mpiexec environmental variables make sure mpiexec matches the MPI libraries and save the variables for testing in PetscInitialize()
+     # the variable HAVE_MPIEXEC_ENVIRONMENTAL_VARIABLE is not currently used. PetscInitialize() can check the existence of the environmental variable to

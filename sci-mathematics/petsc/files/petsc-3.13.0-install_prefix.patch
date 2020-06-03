@@ -1,0 +1,40 @@
+--- a/makefile	2020-04-04 17:26:25.085163156 -0000
++++ b/makefile	2020-04-04 17:27:05.373405931 -0000
+@@ -275,7 +275,7 @@
+ 	@unset MAKEFLAGS && ${PYTHON} ${PETSC_ARCH}/lib/petsc/conf/reconfigure-${PETSC_ARCH}.py
+ #
+ install:
+-	@${PYTHON} ./config/install.py -destDir=${DESTDIR}
++	${PYTHON} ./config/install.py -destDir="${DESTDIR}" -destPrefix="${DESTPREFIX}"
+ 	+${OMAKE_SELF} PETSC_ARCH=${PETSC_ARCH} PETSC_DIR=${PETSC_DIR} mpi4py-install petsc4py-install libmesh-install mfem-install slepc-install hpddm-install amrex-install
+ 
+ mpistreams:
+--- a/config/install.py	2020-04-04 17:26:30.086317427 -0000
++++ b/config/install.py	2020-04-04 17:27:05.373405931 -0000
+@@ -45,6 +45,8 @@
+     import nargs
+     script.Script.setupHelp(self, help)
+     help.addArgument('Installer', '-destDir=<path>', nargs.Arg(None, '', 'Destination Directory for install'))
++    help.addArgument('Installer', '-destPrefix=<path>',
++        nargs.Arg(None, None, 'Prefix within the destination Directory (by default, the configured --prefix)'))
+     return
+ 
+ 
+@@ -64,8 +66,15 @@
+ 
+   def setupDirectories(self):
+     self.rootDir    = self.petscdir.dir
+-    self.installDir = os.path.abspath(os.path.expanduser(self.framework.argDB['prefix']))
+-    self.destDir    = os.path.abspath(self.argDB['destDir']+self.installDir)
++    prefix = self.framework.argDB['prefix']
++    # Support indirect installation into a prefix "container" on a host system:
++    #     Final install place on host system       : /container_prefix/prefix/petsc/
++    # [V] Temporary destination dir for packaging  : destdir/prefix/petsc/
++    # [X] Incorrect double-prefixes destination dir: destdir/container_prefix/prefix/petsc/
++    destPrefix = self.argDB['destPrefix'] if 'destPrefix' in self.argDB else prefix
++    destPrefix = os.path.abspath(os.path.expanduser(destPrefix))
++    self.installDir = os.path.abspath(os.path.expanduser(prefix))
++    self.destDir    = os.path.abspath(self.argDB['destDir'] + destPrefix)
+     self.arch       = self.arch.arch
+     self.archDir           = os.path.join(self.rootDir, self.arch)
+     self.rootIncludeDir    = os.path.join(self.rootDir, 'include')

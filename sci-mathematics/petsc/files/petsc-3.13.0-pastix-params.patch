@@ -1,0 +1,107 @@
+--- a/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-01 02:07:35.749052831 -0000
++++ b/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-01 02:14:44.199296626 -0000
+@@ -391,6 +391,14 @@
+     if (rc != 0) SETERRQ1(PETSC_COMM_SELF, PETSC_ERR_LIB,
+         "Error reported by PaStiX setup in MatFactorNumeric: rc %d\n", rc);
+ 
++#if 0
++      IPARM_REFINEMENT,            /**< Refinement mode                                                Default: PastixRefineGMRES         IN  */
++      IPARM_NBITER,                /**< Number of iterations performed in refinement                   Default: -                         OUT */
++      IPARM_ITERMAX,               /**< Maximum iteration number for refinement                        Default: 250                       IN  */
++      IPARM_GMRES_IM,              /**< GMRES restart parameter                                        Default: 25                        IN  */
++#endif
++
++
+     ierr = PetscOptionsBegin(PetscObjectComm((PetscObject)A),((PetscObject)A)->prefix,"PaStiX Options","Mat");CHKERRQ(ierr);
+     icntl = -1;
+     lu->iparm[IPARM_VERBOSE] = API_VERBOSE_NOT;
+@@ -403,6 +411,22 @@
+     if ((flg && icntl > 0)) {
+       lu->iparm[IPARM_THREAD_NBR] = icntl;
+     }
++
++    icntl=-1;
++    ierr = PetscOptionsInt("-mat_pastix_refinement","iparm[IPARM_REFINEMENT] : Refinement mode","None",lu->iparm[IPARM_REFINEMENT],&icntl,&flg);CHKERRQ(ierr);
++    if ((flg && icntl > 0)) {
++      lu->iparm[IPARM_REFINEMENT] = icntl;
++    }
++    icntl=-1;
++    ierr = PetscOptionsInt("-mat_pastix_itermax","iparm[IPARM_ITERMAX] : Maximum iteration number for refinement","None",lu->iparm[IPARM_ITERMAX],&icntl,&flg);CHKERRQ(ierr);
++    if ((flg && icntl > 0)) {
++      lu->iparm[IPARM_ITERMAX] = icntl;
++    }
++    icntl=-1;
++    ierr = PetscOptionsInt("-mat_pastix_gmres_im","iparm[IPARM_GMRES_IM] : GMRES restart parameter","None",lu->iparm[IPARM_GMRES_IM],&icntl,&flg);CHKERRQ(ierr);
++    if ((flg && icntl > 0)) {
++      lu->iparm[IPARM_GMRES_IM] = icntl;
++    }
+     PetscOptionsEnd();
+ 
+ #if PASTIX_VERSION_MAJOR >= 6
+--- a/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-01 02:47:50.960609430 -0000
++++ b/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-01 04:04:28.328770020 -0000
+@@ -347,6 +347,7 @@
+   Mat            *tseq;
+   PetscErrorCode ierr = 0;
+   PetscInt       icntl;
++  PetscReal      rcntl;
+   PetscInt       M=A->rmap->N;
+   PetscBool      valOnly,flg, isSym;
+   IS             is_iden;
+@@ -411,6 +412,11 @@
+     if ((flg && icntl > 0)) {
+       lu->iparm[IPARM_THREAD_NBR] = icntl;
+     }
++    icntl=-1;
++    ierr = PetscOptionsInt("-mat_pastix_gpunbr","iparm[IPARM_GPU_NBR] : Number of GPU devices to use","None",lu->iparm[IPARM_GPU_NBR],&icntl,&flg);CHKERRQ(ierr);
++    if ((flg && icntl > 0)) {
++      lu->iparm[IPARM_GPU_NBR] = icntl;
++    }
+ 
+     icntl=-1;
+     ierr = PetscOptionsInt("-mat_pastix_refinement","iparm[IPARM_REFINEMENT] : Refinement mode","None",lu->iparm[IPARM_REFINEMENT],&icntl,&flg);CHKERRQ(ierr);
+@@ -423,10 +429,15 @@
+       lu->iparm[IPARM_ITERMAX] = icntl;
+     }
+     icntl=-1;
+-    ierr = PetscOptionsInt("-mat_pastix_gmres_im","iparm[IPARM_GMRES_IM] : GMRES restart parameter","None",lu->iparm[IPARM_GMRES_IM],&icntl,&flg);CHKERRQ(ierr);
++    ierr = PetscOptionsInt("-mat_pastix_gmresim","iparm[IPARM_GMRES_IM] : GMRES restart parameter","None",lu->iparm[IPARM_GMRES_IM],&icntl,&flg);CHKERRQ(ierr);
+     if ((flg && icntl > 0)) {
+       lu->iparm[IPARM_GMRES_IM] = icntl;
+     }
++    icntl=-1;
++    ierr = PetscOptionsReal("-mat_pastix_epsilonrefinement","dparm[DPARM_EPSILON_REFINEMENT] : Epsilon for refinement","None",lu->dparm[DPARM_EPSILON_REFINEMENT],&rcntl,&flg);CHKERRQ(ierr);
++    if ((flg && rcntl > 0)) {
++      lu->dparm[DPARM_EPSILON_REFINEMENT] = rcntl;
++    }
+     PetscOptionsEnd();
+ 
+ #if PASTIX_VERSION_MAJOR >= 6
+--- a/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-02 02:25:16.078717216 -0000
++++ b/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-02 02:27:49.531463331 -0000
+@@ -407,6 +407,11 @@
+     if ((flg && icntl >= 0) || PetscLogPrintInfo) {
+       lu->iparm[IPARM_VERBOSE] =  icntl;
+     }
++    icntl = -1;
++    ierr = PetscOptionsInt("-mat_pastix_verbose","iparm[IPARM_SCHEDULER] : Runtime scheduler","None",lu->iparm[IPARM_SCHEDULER],&icntl,&flg);CHKERRQ(ierr);
++    if (flg && icntl >= 0) {
++      lu->iparm[IPARM_SCHEDULER] =  icntl;
++    }
+     icntl=-1;
+     ierr = PetscOptionsInt("-mat_pastix_threadnbr","iparm[IPARM_THREAD_NBR] : Number of thread by MPI node","None",lu->iparm[IPARM_THREAD_NBR],&icntl,&flg);CHKERRQ(ierr);
+     if ((flg && icntl > 0)) {
+--- a/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-02 02:25:16.078717216 -0000
++++ b/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-02 02:31:30.099288160 -0000
+@@ -407,6 +407,11 @@
+     if ((flg && icntl >= 0) || PetscLogPrintInfo) {
+       lu->iparm[IPARM_VERBOSE] =  icntl;
+     }
++    icntl = -1;
++    ierr = PetscOptionsInt("-mat_pastix_scheduler","iparm[IPARM_SCHEDULER] : Runtime scheduler","None",lu->iparm[IPARM_SCHEDULER],&icntl,&flg);CHKERRQ(ierr);
++    if (flg && icntl >= 0) {
++      lu->iparm[IPARM_SCHEDULER] =  icntl;
++    }
+     icntl=-1;
+     ierr = PetscOptionsInt("-mat_pastix_threadnbr","iparm[IPARM_THREAD_NBR] : Number of thread by MPI node","None",lu->iparm[IPARM_THREAD_NBR],&icntl,&flg);CHKERRQ(ierr);
+     if ((flg && icntl > 0)) {

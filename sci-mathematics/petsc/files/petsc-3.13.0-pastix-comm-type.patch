@@ -1,0 +1,56 @@
+--- a/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-01 04:05:51.642346843 -0000
++++ b/./src/mat/impls/aij/mpi/pastix/pastix.c	2020-05-01 04:07:09.418751218 -0000
+@@ -243,7 +243,7 @@
+ 
+     PASTIX_CALL(rc,
+                 &(lu->pastix_data),
+-                lu->pastix_comm,
++                (PASTIX_Comm)lu->pastix_comm,
+                 lu->n,
+                 lu->colptr,
+                 lu->row,
+@@ -310,7 +310,7 @@
+ 
+   PASTIX_CALL(rc,
+               &(lu->pastix_data),
+-              lu->pastix_comm,
++              (PASTIX_Comm)lu->pastix_comm,
+               lu->n,
+               lu->colptr,
+               lu->row,
+@@ -378,7 +378,7 @@
+     /* Call to set default pastix options */
+     PASTIX_CALL(rc,
+                 &(lu->pastix_data),
+-                lu->pastix_comm,
++                (PASTIX_Comm)lu->pastix_comm,
+                 lu->n,
+                 lu->colptr,
+                 lu->row,
+@@ -450,7 +450,7 @@
+     /* Init the data struct (in <=v5, this happened within any later task) */
+     PASTIX_CALL(rc,
+                 &(lu->pastix_data),
+-                lu->pastix_comm,
++                (PASTIX_Comm)lu->pastix_comm,
+                 lu->n,
+                 lu->colptr,
+                 lu->row,
+@@ -520,7 +520,7 @@
+ 
+     PASTIX_CALL(rc,
+                 &(lu->pastix_data),
+-                lu->pastix_comm,
++                (PASTIX_Comm)lu->pastix_comm,
+                 lu->n,
+                 lu->colptr,
+                 lu->row,
+@@ -538,7 +538,7 @@
+     lu->iparm[IPARM_END_TASK]   = API_TASK_NUMFACT;
+     PASTIX_CALL(rc,
+                 &(lu->pastix_data),
+-                lu->pastix_comm,
++                (PASTIX_Comm)lu->pastix_comm,
+                 lu->n,
+                 lu->colptr,
+                 lu->row,

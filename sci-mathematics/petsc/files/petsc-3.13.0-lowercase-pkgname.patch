@@ -1,0 +1,20 @@
+--- a/config/BuildSystem/config/package.py	2020-04-25 00:41:26.993326946 -0000
++++ b/config/BuildSystem/config/package.py	2020-04-25 00:41:05.481663121 -0000
+@@ -169,6 +169,7 @@
+     name:         The module name (usually the filename)
+     package:      The lowercase name
+     PACKAGE:      The uppercase name
++    pkgname:      The name of pkg-config (.pc) file
+     downloadname:     Name for download option (usually name)
+     downloaddirnames: names for downloaded directory (first part of string) (usually downloadname)
+     '''
+@@ -179,8 +180,8 @@
+       self.name           = 'DEBUGGING'
+     self.PACKAGE          = self.name.upper()
+     self.package          = self.name.lower()
++    self.pkgname          = self.package
+     self.downloadname     = self.name
+-    self.pkgname          = self.name
+     self.downloaddirnames = [self.downloadname];
+     return
+ 

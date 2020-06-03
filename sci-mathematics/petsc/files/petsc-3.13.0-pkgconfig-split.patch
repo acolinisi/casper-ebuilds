@@ -1,0 +1,14 @@
+--- a/config/BuildSystem/config/package.py	2020-05-08 00:54:03.301591945 -0000
++++ b/config/BuildSystem/config/package.py	2020-05-08 00:55:19.222934866 -0000
+@@ -472,9 +472,9 @@
+         os.environ['PKG_CONFIG_PATH'] = self.argDB['with-'+self.package+'-pkg-config']
+ 
+       l,err,ret  = config.base.Configure.executeShellCommand('pkg-config '+self.pkgname+' --libs', timeout=60, log = self.log)
+-      l = l.strip()
++      l = l.strip().split()
+       i,err,ret  = config.base.Configure.executeShellCommand('pkg-config '+self.pkgname+' --cflags', timeout=60, log = self.log)
+-      i = i.strip()
++      i = i.strip().split()
+       if self.argDB['with-'+self.package+'-pkg-config']:
+         if path: os.environ['PKG_CONFIG_PATH'] = path
+         else: os.environ['PKG_CONFIG_PATH'] = ''

@@ -14,13 +14,16 @@ SRC_URI="http://mumps.enseeiht.fr/${MYP}.tar.gz"
 LICENSE="public-domain"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="doc examples metis mpi +scotch static-libs"
+# index-64bit so that we rebuild if scotch changes
+IUSE="doc examples metis mpi +scotch index-64bit static-libs"
+
+REQUIRED_USE="index-64bit? ( scotch )"
 
 RDEPEND="
 	virtual/blas
 	metis? ( || ( >=sci-libs/metis-5 >=sci-libs/parmetis-4 )
 		mpi? ( >=sci-libs/parmetis-4 ) )
-	scotch? ( <sci-libs/scotch-6[mpi=] )
+	scotch? ( sci-libs/scotch[mpi=,index-64bit=] )
 	mpi? ( sci-libs/scalapack )"
 
 DEPEND="${RDEPEND}

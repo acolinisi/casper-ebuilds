@@ -98,7 +98,7 @@ src_install() {
 	emake -C src install \
 		  HYPRE_INSTALL_DIR="${ED}" \
 		  HYPRE_LIB_INSTALL="${ED}/usr/$(get_libdir)" \
-		  HYPRE_INC_INSTALL="${ED}$/usr/include/hypre"
+		  HYPRE_INC_INSTALL="${ED}/usr/include/hypre"
 	use doc && dodoc docs/*.pdf
 	if use examples; then
 		insinto /usr/share/doc/${PF}

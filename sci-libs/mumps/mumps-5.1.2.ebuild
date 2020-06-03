@@ -180,6 +180,19 @@ src_install() {
 		doins libseq/*.h
 		use static-libs && dolib.a libseq/libmpiseq.a
 	fi
+
+	# Let other ebuilds use pkg-config, esp. since lib list is complex
+	cat <<-EOF > mumps.pc
+	Name: ${PN}
+	Description: ${DESCRIPTION}
+	Version: ${PV}
+	URL: ${HOMEPAGE}
+	Requires: $(usex scotch ptscotch)
+	Libs: -lmumps_common -ldmumps -lzmumps -lsmumps -lcmumps
+	EOF
+	insinto /usr/$(get_libdir)/pkgconfig
+	doins mumps.pc
+
 	dodoc README ChangeLog VERSION
 	use doc && dodoc doc/*.pdf
 	if use examples; then

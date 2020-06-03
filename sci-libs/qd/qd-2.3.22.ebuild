@@ -8,8 +8,11 @@ FORTRAN_NEEDED=fortran
 inherit autotools fortran-2
 
 DESCRIPTION="Quad-double and double-double float arithmetics"
-HOMEPAGE="http://crd-legacy.lbl.gov/~dhbailey/mpdist/"
-SRC_URI="http://crd.lbl.gov/~dhbailey/mpdist/${P}.tar.gz"
+HOMEPAGE="
+ 	https://www.davidhbailey.com/dhbsoftware/
+	http://crd-legacy.lbl.gov/~dhbailey/mpdist/
+"
+SRC_URI="https://www.davidhbailey.com/dhbsoftware/${P}.tar.gz"
 
 SLOT="0"
 LICENSE="BSD"

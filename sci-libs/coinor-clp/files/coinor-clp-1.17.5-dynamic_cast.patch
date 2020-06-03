@@ -1,0 +1,47 @@
+--- a/src/ClpSolver.cpp	2020-04-10 19:07:42.922189573 -0000
++++ b/src/ClpSolver.cpp	2020-04-10 19:08:38.603902568 -0000
+@@ -950,7 +950,7 @@
+               }
+               if (tryIt) {
+                 ClpSimplex *thisModel = model2;
+-                thisModel = static_cast< ClpSimplexOther * >(thisModel)->dualOfModel(fractionRow, fractionColumn);
++                thisModel = reinterpret_cast < ClpSimplexOther * >(thisModel)->dualOfModel(fractionRow, fractionColumn);
+                 if (thisModel) {
+                   printf("Dual of model has %d rows and %d columns\n",
+                     thisModel->numberRows(), thisModel->numberColumns());
+@@ -1296,7 +1296,7 @@
+             }
+             if (dualize) {
+               ClpSimplex *thisModel = models + iModel;
+-              int returnCode = static_cast< ClpSimplexOther * >(thisModel)->restoreFromDual(model2);
++              int returnCode = reinterpret_cast < ClpSimplexOther * >(thisModel)->restoreFromDual(model2);
+               if (model2->status() == 3)
+                 returnCode = 0;
+               delete model2;
+@@ -1617,7 +1617,7 @@
+               bool deleteModel2 = false;
+               ClpSimplex *model2 = models + iModel;
+               if (dualize && dualize < 3) {
+-                model2 = static_cast< ClpSimplexOther * >(model2)->dualOfModel();
++                model2 = reinterpret_cast< ClpSimplexOther * >(model2)->dualOfModel();
+                 printf("Dual of model has %d rows and %d columns\n",
+                   model2->numberRows(), model2->numberColumns());
+                 model2->setOptimizationDirection(1.0);
+@@ -1867,7 +1867,7 @@
+               fileName = directory + field;
+             }
+             ClpSimplex *model2 = models + iModel;
+-            static_cast< ClpSimplexOther * >(model2)->parametrics(fileName.c_str());
++            reinterpret_cast< ClpSimplexOther * >(model2)->parametrics(fileName.c_str());
+             time2 = CoinCpuTime();
+             totalTime += time2 - time1;
+             time1 = time2;
+@@ -2890,7 +2890,7 @@
+         case CLP_PARAM_ACTION_GUESS:
+           if (goodModels[iModel]) {
+             delete[] alternativeEnvironment;
+-            ClpSimplexOther *model2 = static_cast< ClpSimplexOther * >(models + iModel);
++            ClpSimplexOther *model2 = reinterpret_cast< ClpSimplexOther * >(models + iModel);
+             alternativeEnvironment = model2->guess(0);
+             if (alternativeEnvironment)
+               CbcOrClpEnvironmentIndex = 0;

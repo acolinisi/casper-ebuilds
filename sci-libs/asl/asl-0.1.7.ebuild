@@ -30,6 +30,8 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
+PATCHES=("${FILESDIR}"/${P}-cmake-vtk-ver.patch)
+
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_DOCDIR=/usr/share/doc/${PF}

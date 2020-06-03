@@ -1,0 +1,85 @@
+--- a/CMakeLists.txt	2020-04-28 17:10:40.208943051 -0000
++++ b/CMakeLists.txt	2020-04-28 17:31:14.967049655 -0000
+@@ -154,54 +154,52 @@
+   SET ( MPI_ARGS "-oversubscribe" )
+ ENDIF()
+ 
+-############################################################################
++###############################################################################
+ #####
+-#####         Scotch
++#####         Add optional library dependencies
+ #####
+-############################################################################
+-# Find SCOTCH library?
+-SET(SCOTCH_DIR "" CACHE PATH "Installation directory for scotch")
+-LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+-FIND_PACKAGE(Scotch)
+-
+-IF ( NOT SCOTCH_FOUND )
+-  MESSAGE ( WARNING "Scotch library not found:"
+-    "Using scotch reduce the execution time of mmg3d "
+-    "(see https://gforge.inria.fr/frs/?group_id=248 to download it)."
+-    "If you have already installed Scotch and want to use it, "
+-    "please set the CMake variable or environment variable SCOTCH_DIR "
+-    "to your scotch directory.")
+-ENDIF ( )
++###############################################################################
+ 
+ ############################################################################
+ #####
+-#####         VTK (to parse (p)vtp/(p)vtu files )
++#####         Scotch
+ #####
+ ############################################################################
+-FIND_PACKAGE(VTK)
+-
+-###############################################################################
+-#####
+-#####         Add dependent options
+-#####
+-###############################################################################
+-
+ # add Scotch library?
+-CMAKE_DEPENDENT_OPTION ( USE_SCOTCH "Use SCOTCH TOOL for renumbering" ON
+-  "SCOTCH_FOUND" OFF)
++OPTION ( USE_SCOTCH "Use SCOTCH TOOL for renumbering" ON)
+ 
+ IF( USE_SCOTCH )
++  # Find SCOTCH library?
++  SET(SCOTCH_DIR "" CACHE PATH "Installation directory for scotch")
++  LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
++  FIND_PACKAGE(Scotch)
++
++  IF ( NOT SCOTCH_FOUND )
++    MESSAGE ( ERROR_FATAL "Scotch library not found:"
++      "Using scotch reduce the execution time of mmg3d "
++      "(see https://gforge.inria.fr/frs/?group_id=248 to download it)."
++      "If you have already installed Scotch and want to use it, "
++      "please set the CMake variable or environment variable SCOTCH_DIR "
++      "to your scotch directory.")
++  ENDIF ( )
++
+   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_SCOTCH")
+- MESSAGE(STATUS
++  MESSAGE(STATUS
+     "Compilation with scotch: ${SCOTCH_LIBRARIES}")
+   SET( LIBRARIES ${LIBRARIES} ${SCOTCH_LIBRARIES})
+ ENDIF()
+ 
++############################################################################
++#####
++#####         VTK (to parse (p)vtp/(p)vtu files )
++#####
++############################################################################
+ # add the VTK library ?
+-CMAKE_DEPENDENT_OPTION ( USE_VTK "Use VTK I/O" ON
+-  "VTK_FOUND" OFF)
++OPTION ( USE_VTK "Use VTK I/O" ON)
+ 
+ IF ( USE_VTK )
++  FIND_PACKAGE(VTK)
++
+   ENABLE_LANGUAGE ( CXX )
+   ADD_DEFINITIONS(-DUSE_VTK)
+   MESSAGE ( STATUS "Compilation with VTK: add vtp and vtu I/O." )

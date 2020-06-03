@@ -1,0 +1,33 @@
+--- a/CMakeLists.txt	2020-04-28 18:51:19.693414070 -0000
++++ b/CMakeLists.txt	2020-04-28 18:53:51.127089378 -0000
+@@ -98,7 +98,7 @@
+ ENDIF()
+ 
+ # Only allow building of static OR shared libraries
+-SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
++SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+ FUNCTION (INVERT_BOOL OUTVAR INVAR)
+   IF(${INVAR})
+     SET(${OUTVAR} OFF PARENT_SCOPE)
+@@ -470,7 +470,7 @@
+ #####         Compile parmmg libraries
+ #####
+ ############################################################################
+-SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
++SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+ 
+ OPTION ( LIBPARMMG_STATIC "Compile static library" ON)
+ IF ( LIBPARMMG_STATIC )
+--- a/cmake/modules/macros.cmake	2020-04-28 19:04:18.966475078 -0000
++++ b/cmake/modules/macros.cmake	2020-04-28 19:04:30.821841147 -0000
+@@ -110,8 +110,8 @@
+   TARGET_LINK_LIBRARIES ( ${target_name} ${LIBRARIES} )
+ 
+   INSTALL ( TARGETS ${target_name}
+-    ARCHIVE DESTINATION lib
+-    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     COMPONENT lib)
+ 
+ ENDMACRO ( )

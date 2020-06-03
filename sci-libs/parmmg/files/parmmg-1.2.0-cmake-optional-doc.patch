@@ -1,0 +1,22 @@
+--- a/CMakeLists.txt	2020-04-28 17:42:08.989243968 -0000
++++ b/CMakeLists.txt	2020-04-28 17:43:16.213319651 -0000
+@@ -567,8 +567,8 @@
+ #####         Create API Documentation
+ #####
+ ###############################################################################
+-FIND_PACKAGE(Doxygen)
+-IF(DOXYGEN_FOUND)
++IF(BUILD_DOC)
++  FIND_PACKAGE(Doxygen REQUIRED)
+ 
+   # PARMMG Documentation
+   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/doc/doxygen/Doxyfile.in
+@@ -591,7 +591,7 @@
+     COMMENT "Generating PARMMG API documentation with Doxygen.
+      Open the doc/doxygen/html/index.html file to see it" VERBATIM
+     )
+-ENDIF ( DOXYGEN_FOUND )
++ENDIF ( BUILD_DOC )
+ 
+ OPTION ( BUILD_TESTING "Enable / Disable tests" OFF )
+ CMAKE_DEPENDENT_OPTION (

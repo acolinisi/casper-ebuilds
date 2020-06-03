@@ -112,15 +112,11 @@ src_install() {
 	fi
 	# alternative stuff
 	cat > metis.pc <<-EOF
-		prefix=${EPREFIX}/usr
-		libdir=\${prefix}/$(get_libdir)
-		includedir=\${prefix}/include
 		Name: metis
 		Description: Unstructured graph partitioning library
 		Version: ${METISPV}
 		URL: ${HOMEPAGE/parmetis/metis}
-		Libs: -L\${libdir} -lmetis
-		Cflags: -I\${includedir}/metis
+		Libs: -lmetis
 	EOF
 	insinto /usr/$(get_libdir)/pkgconfig
 	doins metis.pc
@@ -137,15 +133,11 @@ src_install() {
 		fi
 		# alternative stuff
 		cat > ${PN}.pc <<-EOF
-			prefix=${EPREFIX}/usr
-			libdir=\${prefix}/$(get_libdir)
-			includedir=\${prefix}/include
 			Name: ${PN}
 			Description: ${DESCRIPTION}
 			Version: ${PV}
 			URL: ${HOMEPAGE}
-			Libs: -L\${libdir} -l${PN}
-			Cflags: -I\${includedir}/${PN}
+			Libs: -l${PN}
 			Requires: metis
 		EOF
 		insinto /usr/$(get_libdir)/pkgconfig

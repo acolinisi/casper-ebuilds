@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt.orig2	2020-04-20 17:54:40.838466882 -0000
++++ b/CMakeLists.txt	2020-04-20 17:56:15.943398558 -0000
+@@ -251,7 +251,7 @@
+ endif()
+ endif(ENABLE_DOCS)
+ 
+-install(TARGETS supermesh DESTINATION lib)
++install(TARGETS supermesh DESTINATION lib64)
+ install(DIRECTORY ${LIBSUPERMESH_BINARY_DIR}/include DESTINATION ${CMAKE_INSTALL_PREFIX})
+ install(FILES ${LIBSUPERMESH_BINARY_DIR}/config/libsupermesh.pc DESTINATION lib/pkgconfig)
+ 

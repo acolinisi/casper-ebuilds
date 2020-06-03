@@ -1,0 +1,31 @@
+--- a/MakeLists.txt	2020-04-20 21:32:49.353095220 -0000
++++ b/CMakeLists.txt	2020-04-20 21:32:54.690259906 -0000
+@@ -153,6 +153,8 @@
+ message(STATUS "CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
+ message(STATUS "CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
+ 
++option(USE_VENDORED_LIBSPATIALINDEX "Use included sources for libspatialindex." OFF)
++if (USE_VENDORED_LIBSPATIALINDEX)
+ include_directories(${LIBSUPERMESH_SOURCE_DIR}/spatialindex-1.8.5/include/)
+ include_directories(${LIBSUPERMESH_SOURCE_DIR}/spatialindex-1.8.5/src/)
+ add_subdirectory(spatialindex-1.8.5 EXCLUDE_FROM_ALL)
+@@ -195,6 +197,7 @@
+ foreach(spatialindex_object_file ${spatialindex_object_files})
+   set_source_files_properties(${spatialindex_object_file} PROPERTIES GENERATED 1)
+ endforeach()
++endif(USE_VENDORED_LIBSPATIALINDEX)
+ 
+ file(GLOB source_files ${LIBSUPERMESH_SOURCE_DIR}/src/*.F90 ${LIBSUPERMESH_SOURCE_DIR}/src/*.c ${LIBSUPERMESH_SOURCE_DIR}/src/*.cpp)
+ add_library(supermesh ${source_files} ${spatialindex_object_files})
+--- a/CMakeLists.txt	2020-04-20 21:38:48.825187323 -0000
++++ b/CMakeLists.txt	2020-04-20 21:38:54.958376187 -0000
+@@ -201,7 +201,9 @@
+ 
+ file(GLOB source_files ${LIBSUPERMESH_SOURCE_DIR}/src/*.F90 ${LIBSUPERMESH_SOURCE_DIR}/src/*.c ${LIBSUPERMESH_SOURCE_DIR}/src/*.cpp)
+ add_library(supermesh ${source_files} ${spatialindex_object_files})
++if(USE_VENDORED_LIBSPATIALINDEX)
+ add_dependencies(supermesh spatialindex)
++endif(USE_VENDORED_LIBSPATIALINDEX)
+ 
+ set(test_main ${LIBSUPERMESH_SOURCE_DIR}/src/tests/test_main.cpp)
+ file(GLOB unittest_files ${LIBSUPERMESH_SOURCE_DIR}/src/tests/*.F90)

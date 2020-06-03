@@ -1,0 +1,26 @@
+--- a/CMakeLists.txt	2020-04-20 16:59:24.469100409 -0000
++++ b/CMakeLists.txt	2020-04-20 17:01:54.452727068 -0000
+@@ -69,6 +69,7 @@
+   include_directories(${Backtrace_INCLUDE_DIRS})
+ endif()
+ 
++option(ENABLE_DOCS "Build documentation." OFF)
+ option(LIBSUPERMESH_ENABLE_TIMERS "Enable internal timers" OFF)
+ option(LIBSUPERMESH_OVERLAP_COMPUTE_COMMS "Overlap computation and communication. Efficiency of this depends upon the specific MPI implementation." OFF)
+ 
+@@ -239,6 +240,7 @@
+   "${LIBSUPERMESH_BINARY_DIR}/include_local/libsupermesh_configuration.h"
+   )
+ 
++if (ENABLE_DOCS)
+ find_package(LATEX)
+ if(LATEX_FOUND AND LATEX_PDFLATEX_FOUND AND LATEX_BIBTEX_FOUND)
+   include(${LIBSUPERMESH_SOURCE_DIR}/cmake/UseLATEX.cmake)
+@@ -247,6 +249,7 @@
+     CONFIGURE doc/version.tex IMAGES doc/hex_ordering.pdf TARGET_NAME doc
+     FORCE_PDF EXCLUDE_FROM_ALL BIBFILES doc/bibliography.bib)
+ endif()
++endif(ENABLE_DOCS)
+ 
+ install(TARGETS supermesh DESTINATION lib)
+ install(DIRECTORY ${LIBSUPERMESH_BINARY_DIR}/include DESTINATION ${CMAKE_INSTALL_PREFIX})

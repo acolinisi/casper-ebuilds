@@ -281,7 +281,7 @@ then
 fi
 # do it!
 if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]] ; then
-	'@GENTOO_PORTAGE_EENV@' -i $RETAIN $SHELL -l
+	'@GENTOO_PORTAGE_EENV@' -i $RETAIN $SHELL --rcfile "${EPREFIX}"/.prefixrc -i "$@"
 elif [[ ' bash ' == *" ${SHELL##*/} "* ]] ; then
 	# shell coming from different prefix would load it's own
 	# etc/profile upon -l, so we have to override
@@ -290,10 +290,12 @@ else
 	echo "Only bash is supported with stacked Prefix (you have ${SHELL##*/}), sorry!" > /dev/stderr
 	exit 1
 fi
+RC=$?
 # and leave a message when we exit... the shell might return non-zero
 # without having real problems, so don't send alarming messages about
 # that
-echo "Leaving Gentoo Prefix with exit status $?"
+echo "Leaving Gentoo Prefix with exit status $RC"
+exit $RC
 EOIN
 
 : prefix-stack.bashrc <<'EOIN'

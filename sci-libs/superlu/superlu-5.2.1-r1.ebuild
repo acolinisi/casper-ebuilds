@@ -55,6 +55,7 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=ON
 		-Denable_blaslib=OFF
 		-Denable_tests=$(usex test)
+		-Denable_doc=$(usex doc)
 	)
 	cmake_src_configure
 }

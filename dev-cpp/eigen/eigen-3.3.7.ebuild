@@ -93,6 +93,7 @@ src_test() {
 		-DEIGEN_TEST_CUDA="$(usex cuda)"
 		-DEIGEN_TEST_OPENMP="$(usex openmp)"
 		-DEIGEN_TEST_NEON64="$(usex cpu_flags_arm_neon)"
+		-DOpenGL_GL_PREFERENCE="GLVND"
 	)
 	cmake_src_configure
 	cmake_src_compile blas

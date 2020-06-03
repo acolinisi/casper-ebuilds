@@ -12,8 +12,8 @@ SRC_URI="https://github.com/flame/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc64 ~x86"
-IUSE="openmp pthread serial static-libs eselect-ldso doc 64bit-index"
-REQUIRED_USE="?? ( openmp pthread serial ) ?? ( eselect-ldso 64bit-index )"
+IUSE="openmp pthread serial static-libs eselect-ldso doc index-64bit"
+REQUIRED_USE="?? ( openmp pthread serial ) ?? ( eselect-ldso index-64bit )"
 
 RDEPEND="eselect-ldso? ( !app-eselect/eselect-cblas
 						 >=app-eselect/eselect-blas-0.2 )"
@@ -38,7 +38,7 @@ src_configure() {
 	else
 		BLIS_FLAGS+=( -t no )
 	fi
-	use 64bit-index && BLIS_FLAGS+=( -b 64 -i 64 )
+	use index-64bit && BLIS_FLAGS+=( -b 64 -i 64 )
 	# determine config name
 	case "${ARCH}" in
 		"x86" | "amd64")

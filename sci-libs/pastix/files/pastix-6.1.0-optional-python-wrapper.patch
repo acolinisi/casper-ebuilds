@@ -1,0 +1,77 @@
+--- a/wrappers/CMakeLists.txt	2020-04-23 01:36:41.143251721 -0000
++++ b/wrappers/CMakeLists.txt	2020-04-23 01:41:18.442738878 -0000
+@@ -8,23 +8,20 @@
+ #  @date 2020-01-29
+ #
+ ###
+-if ( PASTIX_WITH_MPI )
+-  if ( PASTIX_WITH_FORTRAN )
+-    message(STATUS "--- Fortran wrapper is disabled due to MPI support activated")
+-    set( PASTIX_WITH_FORTRAN OFF )
+-  endif()
+-endif()
+ 
+ if (PASTIX_WITH_FORTRAN)
++  if ( PASTIX_WITH_MPI )
++    message(FATAL_ERROR "--- Fortran wrapper incompatible with MPI support (PASTIX_WITH_MPI)")
++  endif()
+   add_subdirectory( fortran90 )
+ endif()
+ 
+-if (BUILD_SHARED_LIBS)
++if (PASTIX_WITH_PYTHON)
+   if ( PASTIX_WITH_MPI )
+-    message(STATUS "--- Python wrapper is disabled due to MPI support activated")
+-  else()
+-  add_subdirectory( python )
++    message(FATAL_ERROR "--- Python wrapper incompatible with MPI support (PASTIX_WITH_MPI)")
++  endif()
++  if ( NOT BUILD_SHARED_LIBS )
++    message(FATAL_ERROR "--- Python wrapper requires shared libraries to be built (BUILD_SHARED_LIBS)")
+   endif()
+-else()
+-  message(STATUS "--- Python wrapper is disabled with static libraries")
++  add_subdirectory( python )
+ endif()
+--- a/CMakeLists.txt	2020-04-23 02:38:26.166744863 -0000
++++ b/CMakeLists.txt	2020-04-23 02:39:39.656998900 -0000
+@@ -91,6 +91,8 @@
+ # Internal options
+ option(PASTIX_WITH_FORTRAN
+   "Enable Fortran files/interface/examples to be compiled" ON)
++option(PASTIX_WITH_PYTHON
++  "Enable Python files/interface/examples to be compiled" ON)
+ 
+ cmake_dependent_option(PASTIX_DISTRIBUTED
+  "Enable the distributed interface (requires PASTIX_WITH_MPI)" OFF "PASTIX_WITH_MPI" OFF)
+--- a/spm/CMakeLists.txt	2020-04-23 02:39:49.080287924 -0000
++++ b/spm/CMakeLists.txt	2020-04-23 02:40:43.110945112 -0000
+@@ -83,6 +83,13 @@
+     "Enable Fortran files/interface/examples to be compiled" ON)
+ endif()
+ 
++if ( DEFINED PASTIX_WITH_PYTHON )
++  set( SPM_WITH_PYTHON ${PASTIX_WITH_PYTHON} )
++else()
++  option(SPM_WITH_PYTHON
++    "Enable Python files/interface/examples to be compiled" ON)
++endif()
++
+ if (SPM_WITH_FORTRAN)
+   include(FortranCInterface)
+   FortranCInterface_HEADER(src/FCmangle.h
+--- a/spm/wrappers/CMakeLists.txt	2020-04-23 02:37:40.678349679 -0000
++++ b/spm/wrappers/CMakeLists.txt	2020-04-23 02:38:17.059465531 -0000
+@@ -13,8 +13,9 @@
+   add_subdirectory( fortran90 )
+ endif()
+ 
+-if (BUILD_SHARED_LIBS)
++if (SPM_WITH_PYTHON)
++  if ( NOT BUILD_SHARED_LIBS )
++    message(FATAL_ERROR "--- Python wrapper requires shared libraries to be built (BUILD_SHARED_LIBS)")
++  endif()
+   add_subdirectory( python )
+-else()
+-  message(STATUS "--- Python wrapper is disabled with static libraries")
+ endif()

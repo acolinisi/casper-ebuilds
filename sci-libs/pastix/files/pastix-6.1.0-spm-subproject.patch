@@ -1,0 +1,14 @@
+--- a/spm/CMakeLists.txt	2020-04-23 02:12:33.801266454 -0000
++++ b/spm/CMakeLists.txt	2020-04-23 02:12:41.132481087 -0000
+@@ -9,10 +9,10 @@
+ #
+ ###
+ cmake_minimum_required (VERSION 3.3)
+-project (SPM C Fortran)
+ 
+ # Check if compiled independently or within another project
+ if ( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
++  project (SPM C Fortran)
+   set( BUILD_AS_SUBPROJECT OFF )
+ 
+   option(BUILD_SHARED_LIBS

@@ -1,0 +1,59 @@
+--- a/CMakeLists.txt	2020-04-26 01:00:36.906063041 -0000
++++ b/CMakeLists.txt	2020-04-26 01:00:38.699118412 -0000
+@@ -492,31 +492,37 @@
+ ##
+ #
+ 
+-# Compile the spm library
+-if ( PASTIX_WITH_FORTRAN )
+-  find_package( SPM QUIET COMPONENTS FORTRAN )
+-else()
+-  find_package( SPM QUIET )
+-endif()
+-
+-if ( SPM_FOUND )
+-  if( (PASTIX_INT64 AND (NOT SPM_INTSIZE EQUAL 8)) OR (PASTIX_INT32 AND (NOT SPM_INTSIZE EQUAL 4)) )
+-    message( WARNING "PASTIX_INT64 is enabled and provided SPM does not have the same support. Internal SPM will be compiled.")
+-    unset( SPM_FOUND )
+-  endif()
+-endif()
+-
+-if ( SPM_FOUND )
+-  message( STATUS "Use installed SPM" )
+-  include_directories(${SPM_INCLUDE_DIRS})
+-else()
++# Find or build the spm library
++option(BUILD_SPM "Build the bundled SPM library (if false, then look for SPM on the system)" ON)
++if (BUILD_SPM)
+   message( STATUS "Use internal SPM" )
+   add_subdirectory(spm)
+   set( SPM_LIBRARIES spm )
+   set( SPM_LIBRARIES_FORTRAN spmf )
+   include_directories("spm/include")
+   include_directories("${CMAKE_CURRENT_BINARY_DIR}/spm/include")
+-endif()
++else(BUILD_SPM)
++  message( STATUS "Use SPM library installed in the system" )
++  if ( PASTIX_WITH_FORTRAN )
++    find_package( SPM QUIET COMPONENTS FORTRAN )
++  else()
++    find_package( SPM QUIET )
++  endif()
++
++  if ( SPM_FOUND )
++    if( (PASTIX_INT64 AND (NOT SPM_INTSIZE EQUAL 8)) OR (PASTIX_INT32 AND (NOT SPM_INTSIZE EQUAL 4)) )
++      message( WARNING "PASTIX_INT64 is enabled and provided SPM does not have the same support. Internal SPM will be compiled.")
++      unset( SPM_FOUND )
++    endif()
++  endif()
++
++  if ( SPM_FOUND )
++    message( STATUS "Use installed SPM" )
++    include_directories(${SPM_INCLUDE_DIRS})
++  else()
++    message( FATAL_ERROR "SPM library not found in the system and bundled build disabled")
++  endif()
++endif(BUILD_SPM)
+ 
+ # Disable restrict (temporary)
+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Drestrict=")

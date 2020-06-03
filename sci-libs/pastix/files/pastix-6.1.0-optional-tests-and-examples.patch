@@ -1,0 +1,57 @@
+--- a/CMakeLists.txt	2020-04-23 02:23:30.702248243 -0000
++++ b/CMakeLists.txt	2020-04-23 02:26:12.365222478 -0000
+@@ -882,12 +882,21 @@
+ install(FILES ${PASTIX_HDRS} DESTINATION include/pastix )
+ 
+ ## Executable and tests
++
++option(BUILD_TESTING "Build tests" OFF)
++option(BUILD_EXAMPLES "Build examples" OFF)
++
++if(BUILD_TESTING)
+ enable_testing()
+ include(CTest)
+-# Examples executables
+-add_subdirectory(example)
+ # Testing executables
+ add_subdirectory(test)
++endif(BUILD_TESTING)
++
++if(BUILD_EXAMPLES)
++# Examples executables
++add_subdirectory(example)
++endif(BUILD_EXAMPLES)
+ 
+ ### Wrappers
+ add_subdirectory(wrappers)
+--- a/wrappers/fortran90/CMakeLists.txt	2020-04-23 02:32:37.150040087 -0000
++++ b/wrappers/fortran90/CMakeLists.txt	2020-04-23 02:33:37.821900969 -0000
+@@ -37,6 +37,7 @@
+ #
+ # Add examples
+ #
++if(BUILD_EXAMPLES)
+ set (EXAMPLES
+   fsimple.f90
+   flaplacian.f90
+@@ -101,3 +102,4 @@
+ #
+ # End of fmultilap
+ #
++endif(BUILD_EXAMPLES)
+--- a/spm/wrappers/fortran90/CMakeLists.txt	2020-04-23 02:35:42.233716835 -0000
++++ b/spm/wrappers/fortran90/CMakeLists.txt	2020-04-23 02:36:28.392132569 -0000
+@@ -37,6 +37,7 @@
+ #
+ # Add examples
+ #
++if(BUILD_EXAMPLES)
+ set (EXAMPLES
+   spm_driver.f90
+   spm_user.f90
+@@ -53,4 +54,4 @@
+   add_test(fortran_${_name_we} ./${_name_we})
+ 
+ endforeach()
+-
++endif(BUILD_EXAMPLES)

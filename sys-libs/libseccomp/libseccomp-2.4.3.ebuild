@@ -18,7 +18,7 @@ IUSE="static-libs"
 
 # We need newer kernel headers; we don't keep strict control of the exact
 # version here, just be safe and pull in the latest stable ones. #551248
-DEPEND=">=sys-kernel/linux-headers-4.3"
+DEPEND=">=sys-kernel/linux-headers-3.10"
 
 src_prepare() {
 	default

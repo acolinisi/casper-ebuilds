@@ -267,6 +267,18 @@ if [[ -d /proc/registry ]]; then # we're on Cygwin
 	# some Windows programs (e.g. devenv.exe) need TMP or TEMP
 	[[ -n ${TEMP} ]] && RETAIN+=" TEMP=$TEMP"
 fi
+# retain variables optinally listed in a file
+ENV_FILE="${ENV_FILE:-${EPREFIX}/.prefixenv}"
+if [[ -f "${ENV_FILE}" ]]
+then
+	VAR_NAMES=( $(cat "${ENV_FILE}" | sed -e '/^#.*/d' -e '/^\s*$/d') )
+	ENV_VARS=()
+	for var in ${VAR_NAMES[@]}
+	do
+		[[ -v "${var}" ]] && ENV_VARS+=(${var}="${!var}")
+	done
+	RETAIN+=" ${ENV_VARS[@]}"
+fi
 # do it!
 if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]] ; then
 	'@GENTOO_PORTAGE_EENV@' -i $RETAIN $SHELL -l

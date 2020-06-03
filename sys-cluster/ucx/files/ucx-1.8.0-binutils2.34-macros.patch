@@ -1,0 +1,23 @@
+--- a/src/ucs/debug/debug.c	2020-04-10 18:30:24.126143257 -0000
++++ b/src/ucs/debug/debug.c	2020-04-10 18:30:39.527618705 -0000
+@@ -284,17 +284,17 @@
+     int found;
+ 
+     if ((search->count > 0) || (search->max_lines == 0) ||
+-        ((bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)) {
++        ((bfd_section_flags(section) & SEC_ALLOC) == 0)) {
+         return;
+     }
+ 
+     address = search->file->dl.address - search->file->dl.base;
+-    vma = bfd_get_section_vma(abfd, section);
++    vma = bfd_section_vma(section);
+     if (address < vma) {
+         return;
+     }
+ 
+-    size = bfd_section_size(abfd, section);
++    size = bfd_section_size(section);
+     if (address >= vma + size) {
+         return;
+     }

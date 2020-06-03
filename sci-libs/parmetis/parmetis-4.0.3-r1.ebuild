@@ -19,7 +19,7 @@ SRC_URI="
 LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="amd64 arm64 x86 ~amd64-linux ~x86-linux"
-IUSE="doc double-precision examples int64 mpi openmp pcre static-libs"
+IUSE="doc double-precision examples index-64bit mpi openmp pcre static-libs"
 RESTRICT="mirror bindist"
 
 DEPEND="mpi? ( virtual/mpi )"
@@ -62,7 +62,7 @@ src_prepare() {
 			CMakeLists.txt || die
 	fi
 
-	if use int64; then
+	if use index-64bit; then
 		sed -i -e '/IDXTYPEWIDTH/s/32/64/' metis/include/metis.h || die
 	fi
 

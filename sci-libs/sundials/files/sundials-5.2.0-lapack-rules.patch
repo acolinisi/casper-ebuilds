@@ -1,0 +1,40 @@
+--- a/src/sunlinsol/lapackband/CMakeLists.txt	2020-04-06 06:51:11.553530514 -0000
++++ b/src/sunlinsol/lapackband/CMakeLists.txt	2020-04-06 06:51:26.420988796 -0000
+@@ -43,7 +43,7 @@
+ 
+   # depends on sunmatrixband and LAPACK
+   target_link_libraries(sundials_sunlinsollapackband_static
+-    PUBLIC sundials_sunmatrixband_static ${LAPACK_LIBRARIES})
++    PUBLIC sundials_sunmatrixband_static)
+ 
+   target_compile_definitions(sundials_sunlinsollapackband_static
+     PUBLIC -DBUILD_SUNDIALS_LIBRARY)
+@@ -72,7 +72,7 @@
+ 
+   # depends on sunmatrixband and LAPACK
+   target_link_libraries(sundials_sunlinsollapackband_shared
+-    PUBLIC sundials_sunmatrixband_shared ${LAPACK_LIBRARIES})
++    PUBLIC sundials_sunmatrixband_shared)
+ 
+   install(TARGETS sundials_sunlinsollapackband_shared
+     DESTINATION ${CMAKE_INSTALL_LIBDIR})
+--- a/src/sunlinsol/lapackdense/CMakeLists.txt	2020-04-06 06:53:55.776592622 -0000
++++ b/src/sunlinsol/lapackdense/CMakeLists.txt	2020-04-06 06:54:12.982122974 -0000
+@@ -43,7 +43,7 @@
+ 
+   # depends on sunmatrixdense and LAPACK
+   target_link_libraries(sundials_sunlinsollapackdense_static
+-    PUBLIC sundials_sunmatrixdense_static ${LAPACK_LIBRARIES})
++    PUBLIC sundials_sunmatrixdense_static)
+ 
+   target_compile_definitions(sundials_sunlinsollapackdense_static
+     PUBLIC -DBUILD_SUNDIALS_LIBRARY)
+@@ -72,7 +72,7 @@
+ 
+   # depends on sunmatrixdense and LAPACK
+   target_link_libraries(sundials_sunlinsollapackdense_shared
+-    PUBLIC sundials_sunmatrixdense_shared ${LAPACK_LIBRARIES})
++    PUBLIC sundials_sunmatrixdense_shared)
+ 
+   target_compile_definitions(sundials_sunlinsollapackdense_shared
+     PUBLIC -DBUILD_SUNDIALS_LIBRARY)

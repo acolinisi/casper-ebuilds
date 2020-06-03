@@ -1,0 +1,10 @@
+--- a/examples/templates/cmakelists_serial_C_ex.in	2020-04-06 07:03:38.927576095 -0000
++++ b/examples/templates/cmakelists_serial_C_ex.in	2020-04-06 07:04:09.697525081 -0000
+@@ -141,7 +141,6 @@
+     target_link_libraries(${example} ${SUNDIALS_LIBRARIES})
+     target_link_libraries(${example} ${SUNDIALS_SUNLINSOLLAPACKBAND_LIB})
+     target_link_libraries(${example} ${SUNDIALS_SUNLINSOLLAPACKDENSE_LIB})
+-    target_link_libraries(${example} ${LAPACK_LIBRARIES})
+ 
+     # add the example to ctest
+     add_test(NAME ${example} COMMAND ${example})

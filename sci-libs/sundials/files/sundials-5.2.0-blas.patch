@@ -1,0 +1,11 @@
+--- a/./config/SundialsLapack.cmake	2020-04-06 06:33:12.296253408 -0000
++++ b/./config/SundialsLapack.cmake	2020-04-06 06:33:17.075400863 -0000
+@@ -19,6 +19,8 @@
+ # If LAPACK libraries are undefined, try to find them.
+ if(NOT LAPACK_LIBRARIES)
+   find_package(LAPACK REQUIRED)
++  find_package(BLAS REQUIRED)
++  set(LAPACK_LIBRARIES ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+ 
+   # If the xSDK flag is used, set it to what was found
+   if(LAPACK_LIBRARIES AND TPL_ENABLE_LAPACK)

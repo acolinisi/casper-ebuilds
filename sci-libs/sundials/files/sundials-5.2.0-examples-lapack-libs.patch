@@ -1,0 +1,168 @@
+--- a/examples/idas/serial/CMakeLists.txt	2020-04-06 06:59:29.842893952 -0000
++++ b/examples/idas/serial/CMakeLists.txt	2020-04-06 06:59:39.211182883 -0000
+@@ -127,14 +127,6 @@
+       sundials_sunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${IDAS_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/kinsol/serial/CMakeLists.txt	2020-04-06 07:00:46.311252350 -0000
++++ b/examples/kinsol/serial/CMakeLists.txt	2020-04-06 07:00:59.892671218 -0000
+@@ -122,14 +122,6 @@
+       sundials_sunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${KINSOL_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/ida/serial/CMakeLists.txt	2020-04-06 07:01:15.326147210 -0000
++++ b/examples/ida/serial/CMakeLists.txt	2020-04-06 07:01:29.053570584 -0000
+@@ -103,14 +103,6 @@
+       sundials_sunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${IDA_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/cvodes/serial/CMakeLists.txt	2020-04-06 07:01:49.684206863 -0000
++++ b/examples/cvodes/serial/CMakeLists.txt	2020-04-06 07:02:06.319719931 -0000
+@@ -139,14 +139,6 @@
+       sundials_sunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${CVODES_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/cvode/fcmix_serial/CMakeLists.txt	2020-04-06 07:02:36.090638105 -0000
++++ b/examples/cvode/fcmix_serial/CMakeLists.txt	2020-04-06 07:02:47.548991500 -0000
+@@ -115,14 +115,6 @@
+       sundials_fsunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${FCVODE_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/cvode/serial/CMakeLists.txt	2020-04-06 07:07:05.529948010 -0000
++++ b/examples/cvode/serial/CMakeLists.txt	2020-04-06 07:07:19.293372497 -0000
+@@ -109,14 +109,6 @@
+       sundials_sunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${CVODE_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/arkode/C_serial/CMakeLists.txt	2020-04-06 07:06:45.227321848 -0000
++++ b/examples/arkode/C_serial/CMakeLists.txt	2020-04-06 07:06:51.946529080 -0000
+@@ -120,14 +120,6 @@
+       sundials_sunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${ARKODE_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/arkode/F90_serial/CMakeLists.txt	2020-04-06 07:07:55.227480759 -0000
++++ b/examples/arkode/F90_serial/CMakeLists.txt	2020-04-06 07:08:02.960719264 -0000
+@@ -116,14 +116,6 @@
+       sundials_fsunlinsollapackdense_shared)
+   endif()
+ 
+-  # LAPACK libraries
+-  list(APPEND SUNLINSOLLAPACK_LIBS ${LAPACK_LIBRARIES})
+-
+-  # BLAS libraries
+-  if(BLAS_FOUND)
+-    list(APPEND SUNLINSOLLAPACK_LIBS ${BLAS_LIBRARIES})
+-  endif(BLAS_FOUND)
+-
+   foreach(example_tuple ${FARKODE_examples_BL})
+ 
+     # parse the example tuple
+--- a/examples/sunlinsol/lapackdense/CMakeLists.txt	2020-04-06 07:08:39.150835418 -0000
++++ b/examples/sunlinsol/lapackdense/CMakeLists.txt	2020-04-06 07:08:50.898197727 -0000
+@@ -51,13 +51,6 @@
+ # Set-up linker flags and link libraries
+ set(SUNDIALS_LIBS ${NVEC_LIB} ${SUNMAT_LIB} ${SUNLINSOL_LIB} ${EXTRA_LINK_LIBS})
+ 
+-list(APPEND SUNDIALS_LIBS ${LAPACK_LIBRARIES})
+-
+-if(BLAS_FOUND)
+-  list(APPEND SUNDIALS_LIBS ${BLAS_LIBRARIES})
+-endif(BLAS_FOUND)
+-
+-
+ # Add the build and install targets for each sunlinsol example
+ foreach(example_tuple ${sunlinsol_lapackdense_examples})
+ 
+--- a/examples/sunlinsol/lapackband/CMakeLists.txt	2020-04-06 07:09:16.545988744 -0000
++++ b/examples/sunlinsol/lapackband/CMakeLists.txt	2020-04-06 07:09:24.116222217 -0000
+@@ -51,13 +51,6 @@
+ # Set-up linker flags and link libraries
+ set(SUNDIALS_LIBS ${NVEC_LIB} ${SUNMAT_LIB} ${SUNLINSOL_LIB} ${EXTRA_LINK_LIBS})
+ 
+-list(APPEND SUNDIALS_LIBS ${LAPACK_LIBRARIES})
+-
+-if(BLAS_FOUND)
+-  list(APPEND SUNDIALS_LIBS ${BLAS_LIBRARIES})
+-endif(BLAS_FOUND)
+-
+-
+ # Add the build and install targets for each sunlinsol example
+ foreach(example_tuple ${sunlinsol_lapackband_examples})
+ 

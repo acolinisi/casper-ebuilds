@@ -25,7 +25,8 @@ LICENSE="SGI-B-2.0"
 SLOT="0"
 IUSE="static-libs"
 
-DEPEND=">=virtual/opengl-7.0-r1[${MULTILIB_USEDEP}]"
+# libgl, because need libGL.so, because "checking for GL... "
+DEPEND=">=virtual/opengl-7.0-r1[libgl,${MULTILIB_USEDEP}]"
 RDEPEND="${DEPEND}"
 
 src_prepare() {

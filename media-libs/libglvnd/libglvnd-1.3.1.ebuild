@@ -26,8 +26,11 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="test X"
+IUSE="test libgl X"
 RESTRICT="!test? ( test )"
+
+# A limitation; ideally, would be able to build libGL.so without X
+REQUIRED_USE="libgl? ( X )"
 
 BDEPEND="${PYTHON_DEPS}
 	test? ( X? ( ${VIRTUALX_DEPEND} ) )"

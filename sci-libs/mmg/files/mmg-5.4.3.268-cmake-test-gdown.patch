@@ -1,0 +1,283 @@
+--- a/cmake/modules/LoadCiTests.cmake	2020-04-28 18:17:36.115932012 -0000
++++ b/cmake/modules/LoadCiTests.cmake	2020-04-28 18:26:42.670809647 -0000
+@@ -20,6 +20,33 @@
+ ##  use this copy of the mmg distribution only if you accept them.
+ ## =============================================================================
+ 
++OPTION(UPDATE_TESTS "Check for new versions of tests online and fetch newest" OFF)
++
++FIND_PROGRAM(GDOWN gdown DOC "Utility for downloading (large) files from Google Drive")
++FUNCTION(GDRIVE_FETCH ID OUTPUT_FILE TIMEOUT)
++  IF (TIMEOUT MATCHES 0)
++    SET(TIMEOUT "")
++  ENDIF()
++  IF (GDOWN)
++    EXECUTE_PROCESS(COMMAND "${GDOWN}" -q -O "${OUTPUT_FILE}" --id "${ID}"
++      RESULT_VARIABLE STATUS_CODE ERROR_VARIABLE STATUS_ERROR)
++  ELSE()
++    SET(URL "https://drive.google.com/uc?export=download&id=${ID}")
++    FILE(DOWNLOAD "${URL}" "${OUTPUT_FILE}"
++      STATUS STATUS_TUPLE SHOW_PROGRESS INACTIVITY_TIMEOUT "${TIMEOUT}")
++    LIST(GET STATUS_TUPLE 0 STATUS_CODE)
++    LIST(GET STATUS_TUPLE 1 STATUS_ERROR)
++  ENDIF()
++
++  IF ( NOT STATUS_CODE MATCHES 0 OR NOT EXISTS "${OUTPUT_FILE}")
++    MESSAGE(WARNING "Failed to fetch file from Google Drive, download status:"
++      " ${STATUS_CODE} ${STATUS_ERROR}.
++      Try to get it at the following link: ${URL}
++ then untar it in the ${CI_DIR} directory.")
++  ENDIF()
++  SET(STATUS ${STATUS_CODE} PARENT_SCOPE)
++ENDFUNCTION()
++
+ SET ( GET_MMG_TESTS "FALSE" )
+ SET ( GET_MMG2D_TESTS "FALSE" )
+ SET ( GET_MMGS_TESTS "FALSE" )
+@@ -38,7 +65,7 @@
+   SET ( GET_MMGS_TESTS "TRUE" )
+   SET ( GET_MMG3D_TESTS "TRUE" )
+ 
+-ELSE ( )
++ELSEIF ( UPDATE_TESTS )
+ 
+   # Check if the tests are up to date
+   #--------------> mmg
+@@ -48,25 +75,13 @@
+     SET ( OLD_MMG_MD5 "0" )
+   ENDIF ( )
+ 
+-  FILE(DOWNLOAD https://drive.google.com/uc?export=download&id=1tSey9RCMDWbjovX9CCHPZUZsiNHD5se_
+-    ${CI_DIR}/mmg.version
+-    STATUS MMG_VERSION_STATUS
+-    INACTIVITY_TIMEOUT 5)
+-  LIST(GET MMG_VERSION_STATUS 0 MMG_VERSION_STATUS_0)
+-  LIST(GET MMG_VERSION_STATUS 1 MMG_VERSION_STATUS_1)
+-
+-  IF ( MMG_VERSION_STATUS_0 MATCHES 0)
++  GDRIVE_FETCH("1tSey9RCMDWbjovX9CCHPZUZsiNHD5se_" ${CI_DIR}/mmg.version 5)
++  IF(STATUS MATCHES 0)
+     FILE(MD5 ${CI_DIR}/mmg.version MMG_MD5)
+ 
+     IF ( NOT (${OLD_MMG_MD5} MATCHES ${MMG_MD5}) )
+       SET ( GET_MMG_TESTS "TRUE" )
+     ENDIF ()
+-  ELSE( )
+-    MESSAGE(WARNING "Failed to load a simple text file, download status:"
+-      " ${MMG_VERSION_STATUS_1}.
+- Try to get it at the following link:
+-        https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmRktsVkFDTGlfdzQ
+- then untar it in the ${CI_DIR} directory.")
+   ENDIF()
+ 
+   #--------------> mmg2d
+@@ -76,25 +91,13 @@
+     SET ( OLD_MMG2D_MD5 "0" )
+   ENDIF ( )
+ 
+-  FILE(DOWNLOAD https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmV3BlUER4M0Z4MGs
+-    ${CI_DIR}/mmg2d.version
+-    STATUS MMG2D_VERSION_STATUS
+-    INACTIVITY_TIMEOUT 5)
+-  LIST(GET MMG2D_VERSION_STATUS 0 MMG2D_VERSION_STATUS_0)
+-  LIST(GET MMG2D_VERSION_STATUS 1 MMG2D_VERSION_STATUS_1)
+-
+-  IF ( MMG2D_VERSION_STATUS_0 MATCHES 0)
++  GDRIVE_FETCH("0B3X6EwOEKqHmV3BlUER4M0Z4MGs" ${CI_DIR}/mmg2d.version 5)
++  IF(STATUS MATCHES 0)
+     FILE(MD5 ${CI_DIR}/mmg2d.version MMG2D_MD5)
+ 
+     IF ( NOT (${OLD_MMG2D_MD5} MATCHES ${MMG2D_MD5}) )
+       SET ( GET_MMG2D_TESTS "TRUE" )
+     ENDIF ()
+-  ELSE( )
+-    MESSAGE(WARNING "Failed to load a simple text file, download status:"
+-      " ${MMG2D_VERSION_STATUS_1}.
+- Try to get it at the following link:
+-        https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmV3BlUER4M0Z4MGs
+- then untar it in the ${CI_DIR} directory.")
+   ENDIF()
+ 
+     #--------------> mmgs
+@@ -104,25 +107,13 @@
+     SET ( OLD_MMGS_MD5 "0" )
+   ENDIF ( )
+ 
+-  FILE(DOWNLOAD https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmSWtGV295a28wU2c
+-    ${CI_DIR}/mmgs.version
+-    STATUS MMGS_VERSION_STATUS
+-    INACTIVITY_TIMEOUT 5)
+-  LIST(GET MMGS_VERSION_STATUS 0 MMGS_VERSION_STATUS_0)
+-  LIST(GET MMGS_VERSION_STATUS 1 MMGS_VERSION_STATUS_1)
+-
+-  IF ( MMGS_VERSION_STATUS_0 MATCHES 0)
++  GDRIVE_FETCH("0B3X6EwOEKqHmSWtGV295a28wU2c" ${CI_DIR}/mmgs.version 5)
++  IF(STATUS MATCHES 0)
+     FILE(MD5 ${CI_DIR}/mmgs.version MMGS_MD5)
+ 
+     IF ( NOT (${OLD_MMGS_MD5} MATCHES ${MMGS_MD5}) )
+       SET ( GET_MMGS_TESTS "TRUE" )
+     ENDIF ()
+-  ELSE( )
+-    MESSAGE(WARNING "Failed to load a simple text file, download status:"
+-      " ${MMGS_VERSION_STATUS_1}.
+- Try to get it at the following link:
+-       https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmSWtGV295a28wU2c
+- then untar it in the ${CI_DIR} directory.")
+   ENDIF()
+ 
+   #--------------> mmg3d
+@@ -132,25 +123,13 @@
+     SET ( OLD_MMG3D_MD5 "0" )
+   ENDIF ( )
+ 
+-  FILE(DOWNLOAD https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmSWtGV295a28wU2c
+-    ${CI_DIR}/mmg3d.version
+-    STATUS MMG3D_VERSION_STATUS
+-    INACTIVITY_TIMEOUT 5)
+-  LIST(GET MMG3D_VERSION_STATUS 0 MMG3D_VERSION_STATUS_0)
+-  LIST(GET MMG3D_VERSION_STATUS 1 MMG3D_VERSION_STATUS_1)
+-
+-  IF ( MMG3D_VERSION_STATUS_0 MATCHES 0)
++  GDRIVE_FETCH("0B3X6EwOEKqHmSWtGV295a28wU2c" ${CI_DIR}/mmg3d.version 5)
++  IF(STATUS MATCHES 0)
+     FILE(MD5 ${CI_DIR}/mmg3d.version MMG3D_MD5)
+ 
+     IF (NOT (${OLD_MMG3D_MD5} MATCHES ${MMG3D_MD5}))
+       SET ( GET_MMG3D_TESTS "TRUE" )
+     ENDIF ()
+-  ELSE( )
+-    MESSAGE(WARNING "Failed to load a simple text file, download status:"
+-      " ${MMG3D_VERSION_STATUS_1}.
+- Try to get it at the following link:
+-        https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmSWtGV295a28wU2c
+- then untar it in the ${CI_DIR} directory.")
+   ENDIF()
+ 
+ ENDIF()
+@@ -161,9 +140,9 @@
+   MESSAGE("-- Download the mmg test cases. May be very long...")
+ 
+   SET(ADDRESS
+-    https://drive.google.com/uc?export=download&id=1Pren7-lwnkG7UTaUimspE-16hlIDLoCc
+-    https://drive.google.com/uc?export=download&id=1CZJM__QvYq_88BcMb3dBtaY2nDRYrcLz
+-    https://drive.google.com/uc?export=download&id=1NZHHeSmMzpiADGfLbTatbVn2bjv0bbVp
++    1Pren7-lwnkG7UTaUimspE-16hlIDLoCc
++    1CZJM__QvYq_88BcMb3dBtaY2nDRYrcLz
++    1NZHHeSmMzpiADGfLbTatbVn2bjv0bbVp
+     )
+ 
+   SET(FILENAME
+@@ -178,17 +157,10 @@
+     LIST(GET ADDRESS  ${i} ADDRESS_i)
+     LIST(GET FILENAME ${i} FILENAME_i)
+ 
+-    FILE(DOWNLOAD ${ADDRESS_i}
+-      ${FILENAME_i}
+-      SHOW_PROGRESS)
+-    IF ( NOT EXISTS ${FILENAME_i} )
+-      MESSAGE("\n")
+-      MESSAGE(WARNING "Fail to automatically download the mmg3d test cases
+-Try to get it at the following link:
+-       ${ADDRESS_i}
+-then untar it in the ${CI_DIR} directory.")
++    GDRIVE_FETCH(${ADDRESS_i} ${FILENAME_i} 0)
++    IF ( NOT STATUS MATCHES 0 )
+       SET ( LOAD_OK 0 )
+-      BREAK()
++      # keep looping: print all URLs for the user to fetch manually
+     ENDIF()
+ 
+   ENDFOREACH()
+@@ -216,16 +188,8 @@
+ #--------------> mmg2d
+ IF ( GET_MMG2D_TESTS MATCHES "TRUE" )
+   MESSAGE("-- Download the mmg2d test cases. May be very long...")
+-  FILE(DOWNLOAD https://drive.google.com/uc?export=download&id=1Lnvh7AldwEXS7WRa1VxsRqI7Xu7CgJNj
+-    ${CI_DIR}/mmg2d.tgz
+-    SHOW_PROGRESS)
+-  IF ( NOT EXISTS ${CI_DIR}/mmg2d.tgz )
+-    MESSAGE("\n")
+-    MESSAGE(WARNING "Fail to automatically download the mmg2d test cases.
+-Try to get it at the following link:
+-       https://drive.google.com/uc?export=download&id=1Lnvh7AldwEXS7WRa1VxsRqI7Xu7CgJNj
+-then untar it in the ${CI_DIR} directory.")
+-  ELSE()
++  GDRIVE_FETCH("1Lnvh7AldwEXS7WRa1VxsRqI7Xu7CgJNj" ${CI_DIR}/mmg2d.tgz 0)
++  IF(STATUS MATCHES 0)
+     EXECUTE_PROCESS(
+       COMMAND ${CMAKE_COMMAND} -E tar xzf
+       ${CI_DIR}/mmg2d.tgz
+@@ -244,16 +208,8 @@
+ #--------------> mmgs
+ IF ( GET_MMGS_TESTS MATCHES "TRUE" )
+   MESSAGE("-- Download the mmgs test cases. May be very long...")
+-  FILE(DOWNLOAD https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmcVdZb1EzaTR3ZlU
+-    ${CI_DIR}/mmgs.tgz
+-    SHOW_PROGRESS)
+-  IF ( NOT EXISTS ${CI_DIR}/mmgs.tgz )
+-    MESSAGE("\n")
+-    MESSAGE(WARNING "Fail to automatically download the mmgs test cases.
+-Try to get it at the following link:
+-       https://drive.google.com/uc?export=download&id=0B3X6EwOEKqHmcVdZb1EzaTR3ZlU
+-then untar it in the ${CI_DIR} directory.")
+-  ELSE()
++  GDRIVE_FETCH("0B3X6EwOEKqHmcVdZb1EzaTR3ZlU" ${CI_DIR}/mmgs.tgz 0)
++  IF(STATUS MATCHES 0)
+     EXECUTE_PROCESS(
+       COMMAND ${CMAKE_COMMAND} -E tar xzf
+       ${CI_DIR}/mmgs.tgz
+@@ -271,19 +227,19 @@
+ 
+ #--------------> mmg3d
+ SET(ADDRESS
+-  https://drive.google.com/uc?export=download&id=1WJK8mbFh81QFsDuOUt7kcavJwLO4yatO
+-  https://drive.google.com/uc?export=download&id=1SvznS9n57f1jIVoeFMM7-WVGJUu3OdMz
+-  https://drive.google.com/uc?export=download&id=1wACP1jut6Dz4mTf6uQARW7Koc1Zs_O9H
+-  https://drive.google.com/uc?export=download&id=142BueykwzDGS_Ne_RzJfgMGqQNhzJb6a
+-  https://drive.google.com/uc?export=download&id=1dEXKIApQiEkplI03bgVbThKMKTL4P0M_
+-  https://drive.google.com/uc?export=download&id=1KA5H7oS9HrtXT3sUpGU78YU7BwRHMVk7
+-  https://drive.google.com/uc?export=download&id=1duHPrEjdHrb1k9VwoV_-uYw4CPbMN9AM
+-  https://drive.google.com/uc?export=download&id=179k-asjM88ewVumZSQ9eUMWLJRfbQwIz
+-  https://drive.google.com/uc?export=download&id=1yjGvVah-vFNhwsImrHA0Bu5sIo1Fo5wW
+-  https://drive.google.com/uc?export=download&id=1PpQpC0OvJUTieTs0jd_A0Qb5EVP3QfZw
+-  https://drive.google.com/uc?export=download&id=1DbI0CCIYvDX-cPLZehazMV5wmu-K9K4b
+-  https://drive.google.com/uc?export=download&id=1MDALbXmXSpoVaHo4ghU6QpmQhsBP8Pjy
+-  https://drive.google.com/uc?export=download&id=1iil5UBwVgpcErUcKd_wJi_Oguuuyy0HT
++  1WJK8mbFh81QFsDuOUt7kcavJwLO4yatO
++  1SvznS9n57f1jIVoeFMM7-WVGJUu3OdMz
++  1wACP1jut6Dz4mTf6uQARW7Koc1Zs_O9H
++  142BueykwzDGS_Ne_RzJfgMGqQNhzJb6a
++  1dEXKIApQiEkplI03bgVbThKMKTL4P0M_
++  1KA5H7oS9HrtXT3sUpGU78YU7BwRHMVk7
++  1duHPrEjdHrb1k9VwoV_-uYw4CPbMN9AM
++  179k-asjM88ewVumZSQ9eUMWLJRfbQwIz
++  1yjGvVah-vFNhwsImrHA0Bu5sIo1Fo5wW
++  1PpQpC0OvJUTieTs0jd_A0Qb5EVP3QfZw
++  1DbI0CCIYvDX-cPLZehazMV5wmu-K9K4b
++  1MDALbXmXSpoVaHo4ghU6QpmQhsBP8Pjy
++  1iil5UBwVgpcErUcKd_wJi_Oguuuyy0HT
+   )
+ 
+ SET(FILENAME
+@@ -312,17 +268,10 @@
+     LIST(GET ADDRESS  ${i} ADDRESS_i)
+     LIST(GET FILENAME ${i} FILENAME_i)
+ 
+-    FILE(DOWNLOAD ${ADDRESS_i}
+-      ${FILENAME_i}
+-      SHOW_PROGRESS)
+-    IF ( NOT EXISTS ${FILENAME_i} )
+-      MESSAGE("\n")
+-      MESSAGE(WARNING "Fail to automatically download the mmg3d test cases
+-Try to get it at the following link:
+-       ${ADDRESS_i}
+-then untar it in the ${CI_DIR} directory.")
++    GDRIVE_FETCH(${ADDRESS_i} ${FILENAME_i} 0)
++    IF ( NOT STATUS MATCHES 0 )
+       SET ( LOAD_OK 0 )
+-      BREAK()
++      # keep looping: print all URLs for the user to fetch manually
+     ENDIF()
+ 
+   ENDFOREACH()

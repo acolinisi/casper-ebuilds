@@ -1,0 +1,47 @@
+--- a/CMakeLists.txt	2020-04-28 01:29:25.630737529 -0000
++++ b/CMakeLists.txt	2020-04-28 01:29:38.457133156 -0000
+@@ -135,7 +135,7 @@
+ ###############################################################################
+ IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+   MESSAGE(STATUS "Setting build type to 'Release' as none was specified.")
+-  seT(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
++#_cmake_modify_IGNORE   seT(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+   # Set the possible values of build type for cmake-gui
+   SET_PROPERTY(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+     "MinSizeRel" "RelWithDebInfo")
+@@ -512,8 +512,9 @@
+ #####         Create API Documentation
+ #####
+ ###############################################################################
+-FIND_PACKAGE(Doxygen)
+-IF(DOXYGEN_FOUND)
++OPTION ( BUILD_DOC "Build API documentation" OFF )
++IF(BUILD_DOC)
++  FIND_PACKAGE(Doxygen REQUIRED)
+ 
+   # MMG2D Documentation
+   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/doc/doxygen/mmg2d/Doxyfile.in
+@@ -567,7 +568,7 @@
+   else()
+     add_dependencies( doc mmgs_doc mmg3d_doc mmg2d_doc )
+   endif() 
+-ENDIF ( DOXYGEN_FOUND )
++ENDIF ( BUILD_DOC )
+ 
+ ###############################################################################
+ #####
+@@ -626,3 +627,14 @@
+ #  ${CPACK_SOURCE_IGNORE_FILES}  )
+ 
+ INCLUDE(CPack)
++
++MESSAGE(STATUS "<<< Gentoo configuration >>>
++Build type      ${CMAKE_BUILD_TYPE}
++Install path    ${CMAKE_INSTALL_PREFIX}
++Compiler flags:
++C               ${CMAKE_C_FLAGS}
++C++             ${CMAKE_CXX_FLAGS}
++Linker flags:
++Executable      ${CMAKE_EXE_LINKER_FLAGS}
++Module          ${CMAKE_MODULE_LINKER_FLAGS}
++Shared          ${CMAKE_SHARED_LINKER_FLAGS}\n")

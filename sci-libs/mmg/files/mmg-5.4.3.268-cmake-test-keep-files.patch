@@ -1,0 +1,36 @@
+--- a/cmake/modules/LoadCiTests.cmake.orig2	2020-04-28 18:27:26.318157389 -0000
++++ b/cmake/modules/LoadCiTests.cmake	2020-04-28 18:27:56.179079433 -0000
+@@ -179,8 +179,6 @@
+ Try to untar it by hand in the ${CI_DIR} directory: "
+         "cat mmg.tgz.* | tar xzvf - ")
+     ENDIF()
+-
+-    FILE(REMOVE ${FILENAME})
+   ENDIF()
+ 
+ ENDIF()
+@@ -201,7 +199,6 @@
+         "test cases directory (mmg2d.tgz).
+ Try to untar it by hand in the ${CI_DIR} directory.")
+     ENDIF()
+-    FILE(REMOVE ${CI_DIR}/mmg2d.tgz)
+   ENDIF ()
+ ENDIF ()
+ 
+@@ -221,7 +218,6 @@
+         "test cases directory (mmgs.tgz).
+ Try to untar it by hand in the ${CI_DIR} directory.")
+     ENDIF()
+-    FILE(REMOVE ${CI_DIR}/mmgs.tgz)
+   ENDIF ()
+ ENDIF ()
+ 
+@@ -290,8 +286,6 @@
+ Try to untar it by hand in the ${CI_DIR} directory: "
+         "cat mmg3d.tgz.* | tar xzvf - ")
+     ENDIF()
+-
+-    FILE(REMOVE ${FILENAME})
+   ENDIF()
+ 
+ ENDIF()

@@ -1,0 +1,11 @@
+--- a/cmake/modules/LoadCiTests.cmake	2020-04-28 01:58:20.667266963 -0000
++++ b/cmake/modules/LoadCiTests.cmake	2020-04-28 02:01:56.989943177 -0000
+@@ -159,7 +159,7 @@
+ #--------------> mmg
+ IF ( GET_MMG_TESTS MATCHES "TRUE" )
+   MESSAGE("-- Download the mmg test cases. May be very long...")
+-  FILE(DOWNLOAD https://drive.google.com/uc?export=download&id=1Kd2aow6nfBI1i5dSN6lXMxaDKLrtpd6r
++  FILE(DOWNLOAD https://drive.google.com/uc?export=download&confirm=GDg_&id=1Kd2aow6nfBI1i5dSN6lXMxaDKLrtpd6r
+     ${CI_DIR}/mmg.tgz
+     SHOW_PROGRESS)
+   IF ( NOT EXISTS ${CI_DIR}/mmg.tgz )

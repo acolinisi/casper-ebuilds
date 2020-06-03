@@ -1,0 +1,83 @@
+--- a/CMakeLists.txt	2020-04-28 01:33:23.294068157 -0000
++++ b/CMakeLists.txt	2020-04-28 01:40:52.444922030 -0000
+@@ -211,25 +211,6 @@
+ 
+ ############################################################################
+ #####
+-#####         Scotch
+-#####
+-############################################################################
+-# Find SCOTCH library?
+-SET(SCOTCH_DIR "" CACHE PATH "Installation directory for scotch")
+-LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+-FIND_PACKAGE(Scotch)
+-
+-IF ( NOT SCOTCH_FOUND )
+-  MESSAGE ( WARNING "Scotch library not found:"
+-    "Using scotch reduce the execution time of mmg3d "
+-    "(see https://gforge.inria.fr/frs/?group_id=248 to download it)."
+-    "If you have already installed Scotch and want to use it, "
+-    "please set the CMake variable or environment variable SCOTCH_DIR "
+-    "to your scotch directory.")
+-ENDIF ( )
+-
+-############################################################################
+-#####
+ ##### RPATH for MacOSX
+ #####
+ ############################################################################
+@@ -272,12 +253,9 @@
+   MMG2D_CI "Enable/Disable continuous integration for mmg2d" ON
+   "BUILD_TESTING;BUILD_MMG2D" OFF)
+ 
+-# add LinearElasticity library?
+-SET(ELAS_DIR "" CACHE PATH "Installation directory for Elas")
+-INCLUDE(cmake/modules/FindElas.cmake)
+ CMAKE_DEPENDENT_OPTION (
+   USE_ELAS "Use the Elas library for lagrangian motion option" ON
+-  "BUILD_MMG2D;ELAS_FOUND" OFF)
++  "BUILD_MMG2D" OFF)
+ 
+ #------------------------------- mmgs
+ CMAKE_DEPENDENT_OPTION ( LIBMMGS_STATIC "Compile the mmgs static library" ${BUILD_STATIC_LIBS}
+@@ -324,17 +302,36 @@
+ MARK_AS_ADVANCED(PATTERN)
+ 
+ # add Elastic library?
+-SET(ELAS_DIR "" CACHE PATH "Installation directory for Elas")
+-INCLUDE(cmake/modules/FindElas.cmake)
+ CMAKE_DEPENDENT_OPTION (
+   USE_ELAS "Use the Elas library for lagrangian motion option" ON
+-  "BUILD_MMG3D;ELAS_FOUND" OFF)
++  "BUILD_MMG3D" OFF)
+ 
+ # add Scotch library?
+ CMAKE_DEPENDENT_OPTION ( USE_SCOTCH "Use SCOTCH TOOL for renumbering" ON
+-  "SCOTCH_FOUND;BUILD_MMGS3D" OFF)
++  "BUILD_MMGS3D" OFF)
++
++IF( USE_ELAS )
++  SET(ELAS_DIR "" CACHE PATH "Installation directory for Elas")
++  INCLUDE(cmake/modules/FindElas.cmake)
++  IF ( NOT ELAS_FOUND )
++    MESSAGE ( ERROR_FATAL "Elastic Library (ELAS) not found" )
++  ENDIF()
++ENDIF()
+ 
+ IF( USE_SCOTCH )
++  SET(SCOTCH_DIR "" CACHE PATH "Installation directory for scotch")
++  LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
++  FIND_PACKAGE(Scotch)
++
++  IF ( NOT SCOTCH_FOUND )
++    MESSAGE ( ERROR_FATAL "Scotch library not found:"
++      "Using scotch reduce the execution time of mmg3d "
++      "(see https://gforge.inria.fr/frs/?group_id=248 to download it)."
++      "If you have already installed Scotch and want to use it, "
++      "please set the CMake variable or environment variable SCOTCH_DIR "
++      "to your scotch directory.")
++  ENDIF ( )
++
+   SET(CMAKE_C_FLAGS "-DUSE_SCOTCH ${CMAKE_C_FLAGS}")
+ 
+   MESSAGE(STATUS

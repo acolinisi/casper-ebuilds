@@ -1,0 +1,23 @@
+--- a/CMakeLists.txt	2020-04-28 18:10:48.624347921 -0000
++++ b/CMakeLists.txt	2020-04-28 18:11:44.943087148 -0000
+@@ -568,8 +568,9 @@
+ #####         Create API Documentation
+ #####
+ ###############################################################################
+-FIND_PACKAGE(Doxygen)
+-IF(DOXYGEN_FOUND)
++OPTION ( BUILD_DOC "Build API documentation" OFF )
++IF(BUILD_DOC)
++  FIND_PACKAGE(Doxygen REQUIRED)
+ 
+   # MMG2D Documentation
+   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/doc/doxygen/mmg2d/Doxyfile.in
+@@ -623,7 +624,7 @@
+   else()
+     add_dependencies( doc mmgs_doc mmg3d_doc mmg2d_doc )
+   endif()
+-ENDIF ( DOXYGEN_FOUND )
++ENDIF ( BUILD_DOC )
+ 
+ ###############################################################################
+ #####

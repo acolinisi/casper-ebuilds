@@ -22,10 +22,10 @@ SRC_URI="https://gforge.inria.fr/frs/download.php/latestfile/${PID}/${PN}_${PV}.
 LICENSE="CeCILL-C"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux"
-IUSE="doc int64 mpi +smp starpu static-libs"
+IUSE="doc index-64bit mpi +smp starpu static-libs"
 
 RDEPEND="
-	sci-libs/scotch:0=[int64?,mpi?]
+	sci-libs/scotch:0=[index-64bit?,mpi?]
 	sys-apps/hwloc:0=
 	virtual/blas
 	mpi? ( virtual/mpi )
@@ -71,7 +71,7 @@ src_configure() {
 			-i config.in || die
 	fi
 
-	if use int64; then
+	if use index-64bit; then
 		sed -e '/VERSIONINT.*_int64/s/#//' \
 			-e '/CCTYPES.*INTSSIZE64/s/#//' \
 			-i config.in || die

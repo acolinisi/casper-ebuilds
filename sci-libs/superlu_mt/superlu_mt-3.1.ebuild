@@ -15,7 +15,7 @@ SRC_URI="http://crd.lbl.gov/~xiaoye/SuperLU/${PN}_${PV}.tar.gz"
 LICENSE="BSD"
 SLOT="0/${SOVERSION}"
 KEYWORDS="amd64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="doc examples int64 openmp static-libs test threads"
+IUSE="doc examples index-64bit openmp static-libs test threads"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="|| ( openmp threads )"
 
@@ -49,7 +49,7 @@ src_prepare() {
 		LOADER=$(tc-getCC)
 		ARCH=$(tc-getAR)
 		RANLIB=$(tc-getRANLIB)
-		PREDEFS=${CPPFLAGS} -DUSE_VENDOR_BLAS -DPRNTlevel=0 -DDEBUGlevel=0 $(use int64 && echo -D_LONGINT)
+		PREDEFS=${CPPFLAGS} -DUSE_VENDOR_BLAS -DPRNTlevel=0 -DDEBUGlevel=0 $(use index-64bit && echo -D_LONGINT)
 		CDEFS=-DAdd_
 		CFLAGS=${CFLAGS} ${CTHREADS} \$(PIC)
 		BLASLIB=$($(tc-getPKG_CONFIG) --libs blas)

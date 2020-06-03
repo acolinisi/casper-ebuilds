@@ -3,7 +3,7 @@
 
 EAPI=7
 CMAKE_MAKEFILE_GENERATOR=emake
-inherit cmake-utils
+inherit cmake
 
 DESCRIPTION="BLAS,CBLAS,LAPACK,LAPACKE reference implementations"
 HOMEPAGE="http://www.netlib.org/lapack/"
@@ -35,11 +35,11 @@ src_configure() {
 		-DBUILD_DEPRECATED=$(usex deprecated)
 		-DBUILD_SHARED_LIBS=ON
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	use eselect-ldso || return
 	# Create private lib directory for eselect::blas (ld.so.conf)

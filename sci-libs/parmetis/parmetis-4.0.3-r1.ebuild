@@ -1,13 +1,13 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 # Check metis version bundled in parmetis tar ball
 # by diff of metis and parmetis tar ball
 METISPV=5.1.0
 METISP=metis-${METISPV}
-inherit cmake-utils toolchain-funcs
+inherit cmake toolchain-funcs
 
 DESCRIPTION="Parallel (MPI) unstructured graph partitioning library"
 HOMEPAGE="http://www-users.cs.umn.edu/~karypis/metis/parmetis/"
@@ -36,7 +36,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	# libdir love
 	sed -i \
@@ -82,7 +82,7 @@ src_configure() {
 			-DPCRE=$(usex pcre)
 			$@
 		)
-		cmake-utils_src_configure
+		cmake_src_configure
 	}
 	parmetis_configure -DSHARED=ON
 	if use static-libs; then
@@ -92,15 +92,15 @@ src_configure() {
 }
 
 src_compile() {
-	cmake-utils_src_compile
+	cmake_src_compile
 	use static-libs && \
-		BUILD_DIR="${WORKDIR}/${PN}_static" cmake-utils_src_compile
+		BUILD_DIR="${WORKDIR}/${PN}_static" cmake_src_compile
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 	use static-libs && \
-		BUILD_DIR="${WORKDIR}/${PN}_static" cmake-utils_src_install
+		BUILD_DIR="${WORKDIR}/${PN}_static" cmake_src_install
 	insinto /usr/include
 	doins metis/include/metis.h
 

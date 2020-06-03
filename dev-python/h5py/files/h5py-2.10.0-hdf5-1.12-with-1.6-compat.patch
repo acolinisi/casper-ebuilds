@@ -1,0 +1,53 @@
+--- a/h5py/h5r.pxd	2020-04-21 04:26:30.008299815 -0000
++++ b/h5py/h5r.pxd	2020-04-21 04:37:02.761813026 -0000
+@@ -12,7 +12,9 @@
+ cdef extern from "hdf5.h":
+ 
+   ctypedef haddr_t hobj_ref_t
+-  ctypedef unsigned char hdset_reg_ref_t[12]
++
++cdef struct hdset_reg_ref_t:
++    uint8_t data[12] # sizeof(haddr_t) + 4 == sizeof(signed long long) + 4
+ 
+ cdef union ref_u:
+     hobj_ref_t         obj_ref
+--- a/h5py/_conv.pyx	2020-04-21 04:33:52.697951698 -0000
++++ b/h5py/_conv.pyx	2020-04-21 04:33:59.391158108 -0000
+@@ -400,7 +400,7 @@
+     cdef PyObject* bkg_obj0
+ 
+     memcpy(&bkg_obj0, bkg_obj, sizeof(bkg_obj0));
+-    memcpy(ref.ref.reg_ref, buf_ref, sizeof(hdset_reg_ref_t))
++    memcpy(ref.ref.reg_ref.data, buf_ref, sizeof(hdset_reg_ref_t))
+ 
+     ref.typecode = H5R_DATASET_REGION
+ 
+@@ -430,7 +430,7 @@
+         if not isinstance(obj, RegionReference):
+             raise TypeError("Can't convert incompatible object to HDF5 region reference")
+         ref = <RegionReference>(buf_obj0)
+-        memcpy(buf_ref, ref.ref.reg_ref, sizeof(hdset_reg_ref_t))
++        memcpy(buf_ref, ref.ref.reg_ref.data, sizeof(hdset_reg_ref_t))
+     else:
+         memset(buf_ref, c'\0', sizeof(hdset_reg_ref_t))
+ 
+--- a/h5py/h5i.pyx	2020-04-21 04:38:53.906240579 -0000
++++ b/h5py/h5i.pyx	2020-04-21 04:39:04.667572446 -0000
+@@ -22,7 +22,6 @@
+ DATASPACE   = H5I_DATASPACE
+ DATASET     = H5I_DATASET
+ ATTR        = H5I_ATTR
+-REFERENCE   = H5I_REFERENCE
+ GENPROP_CLS = H5I_GENPROP_CLS
+ GENPROP_LST = H5I_GENPROP_LST
+ DATATYPE    = H5I_DATATYPE
+--- a/h5py/api_types_hdf5.pxd	2020-04-21 04:38:46.954026181 -0000
++++ b/h5py/api_types_hdf5.pxd	2020-04-21 04:39:12.672819316 -0000
+@@ -297,7 +297,6 @@
+     H5I_DATASPACE,          # group ID for Dataspace objects
+     H5I_DATASET,            # group ID for Dataset objects
+     H5I_ATTR,               # group ID for Attribute objects
+-    H5I_REFERENCE,          # group ID for Reference objects
+     H5I_VFL,                # group ID for virtual file layer
+     H5I_GENPROP_CLS,        # group ID for generic property list classes
+     H5I_GENPROP_LST,        # group ID for generic property lists

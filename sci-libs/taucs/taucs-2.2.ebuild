@@ -14,13 +14,13 @@ LICENSE="LGPL-2.1"
 IUSE="cilk doc static-libs"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 
+BDEPEND="virtual/pkgconfig"
 RDEPEND="
 	virtual/blas
 	virtual/lapack
 	|| ( sci-libs/metis sci-libs/parmetis )
 	cilk? ( dev-lang/cilk )"
-DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+DEPEND="${RDEPEND}"
 
 S="${WORKDIR}"
 

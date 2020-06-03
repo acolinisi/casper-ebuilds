@@ -1,9 +1,9 @@
 # Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=4
+EAPI=7
 
-inherit eutils fortran-2 toolchain-funcs
+inherit fortran-2 toolchain-funcs
 
 DESCRIPTION="C library of sparse linear solvers"
 HOMEPAGE="http://www.tau.ac.il/~stoledo/taucs/"
@@ -24,12 +24,13 @@ DEPEND="${RDEPEND}"
 
 S="${WORKDIR}"
 
-src_prepare() {
-	# test with cilk has memory leaks
-	epatch "${FILESDIR}"/${P}-no-test-cilk.patch
-}
+# test with cilk has memory leaks
+PATCHES=(
+	"${FILESDIR}"/${P}-no-test-cilk.patch
+)
 
-src_configure() {
+src_prepare() {
+	default
 	cat > config/linux_shared.mk <<-EOF
 		FC=$(tc-getFC)
 		CC=$(tc-getCC)

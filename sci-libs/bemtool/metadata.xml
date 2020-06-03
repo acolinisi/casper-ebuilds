@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>sci@gentoo.org</email>
+    <name>Gentoo Science Project</name>
+  </maintainer>
+  <longdescription lang="en">
+    BemTool is a C++ header library that only relies on the STL and Boost
+    (www.boost.org/). Its main purpose is the assembly of classic boundary
+    element matrices. At low level, it contains a set of elementary classes
+    for low dimensional linear algebra (so as to deal with geometric
+    computations) and simplicial meshes in 1D,2D and 3D. It contains basic
+    wrappers for Gmsh (cf http://gmsh.info/) as regards mesh generation, and
+    eigen (http://eigen.tuxfamily.org/) for the treatment of large matrices.
+
+    Currently it provides routines for the assembly of boundary element
+    matrices for Laplace, Helmholtz, Yukawa (purely dissipative Helmholtz)
+    and Maxwell matrices in 2D and 3D. The available discretisation spaces
+    are P0, continuous P1, continuous P2 and lowest order Raviart-Thomas
+    elements.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">PierreMarchand20/BemTool</remote-id>
+  </upstream>
+</pkgmetadata>

@@ -1,0 +1,26 @@
+--- a/test2D.cpp	2020-04-29 02:33:33.525631651 -0000
++++ b/test2D.cpp	2020-04-29 02:38:06.335056884 -0000
+@@ -5,7 +5,9 @@
+ #include <iostream>
+ #include <vector>
+ #include <map>
+-#include "bemtool/tools.hpp"
++#include "tools.hpp"
++#include "miscellaneous/eigen_wrap.hpp"
++#include "miscellaneous/refsol.hpp"
+ #include <fstream>
+ 
+ using namespace bemtool;
+--- a/test3D.cpp	2020-04-29 02:33:35.593695521 -0000
++++ b/test3D.cpp	2020-04-29 02:38:11.982231287 -0000
+@@ -1,7 +1,9 @@
+ #include <iostream>
+ #include <vector>
+ #include <map>
+-#include <tools.hpp>
++#include "tools.hpp"
++#include "miscellaneous/eigen_wrap.hpp"
++#include "miscellaneous/refsol.hpp"
+ #include <fstream>
+ 
+ using namespace bemtool;

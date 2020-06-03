@@ -32,7 +32,13 @@
 # @ECLASS-VARIABLE: KERNEL_DIR
 # @DESCRIPTION:
 # A string containing the directory of the target kernel sources. The default value is
-# "/usr/src/linux"
+# "${DEFAULT_KERNEL_DIR}"
+#
+# @ECLASS-VARIABLE: DEFAULT_KERNEL_DIR
+# @INTERNAL
+# @DESCRIPTION:
+# The default value for ${KERNEL_DIR} variable when it is not set.
+DEFAULT_KERNEL_DIR="${EROOT%/}/usr/src/linux"
 
 # @ECLASS-VARIABLE: CONFIG_CHECK
 # @DESCRIPTION:
@@ -115,7 +121,7 @@ IUSE="kernel_linux"
 
 # Overwritable environment Var's
 # ---------------------------------------
-KERNEL_DIR="${KERNEL_DIR:-${ROOT%/}/usr/src/linux}"
+KERNEL_DIR="${KERNEL_DIR:-${DEFAULT_KERNEL_DIR}}"
 
 
 # Bug fixes
@@ -477,7 +483,7 @@ get_version() {
 			get_version_warning_done=1
 			qewarn "Unable to find kernel sources at ${KERNEL_DIR}"
 			#qeinfo "This package requires Linux sources."
-			if [ "${KERNEL_DIR}" == "/usr/src/linux" ] ; then
+			if [ "${KERNEL_DIR}" == "${DEFAULT_KERNEL_DIR}" ] ; then
 				qeinfo "Please make sure that ${KERNEL_DIR} points at your running kernel, "
 				qeinfo "(or the kernel you wish to build against)."
 				qeinfo "Alternatively, set the KERNEL_DIR environment variable to the kernel sources location"

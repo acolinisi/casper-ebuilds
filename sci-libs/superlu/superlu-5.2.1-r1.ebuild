@@ -1,19 +1,18 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 FORTRAN_STANDARD=77
 
-inherit cmake-utils fortran-2
+inherit cmake fortran-2
 
 MY_PN=SuperLU
 
 if [[ ${PV} != *9999* ]]; then
-	inherit versionator
 	SRC_URI="https://crd-legacy.lbl.gov/~xiaoye/SuperLU//${PN}_${PV}.tar.gz"
 	KEYWORDS="~alpha amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ppc64 ~sparc x86 ~amd64-linux ~x86-linux"
-	SLOT="0/$(get_major_version)"
+	SLOT="0/$(ver_cut 1)"
 	S="${WORKDIR}/SuperLU_${PV}"
 else
 	inherit git-r3
@@ -43,23 +42,23 @@ PATCHES=(
 S="${WORKDIR}/${MY_PN}_${PV}"
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 	# respect user's CFLAGS
 	sed -i -e 's/O3//' CMakeLists.txt || die
 }
 
 src_configure() {
 	local mycmakeargs+=(
-		-DCMAKE_INSTALL_INCLUDEDIR="include/superlu"
+		-DCMAKE_INSTALL_INCLUDEDIR="include/${PN}"
 		-DBUILD_SHARED_LIBS=ON
 		-Denable_blaslib=OFF
 		-Denable_tests=$(usex test)
 	)
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 	use doc && dodoc -r DOC/html
 	if use examples; then
 		insinto /usr/share/doc/${PF}/examples

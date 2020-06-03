@@ -93,10 +93,26 @@ src_test() {
 }
 
 src_install() {
+	local libdir=usr/$(get_libdir)
+	local incdir=usr/include/${PN}
 	emake -C src install \
 		  HYPRE_INSTALL_DIR="${ED}" \
-		  HYPRE_LIB_INSTALL="${ED}/usr/$(get_libdir)" \
-		  HYPRE_INC_INSTALL="${ED}/usr/include/hypre"
+		  HYPRE_LIB_INSTALL="${ED}/${libdir}" \
+		  HYPRE_INC_INSTALL="${ED}/${incdir}"
+
+	local urls=(${HOMEPAGE})
+	cat <<-EOF > ${PN}.pc
+	Name: ${PN}
+	Description: ${DESCRIPTION}
+	Version: ${PV}
+	URL: ${urls[0]}
+	Libs: -lHYPRE
+	Cflags: -I${EPREFIX}/${incdir}
+	EOF
+
+	insinto /usr/$(get_libdir)/pkgconfig
+	doins ${PN}.pc
+
 	if use examples; then
 		dodoc -r src/examples
 	fi

@@ -123,6 +123,83 @@ cuda_gccdir() {
 	fi
 }
 
+cuda_get_supported_gcc() {
+	${EPREFIX}/opt/cuda/bin/cuda-config -s
+}
+
+cuda_get_available_gcc() {
+	${EPREFIX}/usr/bin/gcc-config -l | \
+		sed 's/\s*\[[0-9]\+\]\s\+\S\+-\([0-9.]\+\S\+\).*/\1/'
+}
+
+cuda_get_current_gcc() {
+	${EPREFIX}/usr/bin/gcc-config -l | grep '\*' | \
+		sed 's/\s*\[\([0-9]\+\)\].*/\1/'
+}
+
+cuda_is_gcc_compat() {
+	local ver=$(ver_cut 1-2 ${1})
+	local supported_gcc="$(cuda_get_supported_gcc)"
+	local supported_full_ver
+	for supported_full_ver in ${supported_gcc}; do
+		supported_ver=$(ver_cut 1-2 ${supported_full_ver})
+		ver_test ${ver} -eq ${supported_ver} && return 0
+	done
+	return 1
+}
+
+cuda_get_gcc_index() {
+	local supported_gcc="$(cuda_get_supported_gcc)"
+	local available_gcc="$(cuda_get_available_gcc)"
+	local avail_full_ver avail_ver supported_full_ver supported_ver
+	local select_ver
+	for avail_full_ver in $(echo ${available_gcc} | sort -r); do
+		avail_ver=$(ver_cut 1-2 ${avail_full_ver})
+		if cuda_is_gcc_compat ${avail_ver}; then
+			select_ver=${avail_full_ver}
+			break
+		fi
+	done
+	[ -n "${select_ver}" ] || die "No GCC version compatible with CUDA"
+	# loop to find the index, because we used sorted order above
+	local i=1
+	for avail_full_ver in ${available_gcc}; do
+		if [ "${select_ver}" = "${avail_full_ver}" ]; then
+			echo "${i}"
+			return
+		fi
+		i=$((i+1))
+	done
+	die "Unreachable"
+}
+
+cuda_select_gcc() {
+	tc-is-gcc || die "Unsupported toolchain: use GCC to build with CUDA"
+	DEFAULT_GCC_INDEX=$(cuda_get_current_gcc) # global var
+	cuda_is_gcc_compat ${DEFAULT_GCC_INDEX} && return
+	local cuda_gcc_index=$(cuda_get_gcc_index)
+	[ "${DEFAULT_GCC_INDEX}" != "${cuda_gcc_index}" ] || return
+
+	debug-print "Selecting GCC ${cuda_gcc_index} for CUDA"
+	gcc-config ${cuda_gcc_index} || \
+		die "Failed to select CUDA-compatible GCC version"
+}
+
+cuda_restore_gcc() {
+	[ -n "${DEFAULT_GCC_INDEX}" ] || die "Default GCC was not saved?"
+	local current_gcc_index=$(cuda_get_current_gcc)
+	[ "${current_gcc_index}" != "${DEFAULT_GCC_INDEX}" ] || return
+
+	debug-print "Restoring GCC ${DEFAULT_GCC_INDEX}"
+	gcc-config ${DEFAULT_GCC_INDEX} || die "Failed to restore GCC version"
+}
+
+cuda_with_gcc() {
+	cuda_select_gcc
+	"$@"
+	cuda_restore_gcc
+}
+
 # @FUNCTION: cuda_sanitize
 # @DESCRIPTION:
 # Correct NVCCFLAGS by adding the necessary reference to gcc bindir and

@@ -6,8 +6,8 @@ EAPI=7
 inherit fortran-2 toolchain-funcs
 
 DESCRIPTION="C library of sparse linear solvers"
-HOMEPAGE="http://www.tau.ac.il/~stoledo/taucs/"
-SRC_URI="http://www.tau.ac.il/~stoledo/${PN}/${PV}/${PN}.tgz -> ${P}.tgz"
+HOMEPAGE="https://www.tau.ac.il/~stoledo/taucs/"
+SRC_URI="https://www.tau.ac.il/~stoledo/${PN}/${PV}/${PN}.tgz -> ${P}.tgz"
 
 SLOT="0"
 LICENSE="LGPL-2.1"

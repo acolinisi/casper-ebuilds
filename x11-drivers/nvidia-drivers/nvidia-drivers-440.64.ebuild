@@ -343,7 +343,7 @@ src_install() {
 		doexe ${NV_OBJ}/nvidia-modprobe
 		fowners root:video /opt/bin/nvidia-modprobe
 		fperms 4710 /opt/bin/nvidia-modprobe
-		dosym /{opt,usr}/bin/nvidia-modprobe
+		dosym "${EPREFIX}/opt/bin/nvidia-modprobe" /usr/bin/nvidia-modprobe
 
 		doman nvidia-cuda-mps-control.1
 		doman nvidia-modprobe.1
@@ -520,18 +520,18 @@ pkg_preinst() {
 			sed -i \
 				-e "s:PACKAGE:${PF}:g" \
 				-e "s:VIDEOGID:${videogroup}:" \
-				"${D}"/etc/modprobe.d/nvidia.conf || die
+				"${ED}"/etc/modprobe.d/nvidia.conf || die
 		fi
 	fi
 
 	# Clean the dynamic libGL stuff's home to ensure
 	# we dont have stale libs floating around
-	if [ -d "${ROOT}"/usr/lib/opengl/nvidia ]; then
-		rm -rf "${ROOT}"/usr/lib/opengl/nvidia/*
+	if [ -d "${EROOT}"/usr/lib/opengl/nvidia ]; then
+		rm -rf "${EROOT}"/usr/lib/opengl/nvidia/*
 	fi
 	# Make sure we nuke the old nvidia-glx's env.d file
-	if [ -e "${ROOT}"/etc/env.d/09nvidia ]; then
-		rm -f "${ROOT}"/etc/env.d/09nvidia
+	if [ -e "${EROOT}"/etc/env.d/09nvidia ]; then
+		rm -f "${EROOT}"/etc/env.d/09nvidia
 	fi
 }
 
@@ -540,9 +540,9 @@ pkg_postinst() {
 
 	# Switch to the nvidia implementation
 	if ! use libglvnd; then
-		use X && "${ROOT}"/usr/bin/eselect opengl set --use-old nvidia
+		use X && "${EROOT}"/usr/bin/eselect opengl set --use-old nvidia
 	fi
-	"${ROOT}"/usr/bin/eselect opencl set --use-old nvidia
+	"${EROOT}"/usr/bin/eselect opencl set --use-old nvidia
 
 	readme.gentoo_print_elog
 
@@ -566,13 +566,13 @@ pkg_postinst() {
 
 pkg_prerm() {
 	if ! use libglvnd; then
-		use X && "${ROOT}"/usr/bin/eselect opengl set --use-old xorg-x11
+		use X && "${EROOT}"/usr/bin/eselect opengl set --use-old xorg-x11
 	fi
 }
 
 pkg_postrm() {
 	use driver && use kernel_linux && linux-mod_pkg_postrm
 	if ! use libglvnd; then
-		use X && "${ROOT}"/usr/bin/eselect opengl set --use-old xorg-x11
+		use X && "${EROOT}"/usr/bin/eselect opengl set --use-old xorg-x11
 	fi
 }

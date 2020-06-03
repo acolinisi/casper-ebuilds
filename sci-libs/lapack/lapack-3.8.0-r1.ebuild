@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-CMAKE_MAKEFILE_GENERATOR=emake
 inherit cmake
 
 DESCRIPTION="BLAS,CBLAS,LAPACK,LAPACKE reference implementations"

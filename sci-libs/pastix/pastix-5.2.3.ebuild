@@ -13,6 +13,9 @@ inherit fortran-2 toolchain-funcs
 # static libs building without pic
 # metis?
 
+#TODO: make jobserver QA warning
+#TODO: /image path in .pc file
+
 # package id: change every version, see the link on inriaforge
 PID=218
 DESCRIPTION="Parallel solver for very large sparse linear systems"

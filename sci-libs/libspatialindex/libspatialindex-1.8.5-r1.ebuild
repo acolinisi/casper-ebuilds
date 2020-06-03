@@ -1,15 +1,15 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2020 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit autotools eutils ltprune
+inherit autotools
 
 MY_PN="spatialindex-src"
 MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="General framework for developing spatial indices"
-HOMEPAGE="https://libspatialindex.github.com/"
+HOMEPAGE="http://libspatialindex.github.com/"
 SRC_URI="http://download.osgeo.org/libspatialindex/${MY_P}.tar.bz2"
 LICENSE="MIT"
 
@@ -29,12 +29,5 @@ src_prepare() {
 }
 
 src_configure() {
-	econf \
-		$(use_enable static-libs static) \
-		$(use_enable debug)
-}
-
-src_install() {
-	default
-	use static-libs || prune_libtool_files
+	econf $(use_enable debug)
 }

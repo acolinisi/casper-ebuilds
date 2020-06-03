@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>sci@gentoo.org</email>
+    <name>Gentoo Science Project</name>
+  </maintainer>
+  <longdescription lang="en">
+    TetGen is a program to generate tetrahedral meshes of any 3D
+    polyhedral domains. TetGen generates exact constrained Delaunay
+    tetrahedralizations, boundary conforming Delaunay meshes, and
+    Voronoi partitions. The following pictures respectively illustrate
+    a 3D polyhedral domain (left), a boundary conforming Delaunay
+    tetrahedral mesh (middle), and its dual - a Voronoi partition
+    (right).
+
+    TetGen provides various features to generate good quality and
+    adaptive tetrahedral meshes suitable for numerical methods, such
+    as finite element or finite volume methods.
+  </longdescription>
+</pkgmetadata>

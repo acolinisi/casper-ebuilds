@@ -76,6 +76,8 @@ src_prepare() {
 	use cuda && cuda_src_prepare
 }
 
+# TODO: configure pkg-config path to /usr/lib64/pkgconfig, not /usr/share/pkgconfig
+
 src_configure() {
 	cmake_src_configure
 }

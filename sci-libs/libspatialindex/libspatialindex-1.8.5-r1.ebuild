@@ -21,7 +21,8 @@ S=${WORKDIR}/${MY_P}
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.8.1-QA.patch
-)
+	"${FILESDIR}"/${P}-e779efac79ede3a1cc710e72a1ead8bacbeb42ca-fix-C-API.patch
+	)
 
 src_prepare() {
 	default

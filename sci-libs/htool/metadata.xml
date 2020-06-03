@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>sci@gentoo.org</email>
+    <name>Gentoo Science Project</name>
+  </maintainer>
+  <longdescription lang="en">
+    Htool is an implementation of hierarchical matrices (cf. this
+    reference or this one), it was written to test Domain
+    Decomposition Methods (DDM) applied to Boundary Element Method
+    (BEM). It provides:
+    * routines to build hierarchical matrix structures (cluster trees,
+    block trees, low-rank matrices and block matrices),
+    * parallel matrix-vector and matrix-matrix product using MPI and
+    OpenMP,
+    * preconditioning techniques using domain decomposition methods,
+    the possibility to use Htool with any generator of coefficients
+    (e.g., your own BEM library),
+    * an interface with HPDDM for iterative solvers,
+    * GUI and several service functions to display informations about
+    matrix structures and timing.
+  </longdescription>
+  <upstream>
+    <remote-id type="github">htool-ddm/htool</remote-id>
+  </upstream>
+</pkgmetadata>

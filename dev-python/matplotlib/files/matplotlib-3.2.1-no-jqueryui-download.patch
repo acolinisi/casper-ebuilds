@@ -1,0 +1,31 @@
+--- a/setup.py	2020-04-06 18:41:08.082917409 -0000
++++ b/setup.py	2020-04-06 18:41:27.930530331 -0000
+@@ -119,27 +119,7 @@
+ 
+ 
+ def _download_jquery_to(dest):
+-    # Note: When bumping the jquery-ui version, also update the versions in
+-    # single_figure.html and all_figures.html.
+-    url = "https://jqueryui.com/resources/download/jquery-ui-1.12.1.zip"
+-    sha = "f8233674366ab36b2c34c577ec77a3d70cac75d2e387d8587f3836345c0f624d"
+-    name = Path(url).stem
+-    if (dest / name).exists():
+-        return
+-    # If we are installing from an sdist, use the already downloaded jquery-ui.
+-    sdist_src = Path("lib/matplotlib/backends/web_backend", name)
+-    if sdist_src.exists():
+-        shutil.copytree(sdist_src, dest / name)
+-        return
+-    if not (dest / name).exists():
+-        dest.mkdir(parents=True, exist_ok=True)
+-        try:
+-            buff = download_or_cache(url, sha)
+-        except Exception:
+-            raise IOError(f"Failed to download jquery-ui.  Please download "
+-                          f"{url} and extract it to {dest}.")
+-        with ZipFile(buff) as zf:
+-            zf.extractall(dest)
++    pass
+ 
+ 
+ # Relying on versioneer's implementation detail.

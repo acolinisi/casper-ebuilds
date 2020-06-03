@@ -1,0 +1,11 @@
+--- a/meson.build	2020-05-28 16:42:14.000000000 -0000
++++ b/meson.build	2020-05-28 16:42:23.000000000 -0000
+@@ -1156,7 +1156,7 @@
+   endif
+ endforeach
+ 
+-foreach f : ['strtof', 'mkostemp', 'timespec_get', 'memfd_create', 'random_r', 'flock', 'strtok_r']
++foreach f : ['strtof', 'mkostemp', 'timespec_get', 'random_r', 'flock', 'strtok_r']
+   if cc.has_function(f)
+     pre_args += '-DHAVE_@0@'.format(f.to_upper())
+   endif

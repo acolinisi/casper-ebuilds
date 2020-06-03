@@ -76,6 +76,9 @@ src_configure() {
 		local mycmakeargs=(
 			-DGKLIB_PATH="${S}/metis/GKlib"
 			-DMETIS_PATH="${S}/metis"
+			-DCMAKE_SKIP_BUILD_RPATH=ON
+			-DCMAKE_BUILD_WITH_INSTALL_RPATH=OFF
+			-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF
 			-DGKRAND=ON
 			-DMETIS_INSTALL=ON
 			-DOPENMP=$(usex openmp)

@@ -8,7 +8,10 @@ FORTRAN_NEEDED=fortran
 inherit cmake-utils fortran-2 toolchain-funcs flag-o-matic
 
 DESCRIPTION="Parallel matrix preconditioners library"
-HOMEPAGE="https://computation.llnl.gov/projects/hypre-scalable-linear-solvers-multigrid-methods"
+HOMEPAGE="
+	https://www.llnl.gov/casc/hypre/
+	https://computation.llnl.gov/projects/hypre-scalable-linear-solvers-multigrid-methods
+"
 SRC_URI="https://github.com/${PN}-space/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1"

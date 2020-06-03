@@ -14,10 +14,13 @@
 		<flag name="cuda">Add GPU direct support</flag>
 		<flag name="heterogeneous">Enable features required for heterogeneous
 		platform support</flag>
+		<flag name="pmi">Build against Process Management Interface (PMI) libraries versions 1 and/or 2</flag>
+		<flag name="internal_pmix">Build against bundled Process Management Interface (PMIX) library (otherwise, use library installed in the system)</flag>
 		<flag name="romio">Build the ROMIO MPI-IO component</flag>
 		<flag name="mpi-threads">Enable MPI_THREAD_MULTIPLE</flag>
 		<flag name="numa">Enable numactl to allow binding processes to CPUs</flag>
 		<flag name="vt">Enable bundled VampirTrace support</flag>
 		<flag name="pbs">Add support for the Portable Batch System (PBS)</flag>
+		<flag name="ucx">Enable the Open Unified Communication X (Open UCX) transport, build against library installed in the system</flag>
 	</use>
 </pkgmetadata>

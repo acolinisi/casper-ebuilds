@@ -63,11 +63,11 @@ src_prepare() {
 	fi
 
 	if use index-64bit; then
-		sed -i -e '/IDXTYPEWIDTH/s/32/64/' metis/include/metis.h || die
+		sed -i -e '/define\s\+IDXTYPEWIDTH/s/32/64/' metis/include/metis.h || die
 	fi
 
 	if use double-precision; then
-		sed -i -e '/REALTYPEWIDTH/s/32/64/' metis/include/metis.h || die
+		sed -i -e '/define\s\+REALTYPEWIDTH/s/32/64/' metis/include/metis.h || die
 	fi
 }
 

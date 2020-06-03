@@ -8,7 +8,7 @@ inherit cmake fortran-2
 MY_PN=SuperLU
 
 if [[ ${PV} != *9999* ]]; then
-	SRC_URI="https://crd-legacy.lbl.gov/~xiaoye/SuperLU//${PN}_${PV}.tar.gz"
+	SRC_URI="https://portal.nersc.gov/project/sparse/${PN}/${PN}_${PV}.tar.gz"
 	KEYWORDS="~alpha amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ppc64 ~sparc x86 ~amd64-linux ~x86-linux"
 	SLOT="0/$(ver_cut 1)"
 	S="${WORKDIR}/SuperLU_${PV}"
@@ -21,7 +21,7 @@ else
 fi
 
 DESCRIPTION="Sparse LU factorization library"
-HOMEPAGE="https://crd-legacy.lbl.gov/~xiaoye/SuperLU/"
+HOMEPAGE="https://portal.nersc.gov/project/sparse/superlu/#superlu"
 LICENSE="BSD"
 
 IUSE="doc examples test"

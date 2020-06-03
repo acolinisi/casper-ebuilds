@@ -20,7 +20,7 @@ RESTRICT="bindist mirror"
 
 BDEPEND=""
 RDEPEND="
-	<sys-devel/gcc-9[cxx]
+	<sys-devel/gcc-8.4[cxx]
 	>=x11-drivers/nvidia-drivers-${DRIVER_PV}[-X,uvm]
 	debugger? (
 		dev-libs/openssl-compat:1.0.0

@@ -439,12 +439,8 @@ src_install-libs() {
 		nv_libdir="${NV_OBJ}"/32
 	fi
 
-	if use X; then
-		NV_GLX_LIBRARIES=(
-			"libEGL_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-			"libGLESv1_CM_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-			"libGLESv2_nvidia.so.${NV_SOVER} ${GL_ROOT}"
-			"libGLX_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+	if use kernel_linux; then
+		NV_GLX_LIBRARIES+=(
 			"libOpenCL.so.1.0.0 ${CL_ROOT}"
 			"libcuda.so.${NV_SOVER}"
 			"libnvcuvid.so.${NV_SOVER}"
@@ -459,6 +455,15 @@ src_install-libs() {
 			"libnvidia-ifr.so.${NV_SOVER}"
 			"libnvidia-opencl.so.${NV_SOVER}"
 			"libnvidia-ptxjitcompiler.so.${NV_SOVER}"
+		)
+	fi
+
+	if use X; then
+		NV_GLX_LIBRARIES+=(
+			"libEGL_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+			"libGLESv1_CM_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+			"libGLESv2_nvidia.so.${NV_SOVER} ${GL_ROOT}"
+			"libGLX_nvidia.so.${NV_SOVER} ${GL_ROOT}"
 			"libvdpau_nvidia.so.${NV_SOVER}"
 		)
 		if ! use libglvnd; then
@@ -501,7 +506,9 @@ src_install-libs() {
 				"libnvoptix.so.${NV_SOVER}"
 			)
 		fi
-
+	fi
+	if use kernel_linux || use X
+	then
 		for NV_LIB in "${NV_GLX_LIBRARIES[@]}"; do
 			donvidia "${nv_libdir}"/${NV_LIB}
 		done

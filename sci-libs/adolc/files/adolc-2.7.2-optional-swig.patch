@@ -1,0 +1,52 @@
+--- a/configure.ac.orig1	2020-04-06 01:00:18.034999729 -0000
++++ b/configure.ac	2020-04-06 01:00:40.928706102 -0000
+@@ -498,9 +498,22 @@
+ AC_DEFINE(ADOLC_TAPE_DOC_VALUES,1,[ADOL-C tape_doc routine computes values])
+ fi
+ 
+-AM_PATH_PYTHON([2.7],[python_found=yes],[python_found=no])
+-AC_PATH_PROG(SWIG, swig, [no])
+-AM_CONDITIONAL(PYTHONFOUND, [test x$python_found = xyes && test x$SWIG != xno])
++AC_MSG_CHECKING(whether to build Python swig module)
++AC_ARG_ENABLE(swig,
++            [AS_HELP_STRING([--enable-swig],
++                            [build Python swig module [default=disabled],[]])],
++            [swig=$enableval
++             AC_MSG_RESULT($enableval)],
++            [swig="no"
++             AC_MSG_RESULT(no)])
++if test x$swig = xyes; then
++  AM_PATH_PYTHON([2.7],[python_found=yes],[python_found=no])
++  AC_PATH_PROG(SWIG, swig, [no])
++else
++  python_found=no
++  SWIG=no
++fi
++AM_CONDITIONAL(PYTHONFOUND, [test x$swig = xyes && test x$python_found = xyes && test x$SWIG != xno])
+ ###########################################################################
+ #                      COIN_PATCH_LIBTOOL_CYGWIN                          #
+ ###########################################################################
+@@ -645,19 +658,19 @@
+   Only sparsity patterns can be computed\033@<:@0m"
+     warn=true
+ fi
+-if test x$sparse = xyes && test x$python_found = xyes && test x$SWIG != xno; then
++if test x$swig = xyes && test x$sparse = xyes && test x$python_found = xyes && test x$SWIG != xno; then
+    echo \
+ "  Build with python swig module:      yes"
+ else
+    echo -n \
+ "  Build with python swig module:      no "
+-   if test x$sparse = xno && test x$python_found = xyes && test x$SWIG != xno; then
++   if test x$swig = xyes && test x$sparse = xno && test x$python_found = xyes && test x$SWIG != xno; then
+      echo \
+ "(due to sparse drivers disabled)"
+-  elif test x$sparse = xyes && ( test x$python_found = xno || test x$SWIG = xno ); then
++  elif test x$swig = xyes && test x$sparse = xyes && ( test x$python_found = xno || test x$SWIG = xno ); then
+      echo \
+ "(due to python/swig missing)"
+-  else
++  elif test x$swig = xyes; then
+     echo \
+ "(due to sparse drivers disabled and python/swig missing)"
+   fi

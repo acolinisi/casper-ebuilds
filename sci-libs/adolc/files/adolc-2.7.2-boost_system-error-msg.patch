@@ -1,0 +1,11 @@
+--- a/autoconf/ax_boost_system.m4	2020-04-05 22:36:05.304965165 -0000
++++ b/autoconf/ax_boost_system.m4	2020-04-05 22:36:09.595097560 -0000
+@@ -107,7 +107,7 @@
+ 
+             fi
+             if test "x$ax_lib" = "x"; then
+-                AC_MSG_ERROR(Could not find a version of the library!)
++                AC_MSG_ERROR(Could not find a version of the Boost::System library!)
+             fi
+             if test "x$link_system" = "xno"; then
+                 AC_MSG_ERROR(Could not link against $ax_lib !)

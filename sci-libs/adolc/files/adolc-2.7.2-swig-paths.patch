@@ -1,0 +1,21 @@
+--- a/ADOL-C/swig/Makefile.am	2020-04-06 01:13:19.893124758 -0000
++++ b/ADOL-C/swig/Makefile.am	2020-04-06 01:13:28.961404632 -0000
+@@ -20,6 +20,6 @@
+ if PYTHONFOUND
+ if SPARSE
+ install:
+-	CXX=${CXX} ${PYTHON} setup.py install --prefix=${prefix} --only-swig
++	CXX=${CXX} ${PYTHON} setup.py install --prefix=${prefix} --lib-prefix=${prefix} --only-swig
+ endif
+ endif
+--- a/ADOL-C/swig/setup.py	2020-04-06 01:13:48.233999441 -0000
++++ b/ADOL-C/swig/setup.py	2020-04-06 01:13:52.588133822 -0000
+@@ -154,7 +154,7 @@
+                                        ('boost_dir', 'boost_dir'),
+                                        ('only_swig', 'only_swig'))
+         
+-incdirs = np_dist.get_numpy_include_dirs()
++incdirs = np_dist.get_numpy_include_dirs() + ['../include']
+ #python_ldflags = subprocess.check_output(['python-config','--ldflags'],universal_newlines=True)
+ 
+ adolc_mod = Extension('_adolc',

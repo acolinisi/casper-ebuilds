@@ -1,0 +1,11 @@
+--- a/configure.ac	2020-04-06 00:33:22.373136225 -0000
++++ b/configure.ac	2020-04-06 00:33:30.768395337 -0000
+@@ -654,7 +654,7 @@
+    if test x$sparse = xno && test x$python_found = xyes && test x$SWIG != xno; then
+      echo \
+ "(due to sparse drivers disabled)"
+-  elif test x$sparse = xyes && ( $test x$python_found = xno || test x$SWIG = xno ); then
++  elif test x$sparse = xyes && ( test x$python_found = xno || test x$SWIG = xno ); then
+      echo \
+ "(due to python/swig missing)"
+   else

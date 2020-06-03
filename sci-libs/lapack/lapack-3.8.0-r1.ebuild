@@ -15,6 +15,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~
 IUSE="lapacke deprecated doc eselect-ldso"
 # TODO: static-libs 64bit-index
 
+BDEPEND="virtual/pkgconfig"
 RDEPEND="
 	eselect-ldso? ( >=app-eselect/eselect-blas-0.2
 	>=app-eselect/eselect-lapack-0.2 )
@@ -25,8 +26,7 @@ RDEPEND="
 	!sci-libs/lapacke-reference
 	virtual/fortran
 	doc? ( app-doc/blas-docs )"
-DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+DEPEND="${RDEPEND}"
 
 src_configure() {
 	local mycmakeargs=(

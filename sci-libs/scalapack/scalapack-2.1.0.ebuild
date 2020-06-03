@@ -15,11 +15,12 @@ KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="static-libs test"
 RESTRICT="!test? ( test )"
 
+BDEPEND="virtual/pkgconfig"
 RDEPEND="
+	virtual/blas
 	virtual/lapack
 	virtual/mpi"
-DEPEND="${RDEPEND}
-	virtual/pkgconfig"
+DEPEND="${RDEPEND}"
 
 PATCHES=( "${FILESDIR}/${P}-libdir.patch" )
 

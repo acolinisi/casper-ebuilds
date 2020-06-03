@@ -11,11 +11,13 @@ SRC_URI="http://www.netlib.org/${PN}/${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
-IUSE="lapacke deprecated doc eselect-ldso"
+IUSE="blas lapacke deprecated doc eselect-ldso"
 # TODO: static-libs 64bit-index
+# TODO: blas: check if .pc is created, if not create one
 
 BDEPEND="virtual/pkgconfig"
 RDEPEND="
+	!blas? ( virtual/blas:= )
 	eselect-ldso? ( >=app-eselect/eselect-blas-0.2
 	>=app-eselect/eselect-lapack-0.2 )
 	!app-eselect/eselect-cblas
@@ -29,7 +31,8 @@ DEPEND="${RDEPEND}"
 
 src_configure() {
 	local mycmakeargs=(
-		-DCBLAS=ON
+		-DCBLAS=$(usex blas)
+		-DUSE_OPTIMIZED_BLAS=$(usex blas "OFF" "ON")
 		-DLAPACKE=$(usex lapacke)
 		-DBUILD_DEPRECATED=$(usex deprecated)
 		-DBUILD_SHARED_LIBS=ON

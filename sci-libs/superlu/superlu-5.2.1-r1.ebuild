@@ -29,10 +29,12 @@ LICENSE="BSD"
 IUSE="doc examples test"
 RESTRICT="!test? ( test )"
 
-RDEPEND="virtual/blas"
-DEPEND="${RDEPEND}
+BDEPEND="
 	virtual/pkgconfig
-	test? ( app-shells/tcsh )"
+	test? ( app-shells/tcsh )
+	"
+RDEPEND="virtual/blas"
+DEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}"/${P}-no-implicits.patch

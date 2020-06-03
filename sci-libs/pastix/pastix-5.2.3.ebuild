@@ -67,7 +67,7 @@ src_prepare() {
 
 src_configure() {
 	if use amd64; then
-		sed -e 's/^\(VERSIONBIT\s*=\).*/\1 _64bit/' \
+		sed -e 's/^\(versionbit\s*=\).*/\1 _64bit/' \
 			-i config.in || die
 	fi
 

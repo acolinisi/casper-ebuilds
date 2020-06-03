@@ -1,0 +1,102 @@
+--- a/src/mpi/CMakeLists.txt	2020-04-30 04:27:38.537096109 -0000
++++ b/src/mpi/CMakeLists.txt	2020-04-30 04:39:21.093819858 -0000
+@@ -1,10 +1,11 @@
+-IF(MPI_FOUND)
++IF(FF_MPI_FOUND)
+   FILE(GLOB_RECURSE CPPFILES *.cpp)
+   LIST(REMOVE_ITEM CPPFILES ${CMAKE_SOURCE_DIR}/src/fflib/strversionnumber.cpp)
++  message(ERROR_FATAL CPPFILES ${CPPFILES})
+   ADD_LIBRARY(ff-mpi ${CPPFILES})
+   TARGET_LINK_LIBRARIES(ff-mpi strversionnumber)
+   INCLUDE_DIRECTORIES(${MPI_C_INCLUDE_PATH}
+                       ${CMAKE_SOURCE_DIR}/src/femlib
+                       ${CMAKE_SOURCE_DIR}/src/fflib
+                       ${CMAKE_SOURCE_DIR}/src/Graphics)
+-ENDIF(MPI_FOUND)
++ENDIF(FF_MPI_FOUND)
+--- a/cmake/modules/ff_define_freefem_mpi_executable.cmake	2020-04-30 04:37:36.139575035 -0000
++++ b/cmake/modules/ff_define_freefem_mpi_executable.cmake	2020-04-30 04:38:02.665395121 -0000
+@@ -3,7 +3,7 @@
+   # Steps are the same as those required for FreeFem executable
+   # (see ff_define_freefem_executable for an explanation)
+ 
+-  if(MPI_FOUND)
++  if(FF_MPI_FOUND)
+     
+     add_executable(FreeFem++-mpi ${CMAKE_SOURCE_DIR}/src/mpi/parallelempi.cpp
+                                  ${CMAKE_SOURCE_DIR}/src/Graphics/sansrgraph.cpp
+@@ -21,6 +21,6 @@
+     install(TARGETS FreeFem++-mpi
+             RUNTIME DESTINATION bin)
+ 
+-  endif()
++  endif(FF_MPI_FOUND)
+ 
+ endmacro()
+--- a/src/mpi/CMakeLists.txt	2020-04-30 04:27:38.537096109 -0000
++++ b/src/mpi/CMakeLists.txt	2020-04-30 04:41:34.295938007 -0000
+@@ -1,10 +1,11 @@
+-IF(MPI_FOUND)
++IF(FF_MPI_FOUND)
+   FILE(GLOB_RECURSE CPPFILES *.cpp)
+   LIST(REMOVE_ITEM CPPFILES ${CMAKE_SOURCE_DIR}/src/fflib/strversionnumber.cpp)
++  message(WARNING CPPFILES ${CPPFILES})
+   ADD_LIBRARY(ff-mpi ${CPPFILES})
+   TARGET_LINK_LIBRARIES(ff-mpi strversionnumber)
+   INCLUDE_DIRECTORIES(${MPI_C_INCLUDE_PATH}
+                       ${CMAKE_SOURCE_DIR}/src/femlib
+                       ${CMAKE_SOURCE_DIR}/src/fflib
+                       ${CMAKE_SOURCE_DIR}/src/Graphics)
+-ENDIF(MPI_FOUND)
++ENDIF(FF_MPI_FOUND)
+--- a/src/mpi/CMakeLists.txt	2020-04-30 04:27:38.537096109 -0000
++++ b/src/mpi/CMakeLists.txt	2020-04-30 04:44:55.546159968 -0000
+@@ -1,10 +1,12 @@
+-IF(MPI_FOUND)
+-  FILE(GLOB_RECURSE CPPFILES *.cpp)
+-  LIST(REMOVE_ITEM CPPFILES ${CMAKE_SOURCE_DIR}/src/fflib/strversionnumber.cpp)
+-  ADD_LIBRARY(ff-mpi ${CPPFILES})
+-  TARGET_LINK_LIBRARIES(ff-mpi strversionnumber)
+-  INCLUDE_DIRECTORIES(${MPI_C_INCLUDE_PATH}
+-                      ${CMAKE_SOURCE_DIR}/src/femlib
+-                      ${CMAKE_SOURCE_DIR}/src/fflib
+-                      ${CMAKE_SOURCE_DIR}/src/Graphics)
+-ENDIF(MPI_FOUND)
++IF(FF_MPI_FOUND)
++  LIST(ADD_ITEM CPPFILES ${CMAKE_SOURCE_DIR}/src/mpi/parallelempi.cpp)
++ELSE()
++  LIST(ADD_ITEM CPPFILES ${CMAKE_SOURCE_DIR}/src/mpi/parallelempi-empty.cpp)
++ENDIF(FF_MPI_FOUND)
++
++ADD_LIBRARY(ff-mpi ${CPPFILES})
++TARGET_LINK_LIBRARIES(ff-mpi strversionnumber)
++INCLUDE_DIRECTORIES(${MPI_C_INCLUDE_PATH}
++                    ${CMAKE_SOURCE_DIR}/src/femlib
++                    ${CMAKE_SOURCE_DIR}/src/fflib
++                    ${CMAKE_SOURCE_DIR}/src/Graphics)
+--- a/src/mpi/CMakeLists.txt	2020-04-30 04:27:38.537096109 -0000
++++ b/src/mpi/CMakeLists.txt	2020-04-30 04:46:43.569499676 -0000
+@@ -1,10 +1,13 @@
+-IF(MPI_FOUND)
+-  FILE(GLOB_RECURSE CPPFILES *.cpp)
+-  LIST(REMOVE_ITEM CPPFILES ${CMAKE_SOURCE_DIR}/src/fflib/strversionnumber.cpp)
+-  ADD_LIBRARY(ff-mpi ${CPPFILES})
+-  TARGET_LINK_LIBRARIES(ff-mpi strversionnumber)
+-  INCLUDE_DIRECTORIES(${MPI_C_INCLUDE_PATH}
+-                      ${CMAKE_SOURCE_DIR}/src/femlib
+-                      ${CMAKE_SOURCE_DIR}/src/fflib
+-                      ${CMAKE_SOURCE_DIR}/src/Graphics)
+-ENDIF(MPI_FOUND)
++SET(CPPFILES)
++IF(FF_MPI_FOUND)
++  LIST(APPEND CPPFILES ${CMAKE_SOURCE_DIR}/src/mpi/parallelempi.cpp)
++ELSE()
++  LIST(APPEND CPPFILES ${CMAKE_SOURCE_DIR}/src/mpi/parallelempi-empty.cpp)
++ENDIF(FF_MPI_FOUND)
++
++ADD_LIBRARY(ff-mpi ${CPPFILES})
++TARGET_LINK_LIBRARIES(ff-mpi strversionnumber)
++INCLUDE_DIRECTORIES(${MPI_C_INCLUDE_PATH}
++                    ${CMAKE_SOURCE_DIR}/src/femlib
++                    ${CMAKE_SOURCE_DIR}/src/fflib
++                    ${CMAKE_SOURCE_DIR}/src/Graphics)

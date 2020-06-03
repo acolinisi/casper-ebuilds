@@ -1,0 +1,11 @@
+--- a/configure.ac	2020-04-29 21:57:30.685448380 -0000
++++ b/configure.ac	2020-04-29 21:57:46.641941335 -0000
+@@ -84,7 +84,7 @@
+ 	  [
+ 	    ff_$2=`AC_FF_PETSC_AWK($2,$4)`
+ 	    ff_$3=`AC_FF_PETSC_AWK($3,$4)`
+-	   if test -n "[$]ff_$2"; then
++	   if test -n "[$]ff_$2" -o -n "[$]ff_$3"; then
+ 			    ff_$1_ok=yes;
+ 			    AC_FF_ADDWHERELIB($1,[$]ff_$2,[$]ff_$3)
+ 			    AC_SUBST([TOOL_COMPILE_$1],"")

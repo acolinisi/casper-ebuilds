@@ -1,0 +1,156 @@
+--- a/configure.ac	2020-04-29 22:57:53.036651591 -0000
++++ b/configure.ac	2020-04-30 00:04:28.245923077 -0000
+@@ -47,6 +47,12 @@
+ inc_usr_include=""
+ ff_where_lib_conf=plugin/seq/WHERE_LIBRARY-config
+ dnl search of associad software
++m4_define([AC_FF_SET_LIB_PATHS],
++  [
++      ff_where_lib_$1="$2"
++      ff_where_inc_$1="$3"
++      AC_MSG_NOTICE([    set paths for $1 : $2 ;  $3 in  $ff_where_lib_conf])
++]) dnl
+ m4_define([AC_FF_ADDWHERELIB],
+   [
+     if test -z "$ff_where_lib_conf_$1"  ; then
+@@ -56,28 +62,47 @@
+ 	    ff_where_lib_$1="$2"
+ 	    ff_where_inc_$1="$3"
+ 	    ff_$1_ok=yes
+-	    AC_MSG_NOTICE([    ++ add $1 : $2 ;  $3 in  $ff_where_lib_conf "])
++	    AC_MSG_NOTICE([    ++ add $1 : $2 ;  $3 in  $ff_where_lib_conf])
+ 	else
+-	    AC_MSG_NOTICE([    -- do not add $1 : $2 $3 in  $ff_where_lib_conf "])
++	    AC_MSG_NOTICE([    -- already added $1 : $2 $3 in  $ff_where_lib_conf])
+         fi
+ ]) dnl
+ m4_define([AC_FF_WHERELIB],
+-    [  	if test -z "$ff_where_lib_conf_$1" -a "$enable_download_$1"  != "yes" ; then
+-        AC_MSG_CHECKING(check $1)
++    [  	if test "x$enable_$1" != xno -a -z "$ff_where_lib_conf_$1" -a "$enable_download_$1"  != "yes" ; then
++        AC_MSG_CHECKING(if $1 is usable)
+ 	ff_save_libs=$LIBS
+-	LIBS="$LIBS $2 $4"
+-	AC_LINK_IFELSE([AC_LANG_PROGRAM([m4_if($3,,,[#include <$3>])],[])], [ff_WHERE=yes],[ff_WHERE=no])
++	ff_save_cppflags=$CPPFLAGS
++	if test -z "$ff_where_lib_$1" -a -z "$ff_where_inc_$1"; then
++	  # the --with-X-ldflags arg does not distinguish libraries
++	  # into a normal vs "private" set, but our defaults do
++	  ff_where_lib_$1="$2"
++	  ff_where_libpriv_$1="$4"
++
++	  # the --with-X-include arg specifies path, but the default
++	  # specifies a file (so that we can create the test program)
++	  ff_WHERE_INC=`AS_DIRNAME(["$3"])`
++	  case "$ff_WHERE_INC" in
++	      /*) ff_where_inc_$1="$ff_WHERE_INC";;
++	  esac
++	fi
++	LIBS="$LIBS $ff_where_lib_$1 $ff_where_libpriv_$1"
++	CPPFLAGS="$CPPFLAGS -I$ff_where_inc_$1"
++	ff_WHERE_INC_FILE="$3"
++	AC_LINK_IFELSE([AC_LANG_PROGRAM([m4_if($ff_WHERE_INC_FILE,,,
++	  [#include <$ff_WHERE_INC_FILE>])],[])],
++	  [ff_WHERE=yes],[ff_WHERE=no])
+ 	if test "$ff_WHERE" = "yes" ; then
+-	    echo "$1 LD $2"  >>$ff_where_lib_conf
+-	    ff_WHERE_INC=`AS_DIRNAME(["$3"])`
+-	    case "$ff_WHERE_INC" in
+-		/*) echo "$1 INCLUDE -I$ff_WHERE_INC"  >>$ff_where_lib_conf ;;
+-	    esac
+-            ff_where_lib_conf_$1=1
++	    echo "$1 LD $ff_where_lib_$1"  >>$ff_where_lib_conf
++	    echo "$1 INCLUDE -I$ff_where_inc_$1"  >>$ff_where_lib_conf
+ 	fi
+ 	AC_MSG_RESULT($ff_WHERE)
++	if test "$ff_WHERE" = "yes"; then
++	    AC_MSG_NOTICE([    ++ add $1 : $2 ;  $3 in  $ff_where_lib_conf])
++	fi
+         ff_$1_ok=$ff_WHERE;
++        ff_where_lib_conf_$1=1
+ 	LIBS=$ff_save_libs
++	CPPFLAGS=$ff_save_cppflags
+ 	fi
+     ])dnl end m4_define AC_FF_WHERELIB
+ define([AC_FF_PETSC_AWK],[awk -F'=' '"$1 "==[$]1 {print [$]2}' $2])
+@@ -123,7 +148,8 @@
+ 
+ 	# some directives have been specified, use them instead of downloading
+ 
+-	AC_FF_ADDWHERELIB($1,$with_$1_ldflags,$with_$1_include)
++	#AC_FF_ADDWHERELIB($1,$with_$1_ldflags,$with_$1_include)
++	AC_FF_SET_LIB_PATHS($1,$with_$1_ldflags,$with_$1_include)
+         AC_SUBST([TOOL_COMPILE_$1],"")
+ 	enable_$1_download=no
+     fi
+@@ -2026,32 +2052,6 @@
+   AC_FF_ADDWHERELIB(gsl,$GSL_LIBS,$GSL_CFLAGS)
+ fi
+ 
+-m4_map([AC_FF_WHERELIB],[
+-	[[mumps],[-ldmumps -lzmumps  -lmumps_common  -lpord],[dmumps_c.h],[]],
+-	[[mumps_seq],[-ldmumps_seq -lzmumps_seq  -lmumps_common_seq  -lpord_seq -lmpiseq_seq],[dmumps_c.h],[]],
+-	[[libseq],[-lmpiseq_seq],[${inc_usr_include}mumps_seq/mpi.h]],
+-	[[mumps_ptscotch],[-lpord_ptscotch -lmumps_common_ptscotch -ldmumps_ptscotch -lzmumps_ptscotch -lpord_ptscotch],[dmumps_c.h]],
+-	[[mumps_scotch],[-lpord_scotch -lmumps_common_scotch -ldmumps_scotch -lzmumps_scotch -lpord_scotch],[dmumps_c.h]],
+-	[[fftw3],[-lfftw3],[${inc_usr_include}fftw3.h],[]],
+-	[[superlu],[-lsuperlu],[${inc_usr_include}superlu/superlu_enum_consts.h],[]],
+-        [[blacs],[ -lblacsCinit$ff_with_mpi	-lblacsF77init$ff_with_mpi	-lblacs$ff_with_mpi],[]],
+-        [[scalapack],[-lscalapack$ff_with_mpi],[]],
+-        [[scotch],[-lscotch -lscotcherr],[scotch.h]],
+-        [[ptscotch],[-lptscotch -lptscotcherr],[ptscotch.h]],
+-	[[metis],[-lmetis],[${inc_usr_include}metis/metis.h],[]],
+-	[[metis],[-lmetis],[metis.h],[]],
+-	[[parmetis],[-lparmetis -lmetis],[],[]],
+-	[[freeyams],[-lfreeyams],[freeyamslib.h],[]],
+-	[[mmg3d],[-lmmg3d-v4],[libmmg3d.h],[]],
+-        [[mmg],[-lmmg],[libmmg.h],[]],
+-        [[parmmg],[-lparmmg],[libparmmg.h],[]],
+-	[[mshmet],[-lmshmet],[mshmetlib.h],[]],
+-dnl	[[gsl],[-lgsl -lgslcblas -lm],[gsl/gsl_sf.h],[]],
+-	[[tetgen],[-ltet],[tetgen.h],[]],
+-	[[ipopt],[ -lipopt],[${inc_usr_include}coin/IpTNLP.hpp],[]],
+-	[[nlopt],[ -lnlopt],[nlopt.hpp],[]]
+-    ]
+-    )
+ ## before try
+ 
+ TOOL_DISABLE(tetgen,tetgen.$DYLIB_SUFFIX)
+@@ -2079,6 +2079,37 @@
+ AC_SUBST([BIN_ffmaster],"$BIN_ffmaster")
+ TOOL_DISABLE(MMAP,ff-mmap-semaphore.$DYLIB_SUFFIX,,nodownload)
+ 
++# Carry out the checks for usability of the libraries.  For libraries for
++# which a --with-X-{include,ldflags} argument was given, the above TOOL_*()
++# calls have set the path variables. These variables will take precedence
++# over the defaults defined below. The rest of the libraries for which no
++# args where given, will use the defaults below.
++m4_map([AC_FF_WHERELIB],[
++    [[mumps],[-ldmumps -lzmumps  -lmumps_common  -lpord],[dmumps_c.h],[]],
++    [[mumps_seq],[-ldmumps_seq -lzmumps_seq  -lmumps_common_seq  -lpord_seq -lmpiseq_seq],[dmumps_c.h],[]],
++    [[libseq],[-lmpiseq_seq],[${inc_usr_include}mumps_seq/mpi.h]],
++    [[mumps_ptscotch],[-lpord_ptscotch -lmumps_common_ptscotch -ldmumps_ptscotch -lzmumps_ptscotch -lpord_ptscotch],[dmumps_c.h]],
++    [[mumps_scotch],[-lpord_scotch -lmumps_common_scotch -ldmumps_scotch -lzmumps_scotch -lpord_scotch],[dmumps_c.h]],
++    [[fftw3],[-lfftw3],[${inc_usr_include}fftw3.h],[]],
++    [[superlu],[-lsuperlu],[${inc_usr_include}superlu/superlu_enum_consts.h],[]],
++    [[blacs],[ -lblacsCinit$ff_with_mpi    -lblacsF77init$ff_with_mpi    -lblacs$ff_with_mpi],[]],
++    [[scalapack],[-lscalapack$ff_with_mpi],[]],
++    [[scotch],[-lscotch -lscotcherr],[scotch.h]],
++    [[ptscotch],[-lptscotch -lptscotcherr],[ptscotch.h]],
++    [[metis],[-lmetis],[${inc_usr_include}metis/metis.h],[]],
++    [[metis],[-lmetis],[metis.h],[]],
++    [[parmetis],[-lparmetis -lmetis],[],[]],
++    [[freeyams],[-lfreeyams],[freeyamslib.h],[]],
++    [[mmg3d],[-lmmg3d-v4],[libmmg3d.h],[]],
++    [[mmg],[-lmmg],[libmmg.h],[]],
++    [[parmmg],[-lparmmg],[libparmmg.h],[]],
++    [[mshmet],[-lmshmet],[mshmetlib.h],[]],
++dnl    [[gsl],[-lgsl -lgslcblas -lm],[gsl/gsl_sf.h],[]],
++    [[tetgen],[-ltet],[tetgen.h],[]],
++    [[ipopt],[ -lipopt],[${inc_usr_include}coin/IpTNLP.hpp],[]],
++    [[nlopt],[ -lnlopt],[nlopt.hpp],[]]
++])
++
+ # FFCS - MUMPS_seq has a different Win32 compiler setup from FFCS, so we need to add some extra parameters
+ 
+ if test "$OS" = Windows_NT

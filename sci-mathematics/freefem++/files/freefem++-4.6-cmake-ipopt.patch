@@ -1,0 +1,12 @@
+--- a/cmake/modules/FindIPOPT.cmake	2020-04-30 02:52:27.427394172 -0000
++++ b/cmake/modules/FindIPOPT.cmake	2020-04-30 02:52:33.943595613 -0000
+@@ -1,8 +1,7 @@
+ INCLUDE(FindPackageHandleStandardArgs)
+ INCLUDE(PackageManagerPaths)
+ 
+-FIND_PATH(IPOPT_INCLUDES NAMES ipTNLP.hpp 
+-                               IpIpoptApplication.hpp 
++FIND_PATH(IPOPT_INCLUDES NAMES IpIpoptApplication.hpp 
+                          PATHS ${PACKMAN_INCLUDE_PATHS} 
+                          PATH_SUFFIXES coin)
+ 

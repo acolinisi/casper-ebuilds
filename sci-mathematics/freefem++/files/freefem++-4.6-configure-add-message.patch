@@ -1,0 +1,11 @@
+--- a/configure.ac	2020-04-29 22:57:53.036651591 -0000
++++ b/configure.ac	2020-04-29 22:59:20.758361529 -0000
+@@ -58,7 +58,7 @@
+ 	    ff_$1_ok=yes
+ 	    AC_MSG_NOTICE([    ++ add $1 : $2 ;  $3 in  $ff_where_lib_conf "])
+ 	else
+-	    AC_MSG_NOTICE([    -- do not add $1 : $2 $3 in  $ff_where_lib_conf "])
++	    AC_MSG_NOTICE([    -- already added $1 : $2 $3 in  $ff_where_lib_conf "])
+         fi
+ ]) dnl
+ m4_define([AC_FF_WHERELIB],

@@ -1,0 +1,138 @@
+--- a/configure.ac.orig2	2020-04-29 20:41:33.893645084 -0000
++++ b/configure.ac	2020-04-29 21:19:38.916263099 -0000
+@@ -714,6 +714,9 @@
+ m4_include(etc/config/m4/acmacros.m4)
+ m4_include(etc/config/m4/acoptim.m4)
+ 
++# [[file:ax_lib_gl.m4]]
++m4_include(etc/config/m4/ax_lib_gl.m4)
++
+ # [[file:ax_lib_hdf5.m4]]
+ m4_include(etc/config/m4/ax_lib_hdf5.m4)
+ 
+@@ -794,69 +797,8 @@
+ # Checking that OpenGL is accessible
+ # ----------------------------------
+ 
+-ff_gl_ok=no
+-ff_glx_ok=no
+-
+-ff_libs="$LIBS"
+-AC_ARG_WITH(flib,[  --with-flib= the fortran library ])
+-AC_ARG_ENABLE([opengl],AS_HELP_STRING([--enable-opengl],
+-                                      [Enable/disable support for OpenGL]),
+-				      enable_opengl=no)
+-
+-# echo "  .... LIBS = $LIBS .... "
+-if test x$enable_opengl != xno; then
+-# GL libraries seem to depend on some dlopen capabilities
+-if test "$enable_static" != yes -a "$ff_glut_ok" != yes
+-then
+-	# If we cannot find gl.h, no OpenGL version can be produced
+-    AC_CHECK_HEADERS(OpenGL/gl.h,
+-        ff_gl_ok=yes
+-        ,
+-        ff_gl_ok=no
+-        )
+-
+-
+-    if test "$ff_gl_ok" = no
+-    then
+-	AC_CHECK_HEADERS(GL/gl.h,
+-	    ff_gl_ok=yes
+-	    ,
+-	    ff_gl_ok=no
+-	    )
+-    fi
+-    AC_CHECK_HEADERS(GLUT/glut.h,
+-        ff_glut_ok=yes,
+-        ff_glut_ok=no)
+-
+-    if test "$ff_glut_ok" = no
+-    then
+-	AC_CHECK_HEADERS(GL/glut.h,
+-	    ff_glut_ok=yes,
+-	    ff_glut_ok=no)
+-    fi
+-
+-# GLUT .....
+-    if test "$ff_glut_ok" =	yes
+-    then
+-	for glut in \
+-	    "-framework GLUT -framework OpenGL -framework Cocoa" \
+-	    "-lglut -lGLU -lGL"
+-	do
+-	    ff_glut="$glut"
+-	    ff_libs1="$LIBS"
+-     	    LIBS="$LIBS $ff_glut"
+-	    AC_TRY_LINK_FUNC(glutInit,
+-		ff_glut_ok=yes
+-	        LIBS="$ff_libs1"
+-		break,
+-		ff_glut_ok=next);
+-	    LIBS="$ff_libs1"
+-	done
+-    fi
+-
++AX_LIB_GL()
+ 
+-fi
+-fi
+ AC_SUBST(LIBSPTHREAD,$ff_pthread)
+ 
+ # ALH - 16/9/13 - at the moment the requirements for medit (glut) are not compatible with FFCS so medit is
+--- a/etc/config/m4/ax_lib_gl.m4	2020-04-29 21:15:38.078818129 -0000
++++ b/etc/config/m4/ax_lib_gl.m4	2020-04-29 21:13:59.891782886 -0000
+@@ -0,0 +1,52 @@
++# Check for GL headers and library
++
++AC_DEFUN([AX_LIB_GL], [
++
++ff_gl_ok=no
++ff_glx_ok=no
++
++ff_libs="$LIBS"
++
++AC_ARG_WITH(flib,[  --with-flib= the fortran library ],,with_flib=no)
++AC_ARG_ENABLE([opengl],AS_HELP_STRING([--enable-opengl],
++                                      [Enable/disable support for OpenGL]),
++				      ,enable_opengl=no)
++if test x$enable_opengl != xno; then
++    # GL libraries seem to depend on some dlopen capabilities
++    if test "$enable_static" != yes -a "$ff_glut_ok" != yes
++    then
++	# If we cannot find gl.h, no OpenGL version can be produced
++	AC_CHECK_HEADERS(OpenGL/gl.h, ff_gl_ok=yes, ff_gl_ok=no)
++
++	if test "$ff_gl_ok" = no
++	then
++	    AC_CHECK_HEADERS(GL/gl.h, ff_gl_ok=yes, ff_gl_ok=no)
++	fi
++	AC_CHECK_HEADERS(GLUT/glut.h, ff_glut_ok=yes, ff_glut_ok=no)
++
++	if test "$ff_glut_ok" = no
++	then
++	    AC_CHECK_HEADERS(GL/glut.h, ff_glut_ok=yes, ff_glut_ok=no)
++	fi
++
++	# GLUT .....
++	if test "$ff_glut_ok" =	yes
++	then
++	    for glut in \
++		"-framework GLUT -framework OpenGL -framework Cocoa" \
++		"-lglut -lGLU -lGL"
++	    do
++		ff_glut="$glut"
++		ff_libs1="$LIBS"
++		LIBS="$LIBS $ff_glut"
++		AC_TRY_LINK_FUNC(glutInit,
++		    ff_glut_ok=yes
++		    LIBS="$ff_libs1"
++		    break,
++		    ff_glut_ok=next);
++		LIBS="$ff_libs1"
++	    done
++	fi
++    fi
++fi
++])

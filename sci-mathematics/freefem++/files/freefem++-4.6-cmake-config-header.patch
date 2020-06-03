@@ -1,0 +1,12 @@
+--- a/src/lglib/lg.ypp	2020-04-30 03:44:25.838810777 -0000
++++ b/src/lglib/lg.ypp	2020-04-30 03:44:36.370138503 -0000
+@@ -29,7 +29,9 @@
+      Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+      */
+ 
++#ifndef CMAKE
+ #include <config.h>
++#endif
+ #include <iostream>
+ #include  <complex>
+ #include <string>

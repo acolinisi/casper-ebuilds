@@ -1,0 +1,20 @@
+--- a/etc/config/m4/acmpi.m4	2020-04-29 22:34:27.888962160 -0000
++++ b/etc/config/m4/acmpi.m4	2020-04-30 01:50:05.045718288 -0000
+@@ -307,13 +307,13 @@
+ 	    if test "$with_mpilibs" = no -o -z "$with_mpilibs" ; then
+ 		[ff_MPI_INCLUDE=`echo $ff_mpishow|tr ' ' '\n'| grep -E '^[-/][^WLlOgp]|^-Wp,'|tr '\n' ' '`]
+ 		ff_MPI_LIB_DIRS=""
+-		[ff_MPI_LIB=`echo $ff_mpishow|tr ' ' '\n'| grep -E '^-[Llp]|^-Wl,'|tr '\n' ' '`]
+-		[ff_MPI_LIBC=`echo $ff_mpicshow|tr ' ' '\n'| grep -E '^-[Llp]|^-Wl,'|tr '\n' ' '`]
+-		[ff_MPI_LIBFC=`echo $ff_mpifcshow|tr ' ' '\n'| grep -E '^-[Llp]|^-Wl,'|grep -v 'commons,use_dylibs' |tr '\n' ' '`]
++		[ff_MPI_LIB=`echo $ff_mpishow|tr ' ' '\n'| grep -E '^-L'|tr '\n' ' '`]
++		[ff_MPI_LIBC=`echo $ff_mpicshow|tr ' ' '\n'| grep -E '^-L'|tr '\n' ' '`]
++		[ff_MPI_LIBFC=`echo $ff_mpifcshow|tr ' ' '\n'| grep -E '^-L|grep -v 'commons,use_dylibs' |tr '\n' ' '`]
+ 		[ff_mpi_idir=`echo $ff_mpishow|tr ' ' '\n'| grep -E '^-I'|sed s/^-I//|tr '\n' ' '`' /usr/include']
+ 	    fi
+ 	    [ff_mpi_idir=`echo $ff_MPI_INCLUDE|tr ' ' '\n'| grep -E '^-I'|sed s/^-I//|tr '\n' ' '`' /usr/include']
+-	    [ff_mpi_ldir=`echo $ff_MPI_LIB|tr ' ' '\n'| grep -E '^-[Llp]|^-Wl,'|sed -e 's/^-[Llp]//' -e 's/^-Wl,]//'  |tr '\n' ' '`' /usr/lib']
++	    [ff_mpi_ldir=`echo $ff_MPI_LIB|tr ' ' '\n'| grep -E '^-L'|sed -e 's/^-L//'  |tr '\n' ' '`' /usr/lib']
+ 
+ 	    if  test -z "$ff_MPI_INCLUDE_DIR" ; then
+ 		for i in $ff_mpi_idir; do

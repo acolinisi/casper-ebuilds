@@ -1,0 +1,25 @@
+--- a/configure.ac	2020-04-29 06:24:47.600875750 -0000
++++ b/configure.ac	2020-04-29 06:26:26.005913992 -0000
+@@ -65,6 +65,12 @@
+         AC_MSG_CHECKING(check $1)
+ 	ff_save_libs=$LIBS
+ 	LIBS="$LIBS $2 $4"
++	if test -n "$CXX"; then
++	  ff_save_cxx=$CXX
++	fi
++	if test -n "$5"; then
++	    CXX="$5"
++	fi
+ 	AC_LINK_IFELSE([AC_LANG_PROGRAM([m4_if($3,,,[#include <$3>])],[])], [ff_WHERE=yes],[ff_WHERE=no])
+ 	if test "$ff_WHERE" = "yes" ; then
+ 	    echo "$1 LD $2"  >>$ff_where_lib_conf
+@@ -76,6 +82,9 @@
+ 	fi
+ 	AC_MSG_RESULT($ff_WHERE)
+         ff_$1_ok=$ff_WHERE;
++	if test -n "$ff_save_cxx"; then
++	  CXX=$ff_save_cxx
++	fi
+ 	LIBS=$ff_save_libs
+ 	fi
+     ])dnl end m4_define AC_FF_WHERELIB

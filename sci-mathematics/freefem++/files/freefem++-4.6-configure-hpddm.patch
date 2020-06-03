@@ -1,0 +1,10 @@
+--- a/configure.ac	2020-04-29 22:07:10.548362535 -0000
++++ b/configure.ac	2020-04-29 22:07:16.180536535 -0000
+@@ -2041,6 +2041,7 @@
+ 	[[metis],[-lmetis],[metis.h],[]],
+ 	[[parmetis],[-lparmetis -lmetis],[],[]],
+ 	[[freeyams],[-lfreeyams],[freeyamslib.h],[]],
++	[[hpddm],[],[HPDDM.hpp],[]],
+ 	[[mmg3d],[-lmmg3d-v4],[libmmg3d.h],[]],
+         [[mmg],[-lmmg],[libmmg.h],[]],
+         [[parmmg],[-lparmmg],[libparmmg.h],[]],

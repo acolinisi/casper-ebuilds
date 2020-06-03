@@ -1,0 +1,14 @@
+--- a/cmake/modules/ff_configure_thirdparty_optional.cmake	2020-04-30 03:32:01.776773881 -0000
++++ b/cmake/modules/ff_configure_thirdparty_optional.cmake	2020-04-30 03:33:17.410111147 -0000
+@@ -17,7 +17,10 @@
+                              Threads)
+ 
+   foreach(PACKAGE ${FF_THIRDPARTY_OPTIONAL})
+-    ff_find_package(${PACKAGE})
++    option(WITH_${PACKAGE} "Enable optional package ${PACKAGE}" ON)
++    if (WITH_${PACKAGE})
++      ff_find_package(${PACKAGE})
++    endif()
+   endforeach(PACKAGE ${FF_THIRDPARTY_OPTIONAL})
+ 
+ endmacro(ff_configure_thirdparty_optional)

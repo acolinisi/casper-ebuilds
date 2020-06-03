@@ -1,0 +1,51 @@
+--- a/cmake/modules/FindUMFPACK.cmake	2020-04-30 03:09:22.904783862 -0000
++++ b/cmake/modules/FindUMFPACK.cmake	2020-04-30 03:09:49.574607948 -0000
+@@ -1,6 +1,10 @@
+ INCLUDE(FindPackageHandleStandardArgs)
+ INCLUDE(PackageManagerPaths)
+ 
++FIND_PATH(UMFPACK_INCLUDES NAMES umfpack.h
++                         PATHS ${PACKMAN_INCLUDE_PATHS} 
++                         PATH_SUFFIXES suitesparse)
++
+ FIND_LIBRARY(UMFPACK_LIBRARIES NAMES umfpack 
+                               PATHS ${PACKMAN_LIBRARIES_PATHS})
+ 
+--- a/cmake/modules/FindUMFPACK.cmake	2020-04-30 03:15:31.791182279 -0000
++++ b/cmake/modules/FindUMFPACK.cmake	2020-04-30 03:20:04.317603218 -0000
+@@ -4,6 +4,12 @@
+ FIND_PATH(UMFPACK_INCLUDES NAMES umfpack.h
+                          PATHS ${PACKMAN_INCLUDE_PATHS} 
+                          PATH_SUFFIXES suitesparse)
++GET_FILENAME_COMPONENT(UMFPACK_INCLUDE_DIR ${UMFPACK_INCLUDES} NAME)
++IF(UMFPACK_INCLUDE_DIR MATCHES suitesparse)
++  ADD_DEFINITIONS(-DHAVE_SUITESPARSE_UMFPACK_H)
++ELSE()
++  ADD_DEFINITIONS(-DHAVE_UMFPACK_H)
++ENDIF()
+ 
+ FIND_LIBRARY(UMFPACK_LIBRARIES NAMES umfpack 
+                               PATHS ${PACKMAN_LIBRARIES_PATHS})
+--- a/cmake/modules/ff_define_libff_library.cmake	2020-04-30 03:18:52.084371243 -0000
++++ b/cmake/modules/ff_define_libff_library.cmake	2020-04-30 03:19:44.005975598 -0000
+@@ -49,17 +49,9 @@
+ 
+     # Compilation definitions 
+ 
+-    if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+-
+-      TARGET_COMPILE_DEFINITIONS(libff PRIVATE HAVE_LIBUMFPACK 
+-                                       PRIVATE HAVE_SUITESPARSE_UMFPACK_H)
+-
+-    else()
+-
+-      TARGET_COMPILE_DEFINITIONS(libff PRIVATE HAVE_LIBUMFPACK 
+-                                       PRIVATE HAVE_UMFPACK_H)
+-
+-    endif()
++    TARGET_COMPILE_DEFINITIONS(libff PRIVATE HAVE_LIBUMFPACK 
++                                     PRIVATE ${HAVE_UMFPACK_H}
++                                     PRIVATE ${HAVE_SUITESPARSE_UMFPACK_H})
+ 
+     # Required libraries for linking libff 
+     

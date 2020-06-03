@@ -1,0 +1,23 @@
+--- a/configure.ac.orig4	2020-04-30 01:41:40.527107618 -0000
++++ b/configure.ac	2020-04-30 01:58:57.030175229 -0000
+@@ -67,7 +67,7 @@
+         fi
+ ]) dnl
+ m4_define([AC_FF_WHERELIB],
+-    [  	if test "x$enable_$1" != xno -a -z "$ff_where_lib_conf_$1" -a "$enable_download_$1"  != "yes" ; then
++    [ if test "x$enable_$1" != xno -a -z "$ff_where_lib_conf_$1" -a "$enable_download_$1"  != "yes" ; then
+         AC_MSG_CHECKING(if $1 is usable)
+ 	ff_save_libs=$LIBS
+ 	ff_save_cppflags=$CPPFLAGS
+@@ -95,7 +95,11 @@
+         ff_where_lib_conf_$1=1
+ 	LIBS=$ff_save_libs
+ 	CPPFLAGS=$ff_save_cppflags
++      else
++	if test "x$enable_$1" = xno; then
++	  ff_$1_ok=no
+ 	fi
++      fi
+     ])dnl end m4_define AC_FF_WHERELIB
+ define([AC_FF_PETSC_AWK],[awk -F'=' '"$1 "==[$]1 {print [$]2}' $2])
+ m4_define([AC_FF_PETSC_WHERELIB],

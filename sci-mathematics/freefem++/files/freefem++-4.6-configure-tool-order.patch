@@ -1,0 +1,40 @@
+--- a/configure.ac	2020-04-29 22:21:37.546153908 -0000
++++ b/configure.ac	2020-04-29 22:21:42.939320594 -0000
+@@ -2199,6 +2199,18 @@
+ TOOL_DISABLE(NewSolver,"NewSolver.$DYLIB_SUFFIX",,nodownload)
+ TOOL_DISABLE(mkl,"PARDISO.$DYLIB_SUFFIX",,nodownload)
+ 
++##echo @@@@@@@@@@@@ $ff_petsc_ok @@ "hpddm.$DYLIB_SUFFIX $FF_PETCS_DYLIB"
++TOOL_DISABLE(hpddm,["hpddm.$DYLIB_SUFFIX hpddm_substructuring.$DYLIB_SUFFIX $FF_PETSC_DYLIB"])
++TOOL_DISABLE(bemtool,["bem.$DYLIB_SUFFIX"])
++TOOL_DISABLE(htool,["htool.$DYLIB_SUFFIX"])
++
++# Catch old usage to help users update
++AC_ARG_ENABLE(bem, AS_HELP_STRING([--enable-bem],
++  ["DEPRECATED: use --enable-bemtool instead"]))
++if test -n "$enable_bem"; then
++  AC_MSG_ERROR(["Arguments --enable-bem/--disable-bem are deprecated: use --enable-bemtool/--disable-bemtool instead"])
++fi
++
+ # echo "debug cxxx11: $ff_cxx11 mpi: $ff_mpi petsc: $ff_petsc_ok "
+ test "$enable_download" != "yes" -a "$enable_download_hpddm" != "yes" -a \( "$enable_hpddm" != "yes" -o "$ff_hpddm_ok" != "yes" \) && enable_hpddm=no
+ test "$enable_download" != "yes" -a "$enable_htool" != yes && enable_htool=no
+@@ -2230,18 +2242,6 @@
+ FF_PETSC_DYLIB="$FF_PETSC_DYLIB SLEPc.$DYLIB_SUFFIX"
+ fi
+ 
+-##echo @@@@@@@@@@@@ $ff_petsc_ok @@ "hpddm.$DYLIB_SUFFIX $FF_PETCS_DYLIB"
+-TOOL_DISABLE(hpddm,["hpddm.$DYLIB_SUFFIX hpddm_substructuring.$DYLIB_SUFFIX $FF_PETSC_DYLIB"])
+-TOOL_DISABLE(bemtool,["bem.$DYLIB_SUFFIX"])
+-TOOL_DISABLE(htool,["htool.$DYLIB_SUFFIX"])
+-
+-# Catch old usage to help users update
+-AC_ARG_ENABLE(bem, AS_HELP_STRING([--enable-bem],
+-  ["DEPRECATED: use --enable-bemtool instead"]))
+-if test -n "$enable_bem"; then
+-  AC_MSG_ERROR(["Arguments --enable-bem/--disable-bem are deprecated: use --enable-bemtool/--disable-bemtool instead"])
+-fi
+-
+ ##
+ if test "$ff_mkl_ok" = yes ; then
+     AC_DEFINE(HAVE_MKL,1, the MKL intel lib is present for BLAS and LAPACK  )

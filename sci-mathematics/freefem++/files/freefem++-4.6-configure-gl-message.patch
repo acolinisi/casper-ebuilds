@@ -1,0 +1,16 @@
+--- a/configure.ac	2020-04-29 22:27:13.889549183 -0000
++++ b/configure.ac	2020-04-29 22:29:04.871979286 -0000
+@@ -2420,9 +2420,11 @@
+   AC_MSG_NOTICE([      Please run "3rdparty/getall" to download all necessary packages before running make])
+ fi
+ 
+-# FFCS does not use glut, so remove this message because it could make the user think that something is broken
++# FFCS does not use glut and user may have disabled GL explicitly via command
++# line flag, so remove this message because it could make the user think that
++# something is broken
+ 
+-if test $enable_ffcs = no
++if test $enable_ffcs = no -a x$enable_opengl != xno
+ then
+     if test "$ff_glut_ok" != yes  ; then
+ 	AC_MSG_NOTICE([     *********************************************** ])

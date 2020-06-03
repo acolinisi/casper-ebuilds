@@ -1,0 +1,17 @@
+--- a/./etc/config/m4/acoptim.m4	2020-04-27 05:35:49.469015766 -0000
++++ b/./etc/config/m4/acoptim.m4	2020-04-27 05:36:00.240349107 -0000
+@@ -119,14 +119,6 @@
+     -a "$enable_generic" != yes
+ then
+ 
+-# Autoconf always chooses -O2. -O2 in gcc makes some functions
+-# disappear. This is not ideal for debugging. And when we optimize, we
+-# do not use -O2 anyway.
+-
+-CFLAGS="`echo $CFLAGS | sed 's/-O2//g'`"
+-FFLAGS="`echo $FFLAGS | sed 's/-O2//g'`"
+-CXXFLAGS="`echo $CXXFLAGS | sed 's/-O2//g'`"
+-
+     # MacOS X Darwin
+     if test -x /usr/bin/hostinfo
+ 	then

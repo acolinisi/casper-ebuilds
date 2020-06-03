@@ -1,0 +1,14 @@
+--- a/./src/lglib/Makefile.am	2020-04-27 05:53:43.337249450 -0000
++++ b/./src/lglib/Makefile.am	2020-04-27 05:53:54.962609192 -0000
+@@ -11,9 +11,9 @@
+ # machine (the danger is to generate unnecessary version conflicts) on these automatically generated files
+ 
+ lg.tab.hpp lg.tab.cpp:
+-	-rm lg.tab.hpp  lg.tab.cpp lg.tab.cpp.h
++	-rm -f lg.tab.hpp  lg.tab.cpp lg.tab.cpp.h
+ 	bison -dtv -p lg  lg.ypp  -o lg.tab.cpp
+-	-mv lg.tab.cpp.h  lg.tab.hpp # pour un  pb entre des versions de bison 
++	-mv -f lg.tab.cpp.h  lg.tab.hpp # pour un  pb entre des versions de bison 
+ 
+ libfreefem++.dylib: lg.tab.o ../fflib/libff.a
+ 	g++ -bundle lg.tab.o  ../fflib/libff.a $(UMFPACKLIB) $(ARPACKLIB) $(BLASLIB) $(LIBS) -o libfreefem++.dylib

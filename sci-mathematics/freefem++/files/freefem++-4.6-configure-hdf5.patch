@@ -1,0 +1,19 @@
+--- a/configure.ac	2020-04-29 19:04:49.976361809 -0000
++++ b/configure.ac	2020-04-29 19:05:58.504478436 -0000
+@@ -2213,10 +2213,16 @@
+ ##  search of HDF5 ....
+ AX_LIB_HDF5()
+ if test "$with_hdf5" = "yes"; then
++  ff_save_cpp="$CPP";
++  ff_save_cxxcpp="$CXXCPP";
+   ff_save_cppflags="$CPPFLAGS";
++  CPP="$HDF5_CC -E"
++  CXXCPP="$HDF5_CC -E"
+   CPPFLAGS="$CPPFLAGS $HDF5_CPPFLAGS"
+   AC_CHECK_HEADER([H5Cpp.h],[],[with_hdf=no])
+   CPPFLAGS="$ff_save_cppflags"
++  CXXCPP="$ff_save_cxxcpp"
++  CPP="$ff_save_cpp"
+   #if test "$with_hdf5" = "yes"; then
+   AC_FF_ADDWHERELIB(hdf5,$HDF5_LDFLAGS  $HDF5_LIBS,$HDF5_CPPFLAGS)
+   LIBS="$LIBS $HDF5_LDFLAGS  $HDF5_LIBS"

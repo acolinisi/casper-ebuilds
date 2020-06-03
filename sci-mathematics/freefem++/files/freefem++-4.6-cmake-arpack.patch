@@ -1,0 +1,13 @@
+--- a/cmake/modules/ff_define_libff_library.cmake	2020-04-30 04:13:14.605377109 -0000
++++ b/cmake/modules/ff_define_libff_library.cmake	2020-04-30 04:14:20.228406747 -0000
+@@ -71,7 +71,9 @@
+                                                                     ${OpenMP_C_LIBRARIES})
+     else()
+     
+-      target_link_libraries(libff bamglib dl strversionnumber FREEFEM::SUITESPARSE FREEFEM::CHOLMOD)
++      target_link_libraries(libff bamglib dl strversionnumber FREEFEM::SUITESPARSE
++                                                              FREEFEM::CHOLMOD
++                                                              FREEFEM::ARPACK)
+   
+     endif(MINGW)
+ 

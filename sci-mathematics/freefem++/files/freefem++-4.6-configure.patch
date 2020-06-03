@@ -1,0 +1,38 @@
+--- a/configure.ac	2020-04-29 05:00:20.868459668 -0000
++++ b/configure.ac	2020-04-29 05:16:02.962546610 -0000
+@@ -65,6 +65,10 @@
+         AC_MSG_CHECKING(check $1)
+ 	ff_save_libs=$LIBS
+ 	LIBS="$LIBS $2 $4"
++	ff_save_cxx=$CXX
++	if test -n "$5"; then
++	    CXX="$5"
++	fi
+ 	AC_LINK_IFELSE([AC_LANG_PROGRAM([m4_if($3,,,[#include <$3>])],[])], [ff_WHERE=yes],[ff_WHERE=no])
+ 	if test "$ff_WHERE" = "yes" ; then
+ 	    echo "$1 LD $2"  >>$ff_where_lib_conf
+@@ -76,6 +80,7 @@
+ 	fi
+ 	AC_MSG_RESULT($ff_WHERE)
+         ff_$1_ok=$ff_WHERE;
++	CXX=$ff_save_cxx
+ 	LIBS=$ff_save_libs
+ 	fi
+     ])dnl end m4_define AC_FF_WHERELIB
+@@ -2213,10 +2218,16 @@
+ ##  search of HDF5 ....
+ AX_LIB_HDF5()
+ if test "$with_hdf5" = "yes"; then
++  ff_save_cpp="$CPP";
++  ff_save_cxxcpp="$CXXCPP";
+   ff_save_cppflags="$CPPFLAGS";
++  CPP="$HDF5_CC -E"
++  CXXCPP="$HDF5_CC -E"
+   CPPFLAGS="$CPPFLAGS $HDF5_CPPFLAGS"
+   AC_CHECK_HEADER([H5Cpp.h],[],[with_hdf=no])
+   CPPFLAGS="$ff_save_cppflags"
++  CXXCPP="$ff_save_cxxcpp"
++  CPP="$ff_save_cpp"
+   #if test "$with_hdf5" = "yes"; then
+   AC_FF_ADDWHERELIB(hdf5,$HDF5_LDFLAGS  $HDF5_LIBS,$HDF5_CPPFLAGS)
+   LIBS="$LIBS $HDF5_LDFLAGS  $HDF5_LIBS"

@@ -1,0 +1,11 @@
+--- a/configure.ac	2020-04-27 05:46:42.921238611 -0000
++++ b/configure.ac	2020-04-27 05:46:58.227712311 -0000
+@@ -659,7 +659,7 @@
+ # date is only useful for config-version.h
+ 
+ test "$prefix" = NONE && prefix="$ac_default_prefix"
+-ff_prefix_dir="${prefix}/lib/ff++/$VERSION"
++ff_prefix_dir="${libdir}/freefem++"
+ AC_MSG_CHECKING(prefix dir freefem++  )
+ AC_MSG_RESULT($ff_prefix_dir)
+ 

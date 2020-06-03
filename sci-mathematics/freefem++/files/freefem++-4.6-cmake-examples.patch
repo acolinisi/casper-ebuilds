@@ -1,0 +1,10 @@
+--- a/examples/CMakeLists.txt	2020-04-30 02:55:52.117721913 -0000
++++ b/examples/CMakeLists.txt	2020-04-30 02:55:57.552889938 -0000
+@@ -6,7 +6,6 @@
+ ADD_SUBDIRECTORY(eigen)
+ #ADD_SUBDIRECTORY(plugin)
+ ADD_SUBDIRECTORY(mpi)
+-ADD_SUBDIRECTORY(other)
+ ADD_SUBDIRECTORY(tutorial)
+ ADD_SUBDIRECTORY(ffddm)
+ 

@@ -1,0 +1,47 @@
+--- a/src/fflib/problem.cpp	2020-02-10 15:52:25.000000000 -0500
++++ b/src/fflib/problem.cpp	2020-03-05 14:27:12.700514796 -0500
+@@ -697,7 +697,7 @@
+ 
+         if (where_in_stack) delete [] where_in_stack;
+         delete &mate;
+-        if(verbosity>9) cout << "  -- CPU assemble mat " <<  CPUtime()-CPU0 << " s\n";
++        if(verbosity>0) cout << "  -- CPU assemble mat " <<  CPUtime()-CPU0 << " s\n";
+     }
+ 
+     // creating an instance of AssembleBilinearForm with MatriceCreuse
+@@ -1172,7 +1172,7 @@
+         mate.bilinearform=b->b;
+ 
+         Check(*mate.bilinearform,mate.Uh.N,mate.Vh.N);
+-        if(verbosity>9) cout << "  -- CPU init assemble mat " <<  CPUtime()-CPU0 << " s\n";
++        if(verbosity>0) cout << "  -- CPU init assemble mat " <<  CPUtime()-CPU0 << " s\n";
+ 
+         if (di.kind == CDomainOfIntegration::int1d )
+         {
+@@ -1321,7 +1321,7 @@
+ 
+         if (where_in_stack) delete [] where_in_stack;
+         delete &mate;
+-        if(verbosity>9) cout << "  -- CPU assemble mat " <<  CPUtime()-CPU0 << " s\n";
++        if(verbosity>0) cout << "  -- CPU assemble mat " <<  CPUtime()-CPU0 << " s\n";
+     }
+ 
+ 
+@@ -1448,7 +1448,7 @@
+         mate.bilinearform=b->b;
+ 
+         Check(*mate.bilinearform,mate.Uh.N,mate.Vh.N);
+-        if(verbosity>9) cout << "  -- CPU init assemble mat " <<  CPUtime()-CPU0 << " s\n";
++        if(verbosity>0) cout << "  -- CPU init assemble mat " <<  CPUtime()-CPU0 << " s\n";
+ 
+         if (di.kind == CDomainOfIntegration::int1d ) {
+             for (int i=0;i< Th.nt; i++) {
+@@ -1474,7 +1474,7 @@
+ 
+         if (where_in_stack) delete [] where_in_stack;
+         delete &mate;
+-        if(verbosity>9) cout << "  -- CPU assemble mat " <<  CPUtime()-CPU0 << " s\n";
++        if(verbosity>0) cout << "  -- CPU assemble mat " <<  CPUtime()-CPU0 << " s\n";
+     }
+ 
+ 

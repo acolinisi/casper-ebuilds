@@ -1,0 +1,11 @@
+--- a/cmake/modules/FindCHOLMOD.cmake	2020-04-06 08:12:58.353957690 -0000
++++ b/cmake/modules/FindCHOLMOD.cmake	2020-04-06 08:13:05.345173537 -0000
+@@ -130,6 +130,8 @@
+   set(CHOLMOD_LIBRARIES ${CHOLMOD_LIBRARIES} ${BLAS_LIBRARIES})
+ endif()
+ 
++set(CHOLMOD_LIBRARIES ${CHOLMOD_LIBRARIES} -pthread)
++
+ find_program(GFORTRAN_EXECUTABLE gfortran)
+ if (GFORTRAN_EXECUTABLE)
+   execute_process(COMMAND ${GFORTRAN_EXECUTABLE} -print-file-name=libgfortran.so

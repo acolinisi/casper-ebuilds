@@ -3,17 +3,18 @@
 
 EAPI=5
 
-inherit autotools eutils flag-o-matic mpi versionator toolchain-funcs
+inherit autotools eutils flag-o-matic versionator toolchain-funcs
 
+MY_PN=FreeFem
 MY_PV=$(replace_version_separator 2 '-')
 
-DESCRIPTION="Solve PDEs using FEM on 2d and 3d domains"
-HOMEPAGE="http://www.freefem.org/ff++/"
-SRC_URI="http://www.freefem.org/ff++/ftp/old-v3/${PN}-${MY_PV}.tar.gz"
+DESCRIPTION="High-level multiphysics FEM software for solving PDEs on 2D and 3D domains"
+HOMEPAGE="http://www.freefem.org/"
+SRC_URI="https://github.com/${MY_PN}/${MY_PN}-sources/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~amd64-linux"
 IUSE="doc examples mpi opengl X"
 
 RDEPEND="
@@ -22,7 +23,7 @@ RDEPEND="
 	virtual/lapack
 	sci-libs/umfpack
 	sci-libs/arpack
-	mpi? ( $(mpi_pkg_deplist) )
+	mpi? ( virtual/mpi )
 	opengl? (
 		media-libs/freeglut
 		virtual/opengl
@@ -44,7 +45,7 @@ DEPEND="${RDEPEND}
 		media-gfx/imagemagick
 		)"
 
-S="${WORKDIR}/${PN}-${MY_PV}"
+S="${WORKDIR}/${MY_PN}-${MY_PV}"
 
 src_prepare() {
 	# acoptim.m4 forced -O2 removal

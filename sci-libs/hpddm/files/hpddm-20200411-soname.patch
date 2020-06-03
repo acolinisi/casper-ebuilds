@@ -1,0 +1,37 @@
+--- a/Makefile	2020-04-28 22:10:06.329620824 -0000
++++ b/Makefile	2020-04-28 22:11:41.916571969 -0000
+@@ -37,6 +37,8 @@
+ 
+ INCS += -I./include -I./interface
+ 
++SO_VER ?= 0.0.0
++
+ ifdef SOLVER
+     override HPDDMFLAGS += -DD${SOLVER}
+ endif
+@@ -240,11 +242,11 @@
+ 
+ ${TOP_DIR}/${LIB_DIR}/lib%.${EXTENSION_LIB}: interface/%.cpp ${TOP_DIR}/${TRASH_DIR}/%.d ${TOP_DIR}/${TRASH_DIR}/compiler_flags_cpp
+ 	@if [ "$<" = "interface/hpddm_python.cpp" ]; then \
+-		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
+-		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
++		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -Wl,-soname,${@F}.${SO_VER} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
++		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -Wl,-soname,${@F}.${SO_VER} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
+ 	else \
+-		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -shared $< -o $@ ${LIBS}; \
+-		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -shared $< -o $@ ${LIBS}; \
++		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -Wl,-soname,${@F}.${SO_VER} -shared $< -o $@ ${LIBS}; \
++		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -Wl,-soname,${@F}.${SO_VER} -shared $< -o $@ ${LIBS}; \
+ 	fi
+ 	${POSTCOMPILE}
+ 
+--- a/Makefile	2020-04-28 22:31:54.428003409 -0000
++++ b/Makefile	2020-04-28 22:35:30.639677005 -0000
+@@ -248,6 +248,7 @@
+ 		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -Wl,-soname,${@F}.${SO_VER} -shared $< -o $@ ${LIBS}; \
+ 		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -Wl,-soname,${@F}.${SO_VER} -shared $< -o $@ ${LIBS}; \
+ 	fi
++	ln -sf ${@F} $@.${SO_VER}
+ 	${POSTCOMPILE}
+ 
+ lib: $(addprefix ${TOP_DIR}/${LIB_DIR}/libhpddm_, $(addsuffix .${EXTENSION_LIB}, $(filter-out cpp, ${LIST_COMPILATION})))

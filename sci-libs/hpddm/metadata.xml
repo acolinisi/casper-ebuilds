@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>sci@gentoo.org</email>
+    <name>Gentoo Science Project</name>
+  </maintainer>
+  <longdescription lang="en">
+    HPDDM is an efficient implementation of various domain
+    decomposition methods (DDM) such as one- and two-level Restricted
+    Additive Schwarz methods, the Finite Element Tearing and
+    Interconnecting (FETI) method, and the Balancing Domain
+    Decomposition (BDD) method. These methods can be enhanced with
+    deflation vectors computed automatically by the framework using:
+
+    * generalized Eigenvalue problems on the Overlap (GenEO), an
+      approach first introduced in a paper by Spillane et al., or
+    * local Dirichlet-to-Neumann operators, an approach first
+    introduced in a paper by Nataf et al. and revisited by Conen et al
+
+    This code has been proven to be efficient for solving various
+    elliptic problems such as scalar diffusion equations, the system
+    of linear elasticity, but also frequency domain problems like the
+    Helmholtz equation. A comparison with modern multigrid methods can
+    be found in the thesis of Jolivet. 
+  </longdescription>
+  <upstream>
+    <remote-id type="github">hpddm/hpddm</remote-id>
+  </upstream>
+</pkgmetadata>

@@ -1,0 +1,11 @@
+--- a/Makefile	2020-04-28 21:51:50.422781523 -0000
++++ b/Makefile	2020-04-28 21:52:10.262394145 -0000
+@@ -158,7 +158,7 @@
+ c: ${TOP_DIR}/${BIN_DIR}/schwarz_c ${TOP_DIR}/${LIB_DIR}/libhpddm_c.${EXTENSION_LIB}
+ python: ${TOP_DIR}/${LIB_DIR}/libhpddm_python.${EXTENSION_LIB}
+ 
+-ifneq (,$(findstring gfortran,${OMPI_FC}${MPICH_F90}))
++ifneq (,$(findstring gfortran,$(shell ${MPIF90} --showme)))
+     F90MOD = -J
+ else
+     F90MOD = -module

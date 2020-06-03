@@ -1,0 +1,45 @@
+--- a/Makefile	2020-04-28 22:05:10.915499700 -0000
++++ b/Makefile	2020-04-28 22:06:37.462172146 -0000
+@@ -241,11 +241,11 @@
+ 
+ ${TOP_DIR}/${LIB_DIR}/lib%.${EXTENSION_LIB}: interface/%.cpp ${TOP_DIR}/${TRASH_DIR}/%.d ${TOP_DIR}/${TRASH_DIR}/compiler_flags_cpp
+ 	@if [ "$<" = "interface/hpddm_python.cpp" ]; then \
+-		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
+-		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
++		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} ${SO_LDFLAGS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
++		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} ${SO_LDFLAGS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
+ 	else \
+-		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -shared $< -o $@ ${LIBS}; \
+-		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -shared $< -o $@ ${LIBS}; \
++		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${SO_LDFLAGS} -shared $< -o $@ ${LIBS}; \
++		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${SO_LDFLAGS} -shared $< -o $@ ${LIBS}; \
+ 	fi
+ 	${POSTCOMPILE}
+ 
+--- a/Makefile	2020-04-28 22:10:06.329620824 -0000
++++ b/Makefile	2020-04-28 22:11:41.916571969 -0000
+@@ -37,6 +37,8 @@
+ 
+ INCS += -I./include -I./interface
+ 
++SOVER ?= 0.0.0
++
+ ifdef SOLVER
+     override HPDDMFLAGS += -DD${SOLVER}
+ endif
+@@ -240,11 +242,11 @@
+ 
+ ${TOP_DIR}/${LIB_DIR}/lib%.${EXTENSION_LIB}: interface/%.cpp ${TOP_DIR}/${TRASH_DIR}/%.d ${TOP_DIR}/${TRASH_DIR}/compiler_flags_cpp
+ 	@if [ "$<" = "interface/hpddm_python.cpp" ]; then \
+-		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
+-		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
++		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -Wl,-soname,${@F}.${SOVER} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
++		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} ${PYTHON_INCS} -Wl,-soname,${@F}.${SOVER} -shared $< -o $@ ${LIBS} ${PYTHON_LIBS}; \
+ 	else \
+-		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -shared $< -o $@ ${LIBS}; \
+-		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -shared $< -o $@ ${LIBS}; \
++		echo ${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -Wl,-soname,${@F}.${SOVER} -shared $< -o $@ ${LIBS}; \
++		${MPICXX} ${DEPFLAGS} ${CXXFLAGS} ${HPDDMFLAGS} ${INCS} -Wl,-soname,${@F}.${SOVER} -shared $< -o $@ ${LIBS}; \
+ 	fi
+ 	${POSTCOMPILE}
+ 

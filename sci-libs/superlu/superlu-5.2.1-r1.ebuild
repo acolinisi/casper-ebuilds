@@ -3,8 +3,6 @@
 
 EAPI=7
 
-FORTRAN_STANDARD=77
-
 inherit cmake fortran-2
 
 MY_PN=SuperLU

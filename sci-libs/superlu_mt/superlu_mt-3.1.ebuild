@@ -19,9 +19,9 @@ IUSE="doc examples int64 openmp static-libs test threads"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="|| ( openmp threads )"
 
+BDEPEND="virtual/pkgconfig"
 RDEPEND="virtual/blas"
 DEPEND="${RDEPEND}
-	virtual/pkgconfig
 	test? ( app-shells/tcsh )"
 
 S="${WORKDIR}/${MYPN}_${PV}"

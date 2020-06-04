@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>python@gentoo.org</email>
+    <name>Python</name>
+  </maintainer>
+  <longdescription lang="en">cgen offers a simple abstract syntax tree for C
+    and related languages (C++/CUDA/OpenCL) to allow structured code
+    generation from Python. To represent mathematical expressions, cgen can
+    be used with pymbolic.
+  </longdescription>
+  <upstream>
+    <remote-id type="pypi">cgen</remote-id>
+  </upstream>
+</pkgmetadata>

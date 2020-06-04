@@ -1,0 +1,27 @@
+--- a/firedrake/mesh.py	2020-04-22 16:17:03.326054909 -0000
++++ b/firedrake/mesh.py	2020-04-22 16:44:23.193583715 -0000
+@@ -405,15 +405,16 @@
+             # refine this mesh in parallel.  Later, when we actually use
+             # it, we grow the halo.
+             partitioner = plex.getPartitioner()
+-            if IntType.itemsize == 8:
+-                # Default to PTSCOTCH on 64bit ints (Chaco is 32 bit int only)
+-                from firedrake_configuration import get_config
+-                if get_config().get("options", {}).get("with_parmetis", False):
+-                    partitioner.setType(partitioner.Type.PARMETIS)
+-                else:
+-                    partitioner.setType(partitioner.Type.PTSCOTCH)
++            from firedrake_configuration import get_config
++            options = get_config().get("options", {})
++            if options.get("with_ptscotch", False):
++                partitioner.setType(partitioner.Type.PTSCOTCH)
++            elif options.get("with_parmetis", False):
++                partitioner.setType(partitioner.Type.PARMETIS)
++            elif options.get("with_chaco", False) and IntType.itemsize == 4:
++                partitioner.setType(partitioner.Type.CHACO) # 32 bit int only
+             else:
+-                partitioner.setType(partitioner.Type.CHACO)
++                raise NotImplementedError("no mesh partitioner available")
+             try:
+                 sizes, points = distribute
+                 partitioner.setType(partitioner.Type.SHELL)

@@ -1,0 +1,13 @@
+--- a/firedrake/__init__.py	2020-04-27 01:33:13.497159628 -0000
++++ b/firedrake/__init__.py	2020-04-27 01:39:59.363666270 -0000
+@@ -1,6 +1,10 @@
+ import firedrake_configuration
+ import os
+ import sys
++
++# Support side-by-side slot installation with "mainline" (aka. FEniCS) versions
++sys.path.append(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)), 'firedrake_suite'))
++
+ config = firedrake_configuration.get_config()
+ if "PETSC_DIR" in os.environ and not config["options"]["honour_petsc_dir"]:
+     if os.environ["PETSC_DIR"] != os.path.join(os.environ["VIRTUAL_ENV"], "src", "petsc")\

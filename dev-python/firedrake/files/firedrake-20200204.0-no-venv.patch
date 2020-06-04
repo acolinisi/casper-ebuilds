@@ -1,0 +1,24 @@
+--- a/firedrake_configuration/__init__.py	2020-04-22 16:55:58.371003978 -0000
++++ b/firedrake_configuration/__init__.py	2020-04-22 16:57:21.459564154 -0000
+@@ -13,7 +13,7 @@
+                             ".configuration.json"), "r") as f:
+         _config = json.load(f)
+ 
+-except IOError:
++except (IOError, KeyError):
+     # Fall back to old location.
+     try:
+         with open(os.path.join(os.path.dirname(__file__),
+--- a/firedrake/supermeshing.py	2020-04-22 16:59:22.000278333 -0000
++++ b/firedrake/supermeshing.py	2020-04-22 17:00:44.767828455 -0000
+@@ -358,7 +358,9 @@
+         "dim": dim
+     }
+ 
+-    dirs = get_petsc_dir() + (os.environ["VIRTUAL_ENV"], )
++    dirs = get_petsc_dir()
++    if "VIRTUAL_ENV" in os.environ:
++        dirs += (os.environ["VIRTUAL_ENV"], )
+     includes = ["-I%s/include" % d for d in dirs]
+     libs = ["-L%s/lib" % d for d in dirs]
+     libs = libs + ["-Wl,-rpath,%s/lib" % d for d in dirs] + ["-lpetsc", "-lsupermesh"]

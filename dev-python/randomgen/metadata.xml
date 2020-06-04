@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>python@gentoo.org</email>
+    <name>Python</name>
+  </maintainer>
+  <longdescription lang="en">Random Number Generator using settable
+    Basic RNG interface for future NumPy RandomState evolution.
+    Numpy-like random number generator that supports multiple core
+    pseudo RNGs and explicitly parallel generation. 
+  </longdescription>
+</pkgmetadata>

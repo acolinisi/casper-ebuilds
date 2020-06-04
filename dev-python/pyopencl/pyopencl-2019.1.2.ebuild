@@ -17,15 +17,19 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="examples opengl"
 
-RDEPEND="
+# numpy headers are used during the build
+DEPEND="
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/pybind11[${PYTHON_USEDEP}]
+	>=virtual/opencl-2
+	"
+RDEPEND="${DEPEND}
 	>=dev-python/appdirs-1.4.0[${PYTHON_USEDEP}]
 	>=dev-python/decorator-3.2.0[${PYTHON_USEDEP}]
 	dev-python/mako[${PYTHON_USEDEP}]
-	dev-python/numpy[${PYTHON_USEDEP}]
 	>=dev-python/pytools-2017.5[${PYTHON_USEDEP}]
-	dev-python/pybind11[${PYTHON_USEDEP}]
 	>=dev-python/six-1.9.0[${PYTHON_USEDEP}]
-	>=virtual/opencl-2"
+	"
 DEPEND="${RDEPEND}"
 
 distutils_enable_tests pytest

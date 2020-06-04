@@ -1,0 +1,10 @@
+--- a/gen_wrap.py	2020-04-16 17:42:03.107355815 -0000
++++ b/gen_wrap.py	2020-04-16 17:42:15.767746375 -0000
+@@ -811,6 +811,7 @@
+                 "ISL_DECLARE_MULTI_BIND_DOMAIN",
+                 "ISL_DECLARE_MULTI_PARAM",
+                 "ISL_DECLARE_MULTI_DROP_DIMS",
++                "ISL_DECLARE_MULTI_LOCALS",
+                 "isl_malloc_or_die",
+                 "isl_calloc_or_die",
+                 "isl_realloc_or_die",

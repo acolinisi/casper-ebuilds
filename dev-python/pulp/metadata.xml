@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>python@gentoo.org</email>
+    <name>Python</name>
+  </maintainer>
+  <longdescription lang="en">PuLP is an LP modeler written in python. PuLP
+    can generate MPS or LP files and call GLPK, COIN CLP/CBC, CPLEX, and
+    GUROBI to solve linear problems.
+  </longdescription>
+  <upstream>
+    <remote-id type="pypi">PuLP</remote-id>
+  </upstream>
+</pkgmetadata>

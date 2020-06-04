@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>python@gentoo.org</email>
+    <name>Python</name>
+  </maintainer>
+  <longdescription lang="en">Python bindings for PETsc (Portable, Extensible
+    Toolkit for Scientific Computation).  PETSc is a suite of data structures
+    and routines for the scalable (parallel) solution of scientific
+    applications modeled by partial differential equations. It employs the
+    Message Passing Interface (MPI) standard for all message-passing
+    communication.
+  </longdescription>
+  <upstream>
+    <remote-id type="bitbucket">petsc4py</remote-id>
+    <remote-id type="pypi">petsc4py</remote-id>
+  </upstream>
+</pkgmetadata>

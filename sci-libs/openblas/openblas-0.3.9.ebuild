@@ -15,9 +15,19 @@ IUSE="dynamic eselect-ldso index-64bit openmp pthread"
 REQUIRED_USE="?? ( openmp pthread )"
 
 RDEPEND="
-	eselect-ldso? ( >=app-eselect/eselect-blas-0.2
-			!app-eselect/eselect-cblas
-			>=app-eselect/eselect-lapack-0.2 )"
+	eselect-ldso? (
+		>=app-eselect/eselect-blas-0.2
+		!app-eselect/eselect-cblas
+		>=app-eselect/eselect-lapack-0.2
+	)
+	!eselect-ldso? (
+		!app-eselect/eselect-cblas
+		!app-eselect/eselect-blas
+
+		!sci-libs/lapack[blas]
+		!sci-libs/blis[blas]
+	)
+	"
 
 DEPEND="virtual/pkgconfig"
 

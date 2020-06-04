@@ -1,0 +1,11 @@
+# The logic is this: need to strip gdrive:// scheme from the
+# URI, but \${URI#gdrive://} at top level doesn't work
+# (probably) due to shlex dropping everything after # as
+# comment. So, we put it in a nested bash command, and in
+# a variable (_URI) so that we can use the ${VAR#prefix}
+# feature of bash to remove the prefix.
+
+FETCHCOMMAND_GDRIVE="env _DEST=\"\${DISTDIR}/\${FILE}\" _URI=\"\${URI}\" bash -c 'gdown -O \"\${_DEST}\" --id \"\${_URI#gdrive://}\"'"
+
+# same as above, but remove the file ahead of time
+RESUMECOMMAND_GDRIVE="env _DEST=\"\${DISTDIR}/\${FILE}\" _URI=\"\${URI}\" bash -c 'rm -f \"\${_DEST}\" && gdown -O \"\${_DEST}\" --id \"\${_URI#gdrive://}\"'"

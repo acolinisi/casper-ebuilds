@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>python@gentoo.org</email>
+    <name>Python</name>
+  </maintainer>
+  <longdescription lang="en">CodePy is a C/C++ metaprogramming toolkit for
+    Python. It helps you compile source code and dynamically load it into
+    the Python interpreter. This facility also works in conjunction with
+    with PyCuda. Dynamic compilation and linking are so far only supported
+    in Linux with the GNU toolchain.
+  </longdescription>
+  <upstream>
+    <remote-id type="pypi">codepy</remote-id>
+  </upstream>
+</pkgmetadata>

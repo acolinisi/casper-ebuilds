@@ -1,0 +1,31 @@
+dev-lang/python:3.8
+dev-python/pkgconfig
+dev-python/pytest
+
+# Latest version supported by Nvidia CUDA
+sys-devel/gcc:8.3.0
+
+# For Halide
+sys-devel/clang:9
+sys-devel/llvm:9
+
+dev-util/nvidia-cuda-toolkit
+
+# TODO: shouldn't need to specify this (should be a dep)
+# *media-libs/fontconfig
+app-arch/lzma
+
+# Useful utilities
+app-misc/colordiff
+app-misc/screen
+sys-apps/man-pages
+sys-process/htop
+#dev-vcs/hub
+
+# Useful portage helpers
+app-portage/cpuid2cpuflags
+app-portage/eix
+app-portage/gentoolkit
+app-portage/layman
+app-portage/repo-commit
+app-portage/repoman

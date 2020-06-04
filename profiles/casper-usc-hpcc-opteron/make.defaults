@@ -1,0 +1,4 @@
+CFLAGS="-O3 -march=amdfam10 -mtune=amdfam10"
+CXXFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+FFLAGS="${CFLAGS}"

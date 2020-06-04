@@ -1,0 +1,7 @@
+amd64-linux casper-usc-hpcc-amd64 dev
+amd64-linux casper-usc-hpcc-westmere dev
+amd64-linux casper-usc-hpcc-sandybridge dev
+amd64-linux casper-usc-hpcc-ivybridge dev
+amd64-linux casper-usc-hpcc-broadwell dev
+amd64-linux casper-usc-hpcc-skylake dev
+amd64-linux casper-usc-hpcc-opteron dev

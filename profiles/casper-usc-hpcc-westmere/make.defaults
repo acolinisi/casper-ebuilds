@@ -1,0 +1,4 @@
+CFLAGS="-O3 -march=westmere -mtune=westmere"
+CXXFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+FFLAGS="${CFLAGS}"

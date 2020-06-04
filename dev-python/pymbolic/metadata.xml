@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="project">
+    <email>python@gentoo.org</email>
+    <name>Python</name>
+  </maintainer>
+  <longdescription lang="en">Pymbolic is a small expression tree and
+    symbolic manipulation library. Two things set it apart from other
+    libraries of its kind:
+    * Users can easily write their own symbolic operations, simply by
+    deriving from the builtin visitor classes.
+    * Users can easily add their own symbolic entities to do calculations
+    with.
+
+    Pymbolic currently understands regular arithmetic expressions,
+    derivatives, sparse polynomials, fractions, term substitution,
+    expansion. It automatically performs constant folding, and it can
+    compile its expressions into Python bytecode for fast(er) execution.
+
+    If you are looking for a full-blown Computer Algebra System, look at
+    sympy or PyGinac. If you are looking for a basic, small and extensible
+    set of symbolic operations, pymbolic may well be for you.
+  </longdescription>
+  <upstream>
+    <remote-id type="pypi">pymbolic</remote-id>
+  </upstream>
+</pkgmetadata>

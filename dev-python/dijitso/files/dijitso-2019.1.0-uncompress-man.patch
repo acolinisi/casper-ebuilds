@@ -1,0 +1,11 @@
+--- a/setup.py	2020-04-27 04:19:14.661624473 -0000
++++ b/setup.py	2020-04-27 04:19:21.188827395 -0000
+@@ -21,7 +21,7 @@
+ entry_points = {'console_scripts': ['dijitso = dijitso.__main__:main']}
+ 
+ scripts = [join("scripts", script) for script in script_names]
+-man_files = [join("doc", "man", "man1", "%s.1.gz" % (script,)) for script in script_names]
++man_files = [join("doc", "man", "man1", "%s.1" % (script,)) for script in script_names]
+ data_files = [(join("share", "man", "man1"), man_files)]
+ 
+ 

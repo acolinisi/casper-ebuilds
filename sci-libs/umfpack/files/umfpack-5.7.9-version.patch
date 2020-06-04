@@ -1,0 +1,50 @@
+From d90639181856cd9dd7878f1574f7850e6e710aa5 Mon Sep 17 00:00:00 2001
+From: Alexei Colin <acolin@isi.edu>
+Date: Thu, 5 Mar 2020 18:11:06 -0500
+Subject: [PATCH] UMFPACK: update version in header to latest (5.7.9)
+
+Fixes reported version mismatch since 6ee9c7e3d3a6e8fa1322abce8cafd0dc0399d66a
+(SuiteSparse v5.5.0) when the UMFPACK source was updated to 5.7.9 but version
+in the header stayed at 5.7.8.
+
+This version information is reported by UMFPACK at runtime, e.g.:
+
+    UMFPACK V5.7.8 (Nov 9, 2018), Info:
+
+And mismatch between the reported versions and the version in the source tree
+(in ChangeLog) leads to confusion for users with regards to which UMFPACK
+library is being used in build of software that links against UMFPACK.
+---
+ UMFPACK/Include/umfpack.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Include/umfpack.h b/Include/umfpack.h
+index 212b5493..fb22a897 100644
+--- a/Include/umfpack.h
++++ b/Include/umfpack.h
+@@ -95,7 +95,7 @@ extern "C" {
+ /* Version, copyright, and license */
+ /* -------------------------------------------------------------------------- */
+ 
+-#define UMFPACK_VERSION "UMFPACK V5.7.8 (Nov 9, 2018)"
++#define UMFPACK_VERSION "UMFPACK V5.7.9 (Oct 20, 2019)"
+ 
+ #define UMFPACK_COPYRIGHT \
+ "UMFPACK:  Copyright (c) 2005-2013 by Timothy A. Davis.  All Rights Reserved.\n"
+@@ -132,11 +132,11 @@ extern "C" {
+  * above.
+  */
+ 
+-#define UMFPACK_DATE "Nov 9, 2018"
++#define UMFPACK_DATE "Oct 20, 2019"
+ #define UMFPACK_VER_CODE(main,sub) ((main) * 1000 + (sub))
+ #define UMFPACK_MAIN_VERSION 5
+ #define UMFPACK_SUB_VERSION 7
+-#define UMFPACK_SUBSUB_VERSION 8
++#define UMFPACK_SUBSUB_VERSION 9
+ #define UMFPACK_VER UMFPACK_VER_CODE(UMFPACK_MAIN_VERSION,UMFPACK_SUB_VERSION)
+ 
+ /* -------------------------------------------------------------------------- */
+-- 
+2.26.0
+

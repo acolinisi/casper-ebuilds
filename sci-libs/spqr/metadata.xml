@@ -13,12 +13,15 @@
   peak performance of a multicore computer.
 </longdescription>
 <use>
+  <flag name="expert">Compile with min 2-norm solution
+    option using Expert routines</flag>
   <flag name="metis">Use <pkg>sci-libs/metis</pkg> or <pkg>sci-libs/parmetis</pkg> for partitioning</flag>
   <flag name="partition">
-    Use the partition module of <pkg>sci-libs/cholmod</pkg> for
-    partitioning
+    Use <pkg>sci-libs/metis</pkg> and the partition module of
+    <pkg>sci-libs/cholmod</pkg> for input partitioning.
   </flag>
   <flag name="tbb">Enable multithreading with the Intel Threads
   Building Block <pkg>dev-cpp/tbb</pkg></flag>
+  <flag name="timing">Compile with timing and exact flop counts enabled</flag>
 </use>
 </pkgmetadata>

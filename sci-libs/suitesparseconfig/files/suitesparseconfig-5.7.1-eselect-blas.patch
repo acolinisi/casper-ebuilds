@@ -1,0 +1,19 @@
+--- a/SuiteSparse_config.mk	2020-04-22 22:46:58.229845030 -0000
++++ b/SuiteSparse_config.mk	2020-04-22 22:48:56.210482792 -0000
+@@ -174,9 +174,13 @@
+             BLAS = -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread -liomp5 -lpthread -lm
+             LAPACK =
+         else
+-            # use the OpenBLAS at http://www.openblas.net (CAN BE VERY SLOW;
+-            # CHOLMOD can be slowed down by a factor of 100x in extreme cases)
+-            BLAS = -lopenblas
++            ifdef OPENBLAS
++                # use the OpenBLAS at http://www.openblas.net (CAN BE VERY SLOW;
++                # CHOLMOD can be slowed down by a factor of 100x in extreme cases)
++                BLAS = -lopenblas
++            else # On Gentoo, this will be the eselect switcher
++                BLAS = -lblas
++            endif
+         endif
+     endif
+ 

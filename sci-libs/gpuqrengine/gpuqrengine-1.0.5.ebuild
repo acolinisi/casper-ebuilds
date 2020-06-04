@@ -28,7 +28,7 @@ src_prepare() {
 
 src_compile() {
 	# H3 adds GPURuntime headers to prereqs, which is unnecessary
-	suitesparse_src_compile H3=
+	cuda_with_gcc suitesparse_src_compile H3=
 }
 
 src_install() {

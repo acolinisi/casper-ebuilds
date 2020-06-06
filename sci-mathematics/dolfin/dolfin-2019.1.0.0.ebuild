@@ -75,6 +75,8 @@ S="${WORKDIR}/${MYP}"
 PATCHES=(
 	"${FILESDIR}"/${PN}-2016.2.0-trilinos-superlu.patch
 	"${FILESDIR}"/${P}-try-run-rpath.patch
+	"${FILESDIR}"/${P}-include-alg.patch
+	"${FILESDIR}"/${P}-boost-endian.patch
 )
 
 #pkg_setup() {

@@ -1,0 +1,22 @@
+--- a/dolfin/io/VTKWriter.cpp	2020-06-05 23:49:27.316938575 -0000
++++ b/dolfin/io/VTKWriter.cpp	2020-06-05 23:49:34.375157438 -0000
+@@ -24,7 +24,7 @@
+ #include <sstream>
+ #include <vector>
+ #include <iomanip>
+-#include <boost/detail/endian.hpp>
++#include <boost/endian.hpp>
+ 
+ #include <dolfin/fem/GenericDofMap.h>
+ #include <dolfin/fem/FiniteElement.h>
+--- a/dolfin/io/VTKFile.cpp	2020-06-05 23:48:14.354676159 -0000
++++ b/dolfin/io/VTKFile.cpp	2020-06-05 23:48:24.882002588 -0000
+@@ -20,7 +20,7 @@
+ #include <vector>
+ #include <iomanip>
+ #include <boost/cstdint.hpp>
+-#include <boost/detail/endian.hpp>
++#include <boost/endian.hpp>
+ 
+ #include "pugixml.hpp"
+ 

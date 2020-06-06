@@ -3,15 +3,13 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,8} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 WEBAPP_OPTIONAL=yes
-# TODO:
-#WEBAPP_MANUAL_SLOT=yes
-
-inherit flag-o-matic java-pkg-opt-2 python-single-r1 qmake-utils toolchain-funcs cmake virtualx webapp
+WEBAPP_MANUAL_SLOT=yes
 
 # Short package version
 SPV="$(ver_cut 1-2)"
+inherit flag-o-matic java-pkg-opt-2 python-single-r1 qmake-utils toolchain-funcs cmake virtualx webapp
 
 DESCRIPTION="The Visualization Toolkit"
 HOMEPAGE="https://www.vtk.org/"
@@ -21,18 +19,14 @@ SRC_URI="
 	examples? (
 		https://www.vtk.org/files/release/${SPV}/VTKData-${PV}.tar.gz
 		https://www.vtk.org/files/release/${SPV}/VTKLargeData-${PV}.tar.gz
-	)
-	python? ( https://gitlab.kitware.com/vtk/vtk/uploads/cf7f517b4f647de1997c4e8cddb54de9/0001-Compatibility-for-Python-3.8.patch -> ${P}-python3.8.patch )
-	"
+	)"
 
 LICENSE="BSD LGPL-2"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 SLOT="0"
-# TODO: VTK_USE_64BIT_IDS
-IUSE="
-	all-modules aqua boost doc examples imaging ffmpeg gdal java json mpi
-	mysql odbc offscreen postgres python qt5 rendering tbb theora tk tcl
-	video_cards_nvidia views web R +X xdmf2"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+IUSE="all-modules aqua boost doc examples ffmpeg gdal imaging java json mpi
+	odbc offscreen postgres python qt5 R rendering tbb tcl theora tk
+	video_cards_nvidia views web +X xdmf2"
 
 REQUIRED_USE="
 	all-modules? ( python xdmf2 boost )
@@ -46,19 +40,17 @@ REQUIRED_USE="
 
 RDEPEND="
 	app-arch/lz4
-	app-arch/lzma
+	dev-cpp/eigen
 	dev-db/sqlite
-	>=dev-cpp/eigen-2.91.0
-	dev-libs/double-conversion
+	dev-libs/double-conversion:0=
 	dev-libs/expat
-	>=dev-libs/jsoncpp-0.7.0:=
+	dev-libs/jsoncpp:=
 	dev-libs/libxml2:2
 	dev-libs/pugixml
 	>=media-libs/freetype-2.5.4
+	media-libs/glew:0=
 	>=media-libs/libharu-2.3.0-r2
-	media-libs/glew:=
 	media-libs/libpng:0=
-	media-libs/libogg
 	media-libs/libtheora
 	media-libs/mesa
 	media-libs/tiff:0
@@ -69,23 +61,43 @@ RDEPEND="
 	sys-libs/zlib
 	virtual/jpeg:0
 	virtual/opengl
-	X? (
-		x11-libs/libX11
-		x11-libs/libXmu
-		x11-libs/libXt
-	)
+	x11-libs/libX11
+	x11-libs/libXmu
+	x11-libs/libXt
 	boost? ( dev-libs/boost:=[mpi?] )
 	examples? (
 		dev-qt/qtcore:5
 		dev-qt/qtgui:5
 	)
-	ffmpeg? ( virtual/ffmpeg )
+	ffmpeg? ( media-video/ffmpeg )
 	gdal? ( sci-libs/gdal )
 	java? ( >=virtual/jdk-1.7:* )
-	mysql? ( virtual/mysql )
+	mpi? (
+		virtual/mpi[cxx,romio]
+		$(python_gen_cond_dep '
+			python? ( dev-python/mpi4py[${PYTHON_MULTI_USEDEP}] )
+		')
+	)
 	odbc? ( dev-db/unixODBC )
 	offscreen? ( media-libs/mesa[osmesa] )
 	postgres? ( dev-db/postgresql:= )
+	python? (
+		${PYTHON_DEPS}
+		$(python_gen_cond_dep '
+			dev-python/sip[${PYTHON_MULTI_USEDEP}]
+		')
+	)
+	qt5? (
+		dev-qt/designer:5
+		dev-qt/qtcore:5
+		dev-qt/qtgui:5
+		dev-qt/qtopengl:5
+		dev-qt/qtsql:5
+		dev-qt/qtx11extras:5
+		$(python_gen_cond_dep '
+			python? ( dev-python/PyQt5[${PYTHON_MULTI_USEDEP}] )
+		')
+	)
 	R? ( dev-lang/R )
 	tbb? ( dev-cpp/tbb )
 	tcl? ( dev-lang/tcl:0= )
@@ -105,29 +117,19 @@ RDEPEND="
 		')
 	)
 	xdmf2? ( sci-libs/xdmf2 )
-	$(python_gen_cond_dep "
-		mpi? (
-			virtual/mpi[cxx,romio]
-			python? ( dev-python/mpi4py[\${PYTHON_MULTI_USEDEP}] )
-		)
-		python? (
-			${PYTHON_DEPS}
-			dev-python/sip[\${PYTHON_MULTI_USEDEP}]
-		)
-		qt5? (
-			dev-qt/designer:5
-			dev-qt/qtcore:5
-			dev-qt/qtgui:5
-			dev-qt/qtopengl:5
-			dev-qt/qtsql:5
-			dev-qt/qtx11extras:5
-			python? ( dev-python/PyQt5[\${PYTHON_MULTI_USEDEP}] )
-		)
-	")"
-DEPEND="${RDEPEND}
-	doc? ( app-doc/doxygen )"
+"
+DEPEND="${RDEPEND}"
+BDEPEND="doc? ( app-doc/doxygen )"
 
 S="${WORKDIR}"/VTK-${PV}
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-8.1.0-openmpi-4-compatibility.patch
+	"${FILESDIR}"/${P}-qt-5.15.patch # bug 726960
+	"${FILESDIR}"/${P}-gcc-10.patch # bug 723374
+	"${FILESDIR}"/${P}-fno-common.patch # bug 721048
+	"${FILESDIR}"/${P}-py38.patch
+)
 
 RESTRICT="test"
 
@@ -138,12 +140,11 @@ pkg_setup() {
 }
 
 src_prepare() {
-	sed -i 's/\(exodus_unused_symbol_dummy\)_1/\1_2/' \
-		ThirdParty/exodusII/vtkexodusII/src/ex_open_par.c
+	cmake_src_prepare
 
 	local x
-	# missing: VPIC libproj4 utf8 verdict xmdf2 xmdf3
-	for x in expat freetype hdf5 jpeg jsoncpp libharu libxml2 lz4 lzma mpi4py netcdf png sqlite tiff; do
+	# missing: VPIC freerange libproj4 mrmpi sqlite utf8 verdict xmdf2 xmdf3
+	for x in expat freetype hdf5 jpeg jsoncpp libharu libxml2 lz4 netcdf png tiff zlib; do
 		ebegin "Dropping bundled ${x}"
 		rm -r ThirdParty/${x}/vtk${x} || die
 		eend $?
@@ -155,13 +156,6 @@ src_prepare() {
 		sed -e "s|\${VTK_BINARY_DIR}/Utilities/Doxygen/doc|${WORKDIR}|" \
 			-i Utilities/Doxygen/CMakeLists.txt || die
 	fi
-
-	if use python_single_target_python3_8; then
-		# Issue: https://gitlab.kitware.com/vtk/vtk/issues/17670
-		eapply -p1 "${DISTDIR}/${P}-python3.8.patch"
-	fi
-
-	cmake_src_prepare
 }
 
 src_configure() {
@@ -176,7 +170,6 @@ src_configure() {
 		-DVTK_CUSTOM_LIBRARY_SUFFIX=""
 		-DBUILD_SHARED_LIBS=ON
 		-DVTK_USE_SYSTEM_AUTOBAHN=ON
-		-DVTK_USE_SYSTEM_EIGEN=ON
 		-DVTK_USE_SYSTEM_EXPAT=ON
 		-DVTK_USE_SYSTEM_FREETYPE=ON
 		-DVTK_USE_SYSTEM_FreeType=ON
@@ -184,10 +177,9 @@ src_configure() {
 		-DVTK_USE_SYSTEM_GL2PS=OFF
 		-DVTK_USE_SYSTEM_HDF5=ON
 		-DVTK_USE_SYSTEM_JPEG=ON
-		-DVTK_USE_SYSTEM_LIBPROJ4=OFF
+		-DVTK_USE_SYSTEM_LIBPROJ=OFF
 		-DVTK_USE_SYSTEM_LIBXML2=ON
 		-DVTK_USE_SYSTEM_LibXml2=ON
-		-DVTK_USE_SYSTEM_MPI4PY=ON
 		-DVTK_USE_SYSTEM_NETCDF=ON
 		-DVTK_USE_SYSTEM_OGGTHEORA=ON
 		-DVTK_USE_SYSTEM_PNG=ON
@@ -216,7 +208,8 @@ src_configure() {
 		-DVTK_Group_Tk=$(usex tk)
 		-DVTK_Group_Views=$(usex views)
 		-DVTK_Group_Web=$(usex web)
-		-DVTK_WWW_DIR="${ED%/}/${MY_HTDOCSDIR}"
+		-DVTK_SMP_IMPLEMENTATION_TYPE="$(usex tbb TBB Sequential)"
+		-DVTK_WWW_DIR="${ED}/${MY_HTDOCSDIR}"
 		-DVTK_WRAP_JAVA=$(usex java)
 		-DVTK_WRAP_PYTHON=$(usex python)
 		-DVTK_WRAP_PYTHON_SIP=$(usex python)
@@ -248,16 +241,13 @@ src_configure() {
 		mycmakeargs+=( -DJAVAC_OPTIONS=${javacargs// /;} )
 	fi
 
-	if use tbb; then
-		mycmakeargs+=( -DVTK_SMP_IMPLEMENTATION_TYPE="TBB" )
-	else
-		mycmakeargs+=( -DVTK_SMP_IMPLEMENTATION_TYPE="Sequential" )
+	if use mpi; then
+		mycmakeargs+=( -DVTK_USE_SYSTEM_MPI4PY=ON )
 	fi
 
 	if use python; then
-
-			#-DVTK_PYTHON_SITE_PACKAGES_SUFFIX="$(python --version | sed 's/Python \([0-9]\.[0-9]\)\.[0-9]/\1/')"
 		mycmakeargs+=(
+			-DVTK_INSTALL_PYTHON_MODULE_DIR="$(python_get_sitedir)"
 			-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 			-DPYTHON_LIBRARY="$(python_get_library_path)"
 			-DSIP_PYQT_DIR="${EPREFIX}/usr/share/sip"
@@ -315,7 +305,7 @@ src_install() {
 
 	cmake_src_install
 
-	use java && java-pkg_regjar "${ED%/}"/usr/$(get_libdir)/${PN}.jar
+	use java && java-pkg_regjar "${ED}"/usr/$(get_libdir)/${PN}.jar
 
 	# Stop web page images from being compressed
 	use doc && docompress -x /usr/share/doc/${PF}/doxygen
@@ -323,7 +313,6 @@ src_install() {
 	if use tcl; then
 		# install Tcl docs
 		docinto vtk_tcl
-		dodoc Wrapping/Tcl/README
 		docinto .
 	fi
 

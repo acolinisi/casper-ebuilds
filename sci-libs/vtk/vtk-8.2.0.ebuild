@@ -138,6 +138,9 @@ pkg_setup() {
 }
 
 src_prepare() {
+	sed -i 's/\(exodus_unused_symbol_dummy\)_1/\1_2/' \
+		ThirdParty/exodusII/vtkexodusII/src/ex_open_par.c
+
 	local x
 	# missing: VPIC libproj4 utf8 verdict xmdf2 xmdf3
 	for x in expat freetype hdf5 jpeg jsoncpp libharu libxml2 lz4 lzma mpi4py netcdf png sqlite tiff; do

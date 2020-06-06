@@ -76,7 +76,7 @@ media-libs/libglvnd libgl X
 virtual/opengl libgl
 x11-libs/libxcb -xkb
 
->=virtual/mpi-2.0-r5 cxx romio
+virtual/mpi cxx romio
 
 app-portage/layman sync-plugin-portage git
 

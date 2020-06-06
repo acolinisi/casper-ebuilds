@@ -9,8 +9,7 @@ inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Simple Python interface to HDF5 files"
 HOMEPAGE="https://www.h5py.org"
-#SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-SRC_URI="http://distfiles.gentoo.org/${PN}-xxx.tar.gz"
+SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 
 # disable mpi until mpi4py gets python3_8
 #IUSE="examples mpi"
@@ -38,8 +37,8 @@ DEPEND="dev-python/cython[${PYTHON_USEDEP}]
 
 PATCHES=(
 	"${FILESDIR}/${P}-tests.patch"
+	"${FILESDIR}/${P}-hdf5-1.12-with-1.6-compat.patch"
 	)
-#"${FILESDIR}/${P}-hdf5-1.12-with-1.6-compat.patch"
 
 DOCS=( README.rst AUTHORS )
 

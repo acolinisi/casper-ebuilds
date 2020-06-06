@@ -13,6 +13,7 @@ MY_FV=$(ver_cut 1)
 
 DESCRIPTION="Framework for performance-portable parallel computations on unstructured meshes"
 HOMEPAGE="https://github.com/OP2/PyOP2 http://op2.github.com/PyOP2"
+# Note that the checksum of this may change, due to GitHub's autogeneration of tarball
 SRC_URI="https://github.com/OP2/${MY_PN}/archive/Firedrake_${PV}.tar.gz -> ${P}.tar.gz"
 
 S="${WORKDIR}/${MY_PN}-Firedrake_${PV}"

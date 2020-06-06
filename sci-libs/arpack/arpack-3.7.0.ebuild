@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools eutils fortran-2 toolchain-funcs
+inherit autotools eutils flag-o-matic fortran-2 toolchain-funcs
 
 DESCRIPTION="Arnoldi package library to solve large scale eigenvalue problems"
 HOMEPAGE="http://www.caam.rice.edu/software/ARPACK/ https://github.com/opencollab/arpack-ng"
@@ -35,6 +35,7 @@ src_prepare() {
 }
 
 src_configure() {
+	append-fflags -fallow-argument-mismatch
 	econf \
 		$(use_enable static-libs static) \
 		--with-blas="$($(tc-getPKG_CONFIG) --libs blas)" \

@@ -6,8 +6,8 @@ dev-python/pytest
 sys-devel/gcc:8.3.0
 
 # For Halide
-sys-devel/clang:9
-sys-devel/llvm:9
+sys-devel/clang:10
+sys-devel/llvm:10
 
 dev-util/nvidia-cuda-toolkit
 

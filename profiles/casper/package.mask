@@ -8,13 +8,6 @@ dev-lang/python:3.9
 # might belong in usc-hpcc profile instead
 >sys-cluster/libpmi2-slurm-17.11.9.2-r1
 
->=sys-devel/llvm-common-10
->=sys-devel/llvm-10
->=sys-devel/clang-10
->=sys-devel/clang-runtime-10
->=sys-devel/clang-common-10
->=sys-libs/libomp-10
-
 >sci-libs/mmg-5.4.3.267
 
 >=sci-libs/libspatialindex-1.9

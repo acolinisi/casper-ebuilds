@@ -1,13 +1,15 @@
 #*/* PYTHON_TARGETS: python3_8
 #*/* -python_targets_python2_7
 #*/* -python_targets_python3_7
-#*/* -python_targets_python3_6 -python_targets_python2_7
-#*/* python_single_target_python3_8 -python_single_target_python3_6
+#*/* -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#*/* python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
 #*/* python_targets_python3_8
 
 dev-libs/glib -python_targets_python3_7 python_targets_python3_6  python_targets_python3_8 
 sci-libs/pastix cuda -mpi -index-64bit scotch -fortran metis debug starpu
 #sci-libs/pastix smp mpi -index-64bit -fortran -starpu
+#
+sys-devel/clang python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
 
 sci-libs/fftw mpi
 dev-libs/starpu fftw mpi opencl cuda blas -opengl -valgrind
@@ -17,7 +19,7 @@ virtual/cblas -eselect-ldso
 virtual/lapack -eselect-ldso
 virtual/lapacke -eselect-ldso
 sci-mathematics/octave hdf5 curl fftw gnuplot
-sci-libs/nlopt python cxx python_single_target_python3_8 -python_single_target_python3_6
+sci-libs/nlopt python cxx python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7 -python_single_target_python3_7
 sci-libs/parmmg scotch
 #sci-mathematics/freefem++ bemtool -hdf5 hpddm htool lapack mpi lapack gmm ipopt parmetis -metis mumps mmg parmmg nlopt scalapack scotch -superlu tetgen umfpack petsc -opengl -X
 sci-mathematics/freefem++ -lapack mpi ipopt -metis mumps nlopt scalapack scotch -superlu tetgen
@@ -72,16 +74,16 @@ sci-mathematics/slepc mpi -complex-scalars -index-64bit
 # TODO: hdf5, -trilinos, -sundials fails to compile, 
 sci-mathematics/dolfin mpi -hdf5 parmetis petsc scotch -trilinos umfpack -vtk zlib -sundials python
 sci-mathematics/glpk gmp examples
-sci-libs/vtk -X offscreen mpi python python_single_target_python3_8 -python_single_target_python3_6
+sci-libs/vtk -X offscreen mpi python python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
 sci-libs/libsupermesh judy double
 sci-libs/hpddm -c -fortran -python arpack -suitesparse mumps
 sci-libs/htool arpack hpddm lapack
 sci-libs/cadna fortran mpi openmp
 #dev-python/dolfin
-dev-python/h5py python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/firedrake -complex-scalars -index-64bit examples python_single_target_python3_8 -python_single_target_python3_6 mpi scotch metis slepc
-dev-python/pyop2 -complex-scalars -index-64bit examples python_single_target_python3_8 -python_single_target_python3_6
-dev-python/coffee python_single_target_python3_8 -python_single_target_python3_6
+dev-python/h5py python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/firedrake -complex-scalars -index-64bit examples python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7 mpi scotch metis slepc
+dev-python/pyop2 -complex-scalars -index-64bit examples python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7 -python_single_target_python3_7
+dev-python/coffee python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
 media-libs/mesa osmesa -llvm libglvnd -gles2 -gbm -gallium egl -zstd -dri3 classic -X -video_cards_intel -video_cards_nouveau -video_cards_radeon -video_cards_radeonsi
 media-libs/gd png fontconfig
 # sci-libs/vtk insists on libGL.so, but libglvnd builds libGL.so only when GLX (i.e. X) is enabled
@@ -92,77 +94,79 @@ x11-libs/libxcb -xkb
 
 >=virtual/mpi-2.0-r5 cxx romio
 
-app-portage/layman sync-plugin-portage git -python_targets_python2_7 python_targets_python3_6 -python_targets_python3_8
+app-portage/layman sync-plugin-portage git -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
 
 #dev-python/numpy PYTHON_TARGETS: -python3_6
-dev-python/numpy  lapack -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/pandas -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/bottleneck -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-sci-libs/scipy -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 sparse -python_single_target_python3_6 python_single_target_python3_8
-dev-python/pytest -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 python_single_target_python3_8
-dev-python/pillow -python_targets_python3_6 python_targets_python3_8
-dev-python/olefile -python_targets_python3_6 python_targets_python3_8 -python_targets_python2_7 
-dev-python/pybind11 -python_targets_python3_6 python_targets_python3_8
+dev-python/numpy  lapack -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/pandas -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/bottleneck -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+sci-libs/scipy -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8 sparse -python_single_target_python3_6 -python_single_target_python3_7 python_single_target_python3_8
+dev-python/pytest -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 -python_single_target_python3_7 python_single_target_python3_8
+dev-python/pillow -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8
+dev-python/olefile -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -python_targets_python2_7 
+dev-python/pybind11 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8
 #dev-python/pillow PYTHON_TARGETS: -python3_6
 #dev-python/olefile PYTHON_TARGETS: -python2_7 -python3_6
 #dev-python/pybind11 PYTHON_TARGETS: -python3_6
 
-sys-apps/file  -python_targets_python3_6 python_targets_python3_8 -python_targets_python2_7 
-sys-apps/portage -python_single_target_python3_8 python_single_target_python3_6 -python_targets_python3_8 python_targets_python3_6
-app-portage/repoman -python_single_target_python3_8 python_single_target_python3_6 -python_targets_python3_8 python_targets_python3_6
+sys-apps/file  -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -python_targets_python2_7 
+sys-apps/portage python_single_target_python3_8 python_single_target_python3_6 python_targets_python3_8 python_targets_python3_6 -python_targets_python3_7 -python_single_target_python3_7
+app-portage/repoman python_single_target_python3_8 python_single_target_python3_6 -python_single_target_python3_7   python_targets_python3_6 -python_targets_python3_7
 
-dev-python/dijitso python_single_target_python3_8 -python_single_target_python3_6
-dev-python/ffc python_single_target_python3_8 -python_single_target_python3_6
-dev-python/sympy python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/petsc4py -complex-scalars -index-64bit -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 mpi
-dev-python/slepc4py -complex-scalars -index-64bit -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 mpi
-app-portage/gentoolkit python_targets_python3_6 -python_targets_python3_8
+dev-python/dijitso python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+dev-python/ffc python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+dev-python/sympy python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/petsc4py -complex-scalars -index-64bit -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8 mpi
+dev-python/slepc4py -complex-scalars -index-64bit -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8 mpi
+app-portage/gentoolkit python_targets_python3_6  python_targets_python3_8  -python_targets_python3_7
 
-dev-python/certifi -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8
-dev-python/ssl-fetch python_targets_python3_6 -python_targets_python3_8 -python_targets_python2_7
-dev-python/requests socks5 python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
+app-text/asciidoc python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+dev-python/cppy -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
+dev-python/certifi -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
+dev-python/ssl-fetch python_targets_python3_6 python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_7
+dev-python/requests socks5 python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 -python_targets_python3_7
 #dev-python/cffi python_targets_python3_6 python_targets_python3_8
-dev-python/islpy python_targets_python3_6 python_targets_python3_8
-dev-python/cryptography python_targets_python3_6 python_targets_python3_8 -python_targets_python2_7
-dev-python/urllib3 python_targets_python3_6  python_targets_python3_8 -python_targets_python2_7
-dev-python/PySocks -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8
-dev-python/ipaddress -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8
+dev-python/islpy python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
+dev-python/cryptography python_targets_python3_6 python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_7
+dev-python/urllib3 python_targets_python3_6  python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_7
+dev-python/PySocks -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
+dev-python/ipaddress -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
 #dev-python/ply python_targets_python3_6 python_targets_python3_8
-dev-python/pyparsing python_targets_python3_6 python_targets_python3_8
-dev-python/randomgen -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 python_single_target_python3_8
-dev-python/pyyaml python_targets_python3_6 -python_targets_python2_7 -python_targets_python3_8
-dev-python/lxml -python_targets_python2_7 python_targets_python3_6 -python_targets_python3_8
+dev-python/pyparsing python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
+dev-python/randomgen -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 -python_single_target_python3_7 python_single_target_python3_8
+dev-python/pyyaml python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 -python_targets_python3_7
+dev-python/lxml -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
 #dev-python/cython python_targets_python3_6 python_targets_python3_8
-dev-python/entrypoints -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/zope-interface -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 python_single_target_python3_8
-dev-python/namespace-zope -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 python_single_target_python3_8
-dev-python/decorator -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/networkx -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/codepy -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/appdirs -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/attrs -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/flake8 -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/mccabe -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/zipp -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/importlib_metadata -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-#dev-python/pycparser -python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/chardet python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
-dev-python/enum34 python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8
+dev-python/entrypoints -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/zope-interface -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 -python_single_target_python3_7 python_single_target_python3_8
+dev-python/namespace-zope -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8 -python_single_target_python3_6 -python_single_target_python3_7 python_single_target_python3_8
+dev-python/decorator -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/networkx -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/codepy -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/appdirs -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/attrs -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/flake8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/mccabe -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/zipp -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/importlib_metadata -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+#dev-python/pycparser -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 python_targets_python3_8
+dev-python/chardet python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8  -python_targets_python3_7
+dev-python/enum34 python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8  -python_targets_python3_7
 #dev-python/six python_targets_python3_6 python_targets_python3_8
-dev-python/pyopenssl python_targets_python3_6 python_targets_python3_8 -python_targets_python2_7
-dev-python/idna python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8 
-dev-python/setuptools -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8
+dev-python/pyopenssl python_targets_python3_6 python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_7
+dev-python/idna python_targets_python3_6 -python_targets_python2_7 python_targets_python3_8  -python_targets_python3_7
+dev-python/setuptools -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
 #dev-python/setuptools_scm python_targets_python3_6 python_targets_python3_8
-dev-python/packaging  python_targets_python3_6 python_targets_python3_8
-dev-python/pluggy python_targets_python3_6 python_targets_python3_8
-dev-python/py python_targets_python3_6 python_targets_python3_8
-dev-python/toml python_targets_python3_6 python_targets_python3_8
+dev-python/packaging  python_targets_python3_6 python_targets_python3_8  -python_targets_python3_7
+dev-python/pluggy python_targets_python3_6 python_targets_python3_8  -python_targets_python3_7
+dev-python/py python_targets_python3_6 python_targets_python3_8  -python_targets_python3_7
+dev-python/toml python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
 # jit pulls in X (TODO: investigate)
-dev-python/loopy opencl -fortran  python_single_target_python3_8 -python_single_target_python3_6
-dev-python/fiat python_single_target_python3_8 -python_single_target_python3_6
-dev-python/finat python_single_target_python3_8 -python_single_target_python3_6
-dev-python/tsfc python_single_target_python3_8 -python_single_target_python3_6
-dev-python/ufl python_single_target_python3_8 -python_single_target_python3_6
+dev-python/loopy opencl -fortran  python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+dev-python/fiat python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+dev-python/finat python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+dev-python/tsfc python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+dev-python/ufl python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
 #sys-cluster/slurm -munge
 #sys-cluster/libpmi2-slurm
 #
@@ -176,94 +180,114 @@ virtual/opencl video_cards_nvidia -video_cards_amdgpu -video_cards_i965 -video_c
 sys-libs/libcap -pam
 www-client/elinks javascript -mouse
 
-dev-python/mpi4py python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/sip python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/mpmath python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/pexpect python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/ptyprocess python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
+dev-python/mpi4py python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/sip python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/mpmath python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/pexpect python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/ptyprocess python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
 
-dev-python/more-itertools python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7 
-dev-python/pymbolic python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7 
-dev-python/pytools python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/pyflakes python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/pycodestyle python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/importlib_metadata python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/wcwidth python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-python/zipp python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-python/more-itertools python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-python/zope-interface python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-python/namespace-zope python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-python/appdirs python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-python/decorator python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-python/numpy python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#dev-lang/python sqlite -python_targets_python3_6 -python_targets_python2_7
-dev-python/cgen python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/colorama python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/genpy python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/mako python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/pyopencl python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/markupsafe python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/pulp python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/matplotlib python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/cycler python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/python-dateutil python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/pytz python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/kiwisolver python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/versioneer python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-dev-python/cachetools python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
-#sci-libs/scipy python_targets_python3_8 -python_targets_python3_6 -python_targets_python2_7
+dev-python/more-itertools python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 
+dev-python/pymbolic python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7 
+dev-python/pytools python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/pyflakes python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/pycodestyle python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/importlib_metadata python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/wcwidth python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-python/zipp python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-python/more-itertools python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-python/zope-interface python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-python/namespace-zope python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-python/appdirs python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-python/decorator python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-python/numpy python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#dev-lang/python sqlite -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/cgen python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/colorama python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/genpy python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/mako python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/pyopencl python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/markupsafe python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/pulp python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/matplotlib python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/cycler python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/python-dateutil python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/pytz python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/kiwisolver python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/versioneer python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+dev-python/cachetools python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
+#sci-libs/scipy python_targets_python3_8 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python2_7
 
-dev-python/appdirs   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/sip    python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/ptyprocess    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/entrypoints    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/backports   -python_targets_python2_7 -python_targets_python3_6 -pypy3 -python_targets_python3_7 -python_targets_python3_8
+dev-python/appdirs   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/sip    python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/ptyprocess    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/entrypoints    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/backports   -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -pypy3 -python_targets_python3_7 
 dev-python/six    -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
 dev-python/cython    -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/decorator   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
+dev-python/decorator   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
 dev-python/setuptools_scm    -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/pyparsing    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/olefile    -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_7
-dev-python/pexpect    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/pyflakes    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/pycodestyle    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/wcwidth    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
+dev-python/pyparsing    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/olefile    -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_7
+dev-python/pexpect    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/pyflakes    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/pycodestyle    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/wcwidth    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
 #dev-python/configparser   -python_targets_python2_7
-dev-python/contextlib2    -python_targets_python2_7 -python_targets_python3_6 -pypy3 -python_targets_python3_7 -python_targets_python3_8
-#dev-python/scandir    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/namespace-zope   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
+dev-python/contextlib2    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -pypy3 -python_targets_python3_7 
+#dev-python/scandir    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/namespace-zope   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
 dev-python/ply    -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/colorama    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/markupsafe    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/pytz   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/versioneer   python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/toml    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/mako    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-#dev-python/pycparser   -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/packaging    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/py    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/pathlib2    -python_targets_python2_7 -python_targets_python3_6 -pypy3 -python_targets_python3_7 -python_targets_python3_8
-dev-python/more-itertools    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/zope-interface    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/python_targets_python-dateutil    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/attrs    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7
-dev-python/zipp    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/colorama    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/markupsafe    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/pytz   python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/versioneer   python_targets_python3_8 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/toml    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/mako    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+#dev-python/pycparser   -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/packaging    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/py    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/pathlib2    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -pypy3 -python_targets_python3_7 
+dev-python/more-itertools    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/zope-interface    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/python_targets_python-dateutil    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/attrs    python_targets_python3_8 -pypy3 -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 -python_targets_python3_7
+dev-python/zipp    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
 #dev-python/cffi    -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -python_targets_python3_7
-dev-python/importlib_metadata    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/pluggy    -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-libs/boost -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-libs/libxslt -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-sys-apps/kmod -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-x11-base/xcb-proto -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-util/meson -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/toml -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/cached-property -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/importlib_metadata    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/pluggy    -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-libs/boost -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-libs/libxslt -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+sys-apps/kmod -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+x11-base/xcb-proto -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-util/meson -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/toml -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/cached-property -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
 dev-python/pycparser -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/pyproject2setuppy -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/pyproject2setuppy -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
 dev-python/cffi -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/pkgconfig -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/pytest -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/islpy -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
-dev-python/pyadjoint -python_targets_python2_7 -python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/pkgconfig -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/pytest -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/islpy -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
+dev-python/pyadjoint -python_targets_python2_7 -python_targets_python3_6 -python_targets_python3_7 python_targets_python3_8 -pypy3 -python_targets_python3_7
 sys-libs/cracklib -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
 dev-libs/libxml2 -python_targets_python2_7 python_targets_python3_6 python_targets_python3_8 -pypy3 -python_targets_python3_7
+
+virtual/rubygems ruby_targets_ruby27
+dev-ruby/minitest ruby_targets_ruby27
+dev-ruby/net-telnet ruby_targets_ruby27
+dev-ruby/power_assert ruby_targets_ruby27
+dev-ruby/rake ruby_targets_ruby27
+dev-ruby/test-unit ruby_targets_ruby27
+dev-ruby/xmlrpc ruby_targets_ruby27
+dev-ruby/bundler ruby_targets_ruby27
+dev-ruby/did_you_mean ruby_targets_ruby27
+dev-ruby/json ruby_targets_ruby27
+dev-ruby/rdoc ruby_targets_ruby27
+dev-ruby/rubygems ruby_targets_ruby27
+dev-ruby/kpeg ruby_targets_ruby27
+dev-ruby/racc ruby_targets_ruby27
+virtual/ruby-ssl ruby_targets_ruby27
+
+dev-lang/yasm python_single_target_python3_8 -python_single_target_python3_6 -python_single_target_python3_7
+
+

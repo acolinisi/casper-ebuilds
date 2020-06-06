@@ -50,8 +50,7 @@ RDEPEND="${DEPEND}
 	>=dev-python/pymbolic-2019.2[${PYTHON_MULTI_USEDEP}]
 	>=dev-python/six-1.8.0[${PYTHON_MULTI_USEDEP}]
 	opencl? ( >=dev-python/pyopencl-2015.2[${PYTHON_MULTI_USEDEP}] )
-	fortran? ( >=dev-python/f2py-0.3.1[${PYTHON_MULTI_USEDEP}]
-			>=dev-python/ply-3.6[${PYTHON_MULTI_USEDEP}] )
+	fortran? ( >=dev-python/ply-3.6[${PYTHON_MULTI_USEDEP}] )
 	')
 	"
 

@@ -1,6 +1,7 @@
 dev-lang/python:2.7
 dev-lang/python:3.5
 dev-lang/python:3.7
+dev-lang/python:3.9
 
 <sys-devel/gcc-8.3
 

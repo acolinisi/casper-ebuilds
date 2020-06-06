@@ -63,18 +63,17 @@ sci-mathematics/slepc mpi -complex-scalars -index-64bit
 # TODO: hdf5, -trilinos, -sundials fails to compile, 
 sci-mathematics/dolfin mpi -hdf5 parmetis petsc scotch -trilinos umfpack -vtk zlib -sundials python
 sci-mathematics/glpk gmp examples
-sci-libs/vtk -X offscreen mpi python
+sci-libs/vtk -X offscreen mpi python -video_cards_nvidia
 sci-libs/libsupermesh judy double
 sci-libs/hpddm -c -fortran -python arpack -suitesparse mumps
 sci-libs/htool arpack hpddm lapack
 sci-libs/cadna fortran mpi openmp
 
-media-libs/mesa osmesa -llvm libglvnd -gles2 -gbm -gallium egl -zstd -dri3 classic -X -video_cards_intel -video_cards_nouveau -video_cards_radeon -video_cards_radeonsi
+media-libs/mesa osmesa -llvm libglvnd -gles2 -gbm -gallium egl -zstd -dri3 classic -X
 media-libs/gd png fontconfig
 # sci-libs/vtk insists on libGL.so, but libglvnd builds libGL.so only when GLX (i.e. X) is enabled
 media-libs/libglvnd libgl X
 virtual/opengl libgl
-x11-libs/libdrm -video_cards_intel -video_cards_nouveau -video_cards_radeon -video_cards_radeonsi
 x11-libs/libxcb -xkb
 
 >=virtual/mpi-2.0-r5 cxx romio
@@ -84,7 +83,6 @@ app-portage/layman sync-plugin-portage git
 sci-libs/scipy sparse
 
 x11-drivers/nvidia-drivers -X libglvnd -kms -tools -wayland -gtk3 uvm
-virtual/opencl video_cards_nvidia -video_cards_amdgpu -video_cards_i965 -video_cards_radeonsi
 
 dev-lang/python sqlite
 

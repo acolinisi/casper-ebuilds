@@ -1,0 +1,49 @@
+--- a/src/mmg3d/libmmg3d.c	2020-06-06 17:07:48.828434965 -0000
++++ b/src/mmg3d/libmmg3d.c	2020-06-06 17:08:04.743929761 -0000
+@@ -42,23 +42,6 @@
+ #include "inlined_functions_3d.h"
+ #include "mmg3dexterns.c"
+ 
+-double (*MMG5_lenedg)(MMG5_pMesh mesh ,MMG5_pSol sol ,int n, MMG5_pTetra );
+-double (*MMG5_lenedgspl)(MMG5_pMesh mesh ,MMG5_pSol sol ,int n, MMG5_pTetra );
+-double (*MMG5_caltet)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTetra pt);
+-double (*MMG5_caltri)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTria ptt);
+-int    (*MMG3D_defsiz)(MMG5_pMesh mesh ,MMG5_pSol sol);
+-int    (*MMG3D_gradsiz)(MMG5_pMesh mesh,MMG5_pSol sol );
+-int    (*MMG3D_gradsizreq)(MMG5_pMesh mesh,MMG5_pSol sol);
+-int    (*MMG5_intmet)(MMG5_pMesh mesh,MMG5_pSol sol,int n1,char c,int n2, double r);
+-int    (*MMG5_interp4bar)(MMG5_pMesh mesh,MMG5_pSol sol,int n1,int n2,double *r);
+-int    (*MMG5_movintpt)(MMG5_pMesh mesh,MMG5_pSol sol, MMG3D_pPROctree o,int *n1, int n2, int n3);
+-int    (*MMG5_movbdyregpt)(MMG5_pMesh mesh, MMG5_pSol sol, MMG3D_pPROctree o,int*n1, int n2, int*n3, int n4, int n5 ,int n6);
+-int    (*MMG5_movbdyrefpt)(MMG5_pMesh mesh, MMG5_pSol sol, MMG3D_pPROctree o,int*n1, int n2, int* n3, int n4,int n5);
+-int    (*MMG5_movbdynompt)(MMG5_pMesh mesh, MMG5_pSol sol, MMG3D_pPROctree o,int*n1, int n2, int* n3, int n4,int n5);
+-int    (*MMG5_movbdyridpt)(MMG5_pMesh mesh, MMG5_pSol sol, MMG3D_pPROctree o,int*n1, int n2, int* n3, int n4,int n5);
+-int    (*MMG5_cavity)(MMG5_pMesh mesh,MMG5_pSol sol ,int n1,int n2,int *n3,int n4,double r);
+-int    (*MMG3D_PROctreein)(MMG5_pMesh mesh,MMG5_pSol sol ,MMG3D_pPROctree o ,int n,double r);
+-
+ /**
+  * Pack the mesh \a mesh and its associated metric \a met and/or solution \a sol
+  * and return \a val.
+--- a/src/common/mmg.c	2020-06-06 17:12:12.532633267 -0000
++++ b/src/common/mmg.c	2020-06-06 17:12:22.235934934 -0000
+@@ -35,20 +35,6 @@
+ 
+ #include "mmgcommon.h"
+ 
+-/* Declared in the header, but need to define in at most one compilation unit */
+-int    (*MMG5_chkmsh)(MMG5_pMesh,int,int);
+-int    (*MMG5_bezierCP)(MMG5_pMesh ,MMG5_Tria *,MMG5_pBezier ,char );
+-double (*MMG5_lenSurfEdg)(MMG5_pMesh mesh,MMG5_pSol sol ,int ,int, char );
+-int    (*MMG5_grad2met_ani)(MMG5_pMesh,MMG5_pSol,MMG5_pTria,int,int);
+-int    (*MMG5_grad2metreq_ani)(MMG5_pMesh,MMG5_pSol,MMG5_pTria,int,int);
+-int    (*MMG5_compute_meanMetricAtMarkedPoints)( MMG5_pMesh,MMG5_pSol);
+-int    (*MMG5_indElt)(MMG5_pMesh mesh,int kel);
+-int    (*MMG5_indPt)(MMG5_pMesh mesh,int kp);
+-
+-#ifdef USE_SCOTCH
+-int    (*MMG5_renumbering)(int vertBoxNbr, MMG5_pMesh mesh, MMG5_pSol sol,int*);
+-#endif
+-
+ /**
+  * \param *prog pointer toward the program name.
+  *

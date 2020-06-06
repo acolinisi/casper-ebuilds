@@ -67,6 +67,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.4.3-cmake-optional-doc.patch
 	"${FILESDIR}"/${P}-cmake-test-gdown.patch
 	"${FILESDIR}"/${P}-cmake-test-keep-files.patch
+	"${FILESDIR}"/${P}-gcc-no-common.patch
 	)
 
 src_unpack() {
@@ -106,6 +107,12 @@ src_unpack() {
 		unpack "${test_tarballs[@]}"
 		popd
 	fi
+}
+
+src_prepare() {
+	cmake_src_prepare
+	find . -name '*.c' -execdir sed -i \
+		"s@^#include \"mmg\(2d\|3d\|s\)\?externs.c\"@@" {} \;
 }
 
 src_configure() {

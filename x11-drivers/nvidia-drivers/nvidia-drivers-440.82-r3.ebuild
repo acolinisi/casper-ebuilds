@@ -394,7 +394,8 @@ src_install() {
 
 	systemd_dounit *.service
 	dobin nvidia-sleep.sh
-	exeinto $(systemd_get_utildir)/system-sleep
+	local sd_utildir=$(systemd_get_utildir)
+	exeinto ${sd_utildir#${EPREFIX}}/system-sleep
 	doexe nvidia
 
 	if has_multilib_profile && use multilib; then

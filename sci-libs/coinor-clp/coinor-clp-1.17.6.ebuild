@@ -39,8 +39,8 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}/${MYPN}-releases-${PV}/${MYPN}"
 
 PATCHES=(
-	"${FILESDIR}"/${P}-mpi_header.patch
-	"${FILESDIR}"/${P}-dynamic_cast.patch
+	"${FILESDIR}"/${PN}-1.17.5-mpi_header.patch
+	"${FILESDIR}"/${PN}-1.17.5-dynamic_cast.patch
 )
 
 src_prepare() {

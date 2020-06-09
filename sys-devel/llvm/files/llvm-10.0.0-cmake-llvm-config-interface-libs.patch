@@ -1,0 +1,26 @@
+--- a/cmake/modules/LLVM-Config.cmake	2020-06-08 19:36:44.804248189 -0000
++++ b/cmake/modules/LLVM-Config.cmake	2020-06-08 19:37:23.191439807 -0000
+@@ -87,7 +87,13 @@
+       endif()
+     endif()
+ 
+-    target_link_libraries(${executable} PRIVATE LLVM)
++    get_target_property(t ${executable} TYPE)
++    if(t STREQUAL "INTERFACE_LIBRARY")
++      set(link_mode "INTERFACE")
++    else()
++      set(link_mode "PRIVATE")
++    endif()
++    target_link_libraries(${executable} ${link_mode} LLVM)
+   endif()
+ 
+   explicit_llvm_config(${executable} ${link_components})
+@@ -99,7 +105,7 @@
+ 
+   llvm_map_components_to_libnames(LIBRARIES ${link_components})
+   get_target_property(t ${executable} TYPE)
+-  if(t STREQUAL "STATIC_LIBRARY")
++  if(t STREQUAL "STATIC_LIBRARY" OR t STREQUAL "INTERFACE_LIBRARY")
+     target_link_libraries(${executable} INTERFACE ${LIBRARIES})
+   elseif(t STREQUAL "EXECUTABLE" OR t STREQUAL "SHARED_LIBRARY" OR t STREQUAL "MODULE_LIBRARY")
+     target_link_libraries(${executable} PRIVATE ${LIBRARIES})

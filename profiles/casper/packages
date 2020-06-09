@@ -9,6 +9,8 @@ sys-devel/gcc:8.3.0
 sys-devel/clang:10
 sys-devel/llvm:10
 
+dev-lang/halide
+
 dev-util/nvidia-cuda-toolkit
 
 # TODO: shouldn't need to specify this (should be a dep)

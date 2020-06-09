@@ -3,3 +3,4 @@ PYTHON_SINGLE_TARGET="-* python3_8"
 RUBY_TARGETS="-* ruby27"
 
 VIDEO_CARDS="-* nvidia"
+LLVM_TARGETS="-* X86 NVPTX"

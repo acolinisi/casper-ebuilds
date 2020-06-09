@@ -96,4 +96,4 @@ dev-python/slepc4py mpi
 dev-python/firedrake mpi metis scotch slepc examples
 
 sys-devel/llvm bitwriter mcjit lld passes
-dev-lang/halide examples test opengl python tools target_NVPTX target_X86
+dev-lang/halide examples test opengl python tools

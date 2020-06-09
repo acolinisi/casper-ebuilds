@@ -1,0 +1,28 @@
+--- a/dependencies/CMakeLists.txt	2020-06-07 22:20:12.815979666 -0000
++++ b/dependencies/CMakeLists.txt	2020-06-07 22:20:44.287958355 -0000
+@@ -2,10 +2,14 @@
+ find_package(Threads REQUIRED)
+ set_target_properties(Threads::Threads PROPERTIES IMPORTED_GLOBAL TRUE)
+ 
+-find_package(OpenGL)
+-if (TARGET OpenGL::GL)
+-    set_target_properties(OpenGL::GL PROPERTIES IMPORTED_GLOBAL TRUE)
+-endif ()
++option(WITH_OPENGL "Enable OpenGL backend" ON)
++
++if (WITH_OPENGL)
++    find_package(OpenGL REQUIRED)
++    if (TARGET OpenGL::GL)
++        set_target_properties(OpenGL::GL PROPERTIES IMPORTED_GLOBAL TRUE)
++    endif ()
++endif (WITH_OPENGL)
+ 
+ find_package(OpenMP)
+ if (TARGET OpenMP::OpenMP_CXX)
+@@ -16,4 +20,4 @@
+ add_subdirectory(llvm)
+ 
+ add_subdirectory(jpeg)
+-add_subdirectory(png)
+\ No newline at end of file
++add_subdirectory(png)

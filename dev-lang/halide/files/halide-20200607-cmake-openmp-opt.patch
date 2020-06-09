@@ -1,0 +1,27 @@
+--- a/dependencies/CMakeLists.txt	2020-06-07 22:14:34.649463646 -0000
++++ b/dependencies/CMakeLists.txt	2020-06-07 22:15:19.020843470 -0000
+@@ -3,6 +3,7 @@
+ set_target_properties(Threads::Threads PROPERTIES IMPORTED_GLOBAL TRUE)
+ 
+ option(WITH_OPENGL "Enable OpenGL backend" ON)
++option(WITH_OPENMP "Enable OpenMP support" ON)
+ 
+ if (WITH_OPENGL)
+     find_package(OpenGL REQUIRED)
+@@ -11,10 +12,12 @@
+     endif ()
+ endif (WITH_OPENGL)
+ 
+-find_package(OpenMP)
+-if (TARGET OpenMP::OpenMP_CXX)
+-    set_target_properties(OpenMP::OpenMP_CXX PROPERTIES IMPORTED_GLOBAL TRUE)
+-endif ()
++if (WITH_OPENMP)
++    find_package(OpenMP)
++    if (TARGET OpenMP::OpenMP_CXX)
++        set_target_properties(OpenMP::OpenMP_CXX PROPERTIES IMPORTED_GLOBAL TRUE)
++    endif ()
++endif (WITH_OPENMP)
+ 
+ add_subdirectory(clang)
+ add_subdirectory(llvm)

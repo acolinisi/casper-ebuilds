@@ -22,14 +22,15 @@ KEYWORDS="~amd64 ~amd64-linux"
 MY_TARGETS=(AArch64 AMDGPU ARM Hexagon Mips
 	NVPTX PowerPC RISCV WebAssembly X86)
 
-IUSE="doc examples opengl +openmp python tools test
-	${MY_TARGETS[@]/#/target_}"
-
-MY_LLVM_TARGETS=("${MY_TARGETS[@]/#/llvm_target_}")
-
 function my_join_by { local IFS="$1"; shift; echo "$*"; }
+
+MY_LLVM_TARGETS=("${MY_TARGETS[@]/#/llvm_targets_}")
+MY_LLVM_TARGETS_FLAGS=$(my_join_by , "${MY_LLVM_TARGETS[@]/%/?}")
+
+IUSE="doc examples opengl +openmp python tools test ${MY_LLVM_TARGETS[@]}"
+
 DEPEND="
-	>=sys-devel/llvm-9[bitwriter,lld,mcjit,passes,$(my_join_by , ${MY_LLVM_TARGETS[@]})]
+	>=sys-devel/llvm-9[bitwriter,lld,mcjit,passes,${MY_LLVM_TARGETS_FLAGS}]
 	>=sys-devel/clang-9
 	sys-libs/zlib
 	media-libs/libpng
@@ -69,7 +70,7 @@ src_configure() {
 		-DLLVM_USE_SHARED_LLVM_LIBRARY=ON
 	)
 	for target in ${MY_TARGETS[@]}; do
-		mycmakeargs+=(-DWITH_${target^^}=$(usex target_${target}))
+		mycmakeargs+=(-DWITH_${target^^}=$(usex llvm_targets_${target}))
 	done
 	cmake_src_configure
 	#mkdir -p build && cd build

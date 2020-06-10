@@ -95,5 +95,8 @@ dev-python/petsc4py mpi
 dev-python/slepc4py mpi
 dev-python/firedrake mpi metis scotch slepc examples
 
-sys-devel/llvm bitwriter mcjit lld passes
+# Note: llvm:10 is used to build llvm:11, because MLIR fails to build
+# with GCC (v9 and v10). Then, llvm:11 is used to build Halide.
+sys-devel/llvm:10 -mlir
+sys-devel/llvm:11 bitwriter mcjit lld passes mlir examples lit
 dev-lang/halide examples test opengl python tools

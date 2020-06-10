@@ -75,8 +75,6 @@ PDEPEND="sys-devel/llvm-common
 # least intrusive of all
 CMAKE_BUILD_TYPE=RelWithDebInfo
 
-PATCHES=("${FILESDIR}"/${PN}-10.0.0-cmake-llvm-config-interface-libs.patch)
-
 python_check_deps() {
 	use doc || return 0
 
@@ -176,6 +174,7 @@ src_prepare() {
 	# Fix llvm-config for shared linking and sane flags
 	# https://bugs.gentoo.org/show_bug.cgi?id=565358
 	eapply "${FILESDIR}"/9999/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch
+	eapply "${FILESDIR}"/${PN}-10.0.0-cmake-llvm-config-interface-libs.patch
 
 	# disable use of SDK on OSX, bug #568758
 	sed -i -e 's/xcrun/false/' utils/lit/lit/util.py || die

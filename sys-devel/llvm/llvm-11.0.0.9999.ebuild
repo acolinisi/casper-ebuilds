@@ -29,7 +29,8 @@ ALL_LLVM_TARGETS=( "${ALL_LLVM_TARGETS[@]/#/llvm_targets_}" )
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA BSD public-domain rc"
 SLOT="$(ver_cut 1)"
 KEYWORDS=""
-IUSE="debug doc exegesis gold libedit +libffi ncurses test xar xml z3
+IUSE="bitwriter debug doc exegesis gold libedit +libffi lld mcjit
+	ncurses passes test xar xml z3
 	kernel_Darwin ${ALL_LLVM_TARGETS[*]}"
 REQUIRED_USE="|| ( ${ALL_LLVM_TARGETS[*]} )"
 RESTRICT="!test? ( test )"
@@ -312,6 +313,124 @@ get_distribution_components() {
 
 		use gold && out+=(
 			LLVMgold
+		)
+
+		use mcjit && out+=(
+			# LLVMRemarks
+			LLVMBitstreamReader
+
+			# LLVMCore
+			LLVMBinaryFormat
+			LLVMRemarks
+
+			# LLVMBitReader
+			LLVMBitstreamReader
+
+			# LLVMObject
+			LLVMBinaryFormat
+			LLVMBitReader
+			LLVMMCParser
+			LLVMTextAPI
+
+			LLVMCore
+			LLVMExecutionEngine
+			LLVMObject
+			LLVMRuntimeDyld
+			LLVMTarget
+
+			LLVMMCJIT
+		)
+		use bitwriter && out+=(
+			# LLVMRemarks
+			LLVMBitstreamReader
+
+			# LLVMCore
+			LLVMBinaryFormat
+			LLVMRemarks
+
+			# LLVMAnalysis
+			LLVMBinaryFormat
+			LLVMProfileData
+
+			# LLVMDebugInfoCodeView
+			LLVMDebugInfoMSF
+
+			# LLVMMC
+			LLVMBinaryFormat
+			LLVMDebugInfoCodeView
+
+			# LLVMBitReader
+			LLVMBitstreamReader
+
+			# LLVMObject
+			LLVMBinaryFormat
+			LLVMBitReader
+			LLVMMCParser
+			LLVMTextAPI
+
+			LLVMAnalysis
+			LLVMCore
+			LLVMMC
+			LLVMObject
+
+			LLVMBitWriter
+		)
+		use lld && out+=(
+			# LLVMRemarks
+			LLVMBitstreamReader
+
+			# LLVMCore
+			LLVMBinaryFormat
+			LLVMRemarks
+
+			LLVMCore
+			LLVMTransformUtils
+
+			LLVMLinker
+		)
+		use passes && out+=(
+			# LLVMRemarks
+			LLVMBitstreamReader
+
+			# LLVMCore
+			LLVMBinaryFormat
+			LLVMRemarks
+
+			# LLVMBitReader
+			LLVMBitstreamReader
+
+			# LLVMCodeGen
+			LLVMBitReader
+			LLVMProfileData
+
+			# LLVMInstrumentation
+			LLVMProfileData
+
+			# LLVMIRReader
+			LLVMAsmParser
+
+			# LLVMipo
+			LLVMBitReader
+			LLVMIRReader
+			LLVMProfileData
+
+			# LLVMAnalysis
+			LLVMBinaryFormat
+			LLVMProfileData
+
+			LLVMAggressiveInstCombine
+			LLVMAnalysis
+			LLVMCodeGen
+			LLVMCore
+			LLVMInstCombine
+			LLVMInstrumentation
+			LLVMScalarOpts
+			LLVMTarget
+			LLVMTransformUtils
+			LLVMVectorize
+			LLVMipo
+
+			LLVMPasses
 		)
 	fi
 

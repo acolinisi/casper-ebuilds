@@ -29,7 +29,7 @@ ALL_LLVM_TARGETS=( "${ALL_LLVM_TARGETS[@]/#/llvm_targets_}" )
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA BSD public-domain rc"
 SLOT="$(ver_cut 1)"
 KEYWORDS=""
-IUSE="bitwriter debug doc exegesis gold libedit +libffi lld mcjit
+IUSE="bitwriter debug doc examples exegesis gold libedit +libffi lld mcjit
 	mlir ncurses passes test xar xml z3
 	kernel_Darwin ${ALL_LLVM_TARGETS[*]}"
 REQUIRED_USE="|| ( ${ALL_LLVM_TARGETS[*]} )"
@@ -175,6 +175,8 @@ src_prepare() {
 	# https://bugs.gentoo.org/show_bug.cgi?id=565358
 	eapply "${FILESDIR}"/9999/0007-llvm-config-Clean-up-exported-values-update-for-shar.patch
 	eapply "${FILESDIR}"/${PN}-10.0.0-cmake-llvm-config-interface-libs.patch
+	eapply "${FILESDIR}"/9999/cmake-llvm-examples-cast.patch
+	eapply "${FILESDIR}"/9999/cmake-llvm-examples-ndebug.patch
 
 	# disable use of SDK on OSX, bug #568758
 	sed -i -e 's/xcrun/false/' utils/lit/lit/util.py || die
@@ -474,6 +476,7 @@ multilib_src_configure() {
 		-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="${LLVM_TARGETS// /;}"
 		-DLLVM_ENABLE_PROJECTS="${my_projects// /;}"
 		-DLLVM_BUILD_TESTS=$(usex test)
+		-DLLVM_BUILD_EXAMPLES=$(usex examples)
 
 		-DLLVM_ENABLE_FFI=$(usex libffi)
 		-DLLVM_ENABLE_LIBEDIT=$(usex libedit)
@@ -563,7 +566,9 @@ multilib_src_configure() {
 }
 
 multilib_src_compile() {
-	cmake-utils_src_compile
+	local targets=(all)
+	use mlir && use examples && targets+=(Toy)
+	cmake-utils_src_compile ${targets[@]}
 
 	pax-mark m "${BUILD_DIR}"/bin/llvm-rtdyld
 	pax-mark m "${BUILD_DIR}"/bin/lli

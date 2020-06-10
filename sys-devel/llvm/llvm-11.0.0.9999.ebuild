@@ -75,7 +75,7 @@ PDEPEND="sys-devel/llvm-common
 # least intrusive of all
 CMAKE_BUILD_TYPE=RelWithDebInfo
 
-PATCHES=("${FILESDIR}"/${PN}-11.0.0.9999-cmake-llvm-config-interface-libs.patch)
+PATCHES=("${FILESDIR}"/${PN}-10.0.0-cmake-llvm-config-interface-libs.patch)
 
 python_check_deps() {
 	use doc || return 0

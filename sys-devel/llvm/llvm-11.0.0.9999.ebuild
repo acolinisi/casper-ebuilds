@@ -420,12 +420,17 @@ get_distribution_components() {
 			LLVMBinaryFormat
 			LLVMProfileData
 
+			# LLVMipo
+			LLVMFrontendOpenMP
+
 			LLVMAggressiveInstCombine
 			LLVMAnalysis
 			LLVMCodeGen
 			LLVMCore
+			LLVMCoroutines
 			LLVMInstCombine
 			LLVMInstrumentation
+			LLVMMLPolicies
 			LLVMScalarOpts
 			LLVMTarget
 			LLVMTransformUtils

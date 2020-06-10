@@ -4,8 +4,9 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
+DISTUTILS_OPTIONAL=1
 inherit cmake-utils llvm.org multilib-minimal multiprocessing \
-	pax-utils python-any-r1 toolchain-funcs
+	pax-utils distutils-r1 toolchain-funcs
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
@@ -29,12 +30,14 @@ ALL_LLVM_TARGETS=( "${ALL_LLVM_TARGETS[@]/#/llvm_targets_}" )
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA BSD public-domain rc"
 SLOT="$(ver_cut 1)"
 KEYWORDS=""
-IUSE="bitwriter debug doc examples exegesis gold libedit +libffi lld mcjit
-	mlir ncurses passes test xar xml z3
+IUSE="bitwriter debug doc examples exegesis gold libedit +libffi
+	lit lld mcjit mlir ncurses passes test xar xml z3
 	kernel_Darwin ${ALL_LLVM_TARGETS[*]}"
-REQUIRED_USE="|| ( ${ALL_LLVM_TARGETS[*]} )"
+REQUIRED_USE="|| ( ${ALL_LLVM_TARGETS[*]} )
+		lit? ( ${PYTHON_REQUIRED_USE} )"
 RESTRICT="!test? ( test )"
 
+# TODO: python dependencies of llvm-lit
 RDEPEND="
 	sys-libs/zlib:0=[${MULTILIB_USEDEP}]
 	exegesis? ( dev-libs/libpfm:= )
@@ -47,6 +50,7 @@ RDEPEND="
 	libedit? ( dev-libs/libedit:0=[${MULTILIB_USEDEP}] )
 	libffi? ( >=dev-libs/libffi-3.0.13-r1:0=[${MULTILIB_USEDEP}] )
 	ncurses? ( >=sys-libs/ncurses-5.9-r3:0=[${MULTILIB_USEDEP}] )
+	lit? ( ${PYTHON_DEPS} )
 	xar? ( app-arch/xar )
 	xml? ( dev-libs/libxml2:2=[${MULTILIB_USEDEP}] )
 	z3? ( >=sci-mathematics/z3-4.7.1:0=[${MULTILIB_USEDEP}] )"
@@ -177,6 +181,11 @@ src_prepare() {
 	eapply "${FILESDIR}"/${PN}-10.0.0-cmake-llvm-config-interface-libs.patch
 	eapply "${FILESDIR}"/9999/cmake-llvm-examples-cast.patch
 	eapply "${FILESDIR}"/9999/cmake-llvm-examples-ndebug.patch
+	eapply "${FILESDIR}"/9999/cmake-llvm-no-dep-on-tblgen-exe.patch
+	pushd ..
+	eapply "${FILESDIR}"/9999/cmake-mlir-targets.patch
+	eapply "${FILESDIR}"/9999/cmake-mlir-config-paths.patch
+	popd
 
 	# disable use of SDK on OSX, bug #568758
 	sed -i -e 's/xcrun/false/' utils/lit/lit/util.py || die
@@ -441,6 +450,9 @@ get_distribution_components() {
 			LLVMPasses
 		)
 		use mlir && out+=(
+			# CMake error about no install target, so
+			# we patched the CMake script instead.
+			#mlir-libraries
 		)
 	fi
 
@@ -601,16 +613,29 @@ src_install() {
 
 	# move wrapped headers back
 	mv "${ED}"/usr/include "${ED}"/usr/lib/llvm/${SLOT}/include || die
+
+	if use lit; then
+		pushd utils/lit
+		python_setup
+		distutils-r1_python_install
+		popd
+	fi
 }
 
 multilib_src_install() {
-	DESTDIR=${D} cmake-utils_src_make install-distribution
+	local targets=(install-distribution)
+	use mlir && targets+=(tools/mlir/install)
+	DESTDIR=${D} cmake-utils_src_make ${targets[@]}
+
+	local llvm_prefix="usr/lib/llvm/${SLOT}"
 
 	# move headers to /usr/include for wrapping
 	rm -rf "${ED}"/usr/include || die
-	mv "${ED}"/usr/lib/llvm/${SLOT}/include "${ED}"/usr/include || die
+	mv "${ED}"/${llvm_prefix}/include "${ED}"/usr/include || die
 
-	LLVM_LDPATHS+=( "${EPREFIX}/usr/lib/llvm/${SLOT}/$(get_libdir)" )
+	LLVM_LDPATHS+=( "${EPREFIX}/${llvm_prefix}/$(get_libdir)" )
+	exeinto "/${llvm_prefix}/bin"
+	doexe bin/llvm-lit
 }
 
 multilib_src_install_all() {

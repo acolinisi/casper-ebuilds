@@ -1,0 +1,16 @@
+--- a/examples/ExceptionDemo/ExceptionDemo.cpp	2020-06-10 20:40:24.052411680 -0000
++++ b/examples/ExceptionDemo/ExceptionDemo.cpp	2020-06-10 20:45:18.766563064 -0000
+@@ -1959,11 +1959,13 @@
+ 
+     executionEngine->finalizeObject();
+ 
++#ifndef NDEBUG
+     fprintf(stderr, "\nBegin module dump:\n\n");
+ 
+     module->dump();
+ 
+     fprintf(stderr, "\nEnd module dump:\n");
++#endif
+ 
+     fprintf(stderr, "\n\nBegin Test:\n");
+ 

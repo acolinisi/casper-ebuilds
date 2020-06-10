@@ -1,0 +1,10 @@
+--- a/mlir/cmake/modules/AddMLIR.cmake	2020-06-10 19:54:05.424124301 -0000
++++ b/mlir/cmake/modules/AddMLIR.cmake	2020-06-10 19:54:08.024204967 -0000
+@@ -130,6 +130,7 @@
+       set(export_to_mlirtargets)
+       if (${name} IN_LIST LLVM_DISTRIBUTION_COMPONENTS OR
+           "mlir-libraries" IN_LIST LLVM_DISTRIBUTION_COMPONENTS OR
++          "mlir" IN_LIST LLVM_ENABLE_PROJECTS OR
+           NOT LLVM_DISTRIBUTION_COMPONENTS)
+           set(export_to_mlirtargets EXPORT MLIRTargets)
+         set_property(GLOBAL PROPERTY MLIR_HAS_EXPORTS True)

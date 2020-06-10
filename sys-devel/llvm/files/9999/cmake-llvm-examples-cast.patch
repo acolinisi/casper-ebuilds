@@ -1,0 +1,11 @@
+--- a/examples/ExceptionDemo/ExceptionDemo.cpp	2020-06-10 20:40:24.052411680 -0000
++++ b/examples/ExceptionDemo/ExceptionDemo.cpp	2020-06-10 20:40:57.877462008 -0000
+@@ -792,7 +792,7 @@
+   }
+ #endif
+ 
+-  const uint8_t *lsda = _Unwind_GetLanguageSpecificData(context);
++  const uint8_t *lsda = static_cast<const uint8_t *>(_Unwind_GetLanguageSpecificData(context));
+ 
+ #ifdef DEBUG
+   fprintf(stderr,

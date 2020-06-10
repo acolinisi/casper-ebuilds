@@ -1,0 +1,11 @@
+--- a/cmake/modules/TableGen.cmake	2020-06-10 22:07:18.720457947 -0000
++++ b/cmake/modules/TableGen.cmake	2020-06-10 22:07:39.161089178 -0000
+@@ -108,7 +108,7 @@
+     # The file in LLVM_TARGET_DEFINITIONS may be not in the current
+     # directory and local_tds may not contain it, so we must
+     # explicitly list it here:
+-    DEPENDS ${${project}_TABLEGEN_TARGET} ${${project}_TABLEGEN_EXE}
++    DEPENDS ${${project}_TABLEGEN_TARGET}
+       ${local_tds} ${global_tds}
+     ${LLVM_TARGET_DEFINITIONS_ABSOLUTE}
+     COMMENT "Building ${ofn}..."

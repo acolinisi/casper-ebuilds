@@ -1,0 +1,30 @@
+--- a/mlir/cmake/modules/CMakeLists.txt	2020-06-10 22:18:49.991813453 -0000
++++ b/mlir/cmake/modules/CMakeLists.txt	2020-06-10 22:20:14.778435514 -0000
+@@ -59,6 +59,9 @@
+ set(MLIR_CONFIG_INCLUDE_DIRS
+   "\${MLIR_INSTALL_PREFIX}/include"
+   )
++# These refer to build directory, so wipe them. No need to set them to anything.
++set(MLIR_INCLUDE_DIR)
++set(MLIR_MAIN_SRC_DIR)
+ configure_file(
+   ${CMAKE_CURRENT_SOURCE_DIR}/MLIRConfig.cmake.in
+   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/MLIRConfig.cmake
+--- a/mlir/cmake/modules/AddMLIR.cmake	2020-06-10 22:21:45.150230301 -0000
++++ b/mlir/cmake/modules/AddMLIR.cmake	2020-06-10 22:28:48.715329238 -0000
+@@ -27,7 +27,14 @@
+ # Generate Documentation
+ function(add_mlir_doc doc_filename command output_file output_directory)
+   set(LLVM_TARGET_DEFINITIONS ${doc_filename}.td)
+-  tablegen(MLIR ${output_file}.md ${command} "-I${MLIR_MAIN_INCLUDE_DIR}" "-I${MLIR_INCLUDE_DIR}")
++  set(TBLGEN_INCLUDES "${MLIR_MAIN_INCLUDE_DIR}" "${MLIR_INCLUDE_DIR}")
++  foreach(include ${TBLGEN_INCLUDES})
++    if (NOT "${include}" STREQUAL "")
++      list(APPEND TBLGEN_INCLUDES -I ${include})
++    endif()
++  endforeach()
++
++  tablegen(MLIR ${output_file}.md ${command} ${TBLGEN_INCLUDES})
+   set(GEN_DOC_FILE ${MLIR_BINARY_DIR}/docs/${output_directory}${output_file}.md)
+   add_custom_command(
+           OUTPUT ${GEN_DOC_FILE}

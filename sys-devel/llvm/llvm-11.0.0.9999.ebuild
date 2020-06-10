@@ -9,7 +9,7 @@ inherit cmake-utils llvm.org multilib-minimal multiprocessing \
 
 DESCRIPTION="Low Level Virtual Machine"
 HOMEPAGE="https://llvm.org/"
-LLVM_COMPONENTS=( llvm )
+LLVM_COMPONENTS=( llvm mlir )
 llvm.org_set_globals
 
 # Those are in lib/Targets, without explicit CMakeLists.txt mention
@@ -30,7 +30,7 @@ LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA BSD public-domain rc"
 SLOT="$(ver_cut 1)"
 KEYWORDS=""
 IUSE="bitwriter debug doc exegesis gold libedit +libffi lld mcjit
-	ncurses passes test xar xml z3
+	mlir ncurses passes test xar xml z3
 	kernel_Darwin ${ALL_LLVM_TARGETS[*]}"
 REQUIRED_USE="|| ( ${ALL_LLVM_TARGETS[*]} )"
 RESTRICT="!test? ( test )"
@@ -439,6 +439,8 @@ get_distribution_components() {
 
 			LLVMPasses
 		)
+		use mlir && out+=(
+		)
 	fi
 
 	printf "%s${sep}" "${out[@]}"
@@ -450,6 +452,9 @@ multilib_src_configure() {
 		ffi_cflags=$($(tc-getPKG_CONFIG) --cflags-only-I libffi)
 		ffi_ldflags=$($(tc-getPKG_CONFIG) --libs-only-L libffi)
 	fi
+
+	local my_projects=()
+	use mlir && my_projects+=(mlir)
 
 	local libdir=$(get_libdir)
 	local mycmakeargs=(
@@ -468,6 +473,7 @@ multilib_src_configure() {
 		# is that the former list is explicitly verified at cmake time
 		-DLLVM_TARGETS_TO_BUILD=""
 		-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD="${LLVM_TARGETS// /;}"
+		-DLLVM_ENABLE_PROJECTS="${my_projects// /;}"
 		-DLLVM_BUILD_TESTS=$(usex test)
 
 		-DLLVM_ENABLE_FFI=$(usex libffi)

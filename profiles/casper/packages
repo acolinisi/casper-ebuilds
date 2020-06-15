@@ -34,6 +34,8 @@ app-portage/repoman
 
 # CASPER auto-scheduling predictor
 sci-libs/tensorflow
+dev-python/pandas
+sci-libs/scikits_learn
 
 # Choices for virtual packages
 # dep of sci-libs/tensorflow <- dev-util/bazel

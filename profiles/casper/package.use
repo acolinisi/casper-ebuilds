@@ -110,7 +110,5 @@ app-text/ghostscript-gpl -cups
 net-print/cups -pam
 net-print/cups-filters -postscript -foomatic
 
-dev-python/pandas
-sci-libs/scikits_learn
 
 app-misc/screen -pam

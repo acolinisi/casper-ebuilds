@@ -1,0 +1,11 @@
+--- a/setup.py	2020-06-13 01:16:06.761929327 -0000
++++ b/setup.py	2020-06-13 01:18:04.555503485 -0000
+@@ -180,7 +180,7 @@
+       # available dynamically
+       EXTRA_ENV_COMPILE_ARGS += ' /MT'
+   elif "linux" in sys.platform:
+-    EXTRA_ENV_COMPILE_ARGS += ' -std=gnu99 -fvisibility=hidden -fno-wrapv -fno-exceptions'
++    EXTRA_ENV_COMPILE_ARGS += ' -fvisibility=hidden -fno-wrapv -fno-exceptions'
+   elif "darwin" in sys.platform:
+     EXTRA_ENV_COMPILE_ARGS += ' -stdlib=libc++ -fvisibility=hidden -fno-wrapv -fno-exceptions'
+ 

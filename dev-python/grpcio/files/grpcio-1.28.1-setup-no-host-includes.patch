@@ -1,0 +1,24 @@
+--- a/setup.py	2020-06-13 01:16:06.761929327 -0000
++++ b/setup.py	2020-06-13 01:18:04.555503485 -0000
+@@ -214,15 +214,18 @@
+ if BUILD_WITH_SYSTEM_OPENSSL:
+   CORE_C_FILES = filter(lambda x: 'third_party/boringssl' not in x, CORE_C_FILES)
+   CORE_C_FILES = filter(lambda x: 'src/boringssl' not in x, CORE_C_FILES)
+-  SSL_INCLUDE = (os.path.join('/usr', 'include', 'openssl'),)
++  #SSL_INCLUDE = (os.path.join('/usr', 'include', 'openssl'),)
++  SSL_INCLUDE = ()
+ 
+ if BUILD_WITH_SYSTEM_ZLIB:
+   CORE_C_FILES = filter(lambda x: 'third_party/zlib' not in x, CORE_C_FILES)
+-  ZLIB_INCLUDE = (os.path.join('/usr', 'include'),)
++  #ZLIB_INCLUDE = (os.path.join('/usr', 'include'),)
++  ZLIB_INCLUDE = ()
+ 
+ if BUILD_WITH_SYSTEM_CARES:
+   CORE_C_FILES = filter(lambda x: 'third_party/cares' not in x, CORE_C_FILES)
+-  CARES_INCLUDE = (os.path.join('/usr', 'include'),)
++  #CARES_INCLUDE = (os.path.join('/usr', 'include'),)
++  CARES_INCLUDE = ()
+ 
+ EXTENSION_INCLUDE_DIRECTORIES = (
+     (PYTHON_STEM,) +

@@ -25,6 +25,11 @@ DEPEND="${RDEPEND}
 	dev-python/setuptools[${PYTHON_USEDEP}]
 "
 
+PATCHES=(
+	"${FILESDIR}"/${P}-setup-std-flag.patch
+	"${FILESDIR}"/${P}-setup-no-host-includes.patch
+	)
+
 python_configure_all() {
 	export GRPC_PYTHON_DISABLE_LIBC_COMPATIBILITY=1
 	export GRPC_PYTHON_BUILD_SYSTEM_CARES=1

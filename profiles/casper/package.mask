@@ -11,3 +11,7 @@ dev-lang/python:3.9
 >sci-libs/mmg-5.4.3.267
 
 >=sci-libs/libspatialindex-1.9
+
+# The install is broken: headers not in security/ subdir. This package
+# should be optional, check use flags if some package requires it.
+sys-libs/pam

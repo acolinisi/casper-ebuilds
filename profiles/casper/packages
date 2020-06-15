@@ -35,6 +35,7 @@ app-portage/repoman
 # CASPER auto-scheduling predictor
 sci-libs/tensorflow
 dev-python/pandas
+dev-python/seaborn
 sci-libs/scikits_learn
 
 # Choices for virtual packages

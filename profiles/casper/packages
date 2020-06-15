@@ -31,3 +31,10 @@ app-portage/gentoolkit
 app-portage/layman
 app-portage/repo-commit
 app-portage/repoman
+
+# CASPER auto-scheduling predictor
+sci-libs/tensorflow
+
+# Choices for virtual packages
+# dep of sci-libs/tensorflow <- dev-util/bazel
+dev-java/openjdk:8

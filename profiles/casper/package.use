@@ -100,3 +100,17 @@ dev-python/firedrake mpi metis scotch slepc examples
 sys-devel/llvm:10 -mlir
 sys-devel/llvm:11 bitwriter mcjit lld passes mlir examples lit
 dev-lang/halide examples test opengl python tools
+
+# Dependencies of CASPER Auto-Scheduler
+
+# For tensorflow
+sci-libs/tensorflow python -cuda
+dev-java/openjdk headless-awt -cups -alsa
+app-text/ghostscript-gpl -cups
+net-print/cups -pam
+net-print/cups-filters -postscript -foomatic
+
+dev-python/pandas
+sci-libs/scikits_learn
+
+app-misc/screen -pam

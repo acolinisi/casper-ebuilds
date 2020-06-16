@@ -112,3 +112,4 @@ net-print/cups-filters -postscript -foomatic
 
 
 app-misc/screen -pam
+dev-python/requests socks5

@@ -23,6 +23,7 @@ app-misc/screen
 sys-apps/man-pages
 sys-process/htop
 #dev-vcs/hub
+dev-python/gdown
 
 # Useful portage helpers
 app-portage/cpuid2cpuflags

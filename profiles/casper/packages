@@ -6,8 +6,13 @@ dev-python/pytest
 sys-devel/gcc:8.3.0
 
 # For Halide
+# TODO: move clang to v11 too once released (currently need llvm:11
+# because MLIR builds successfully only for v11, and a CASPER app needs
+# MLIR and Halide, and can't mix different versions of transitive LLVM dep).
+# Note: clang/llvm:10 needed to build llvm:11, but that's listed
+# in the deps spec inside the ebuild so doesn't affect the list here.
 sys-devel/clang:10
-sys-devel/llvm:10
+sys-devel/llvm:11
 
 dev-lang/halide
 

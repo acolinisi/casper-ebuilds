@@ -1,1 +1,9 @@
-sys-devel/llvm:11 **
+# Allow live (VCS) versions, note that not all are slotted
+# sys-devel/llvm:11 **
+# sys-devel/llvm-common **
+# sys-devel/clang:11 **
+# sys-devel/clang-common **
+# sys-devel/clang-runtime:11.0.0 **
+# sys-libs/compiler-rt:11.0.0 **
+# sys-libs/compiler-rt-sanitizers:11.0.0 **
+# sys-libs/libomp **

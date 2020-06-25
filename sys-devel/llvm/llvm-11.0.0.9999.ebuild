@@ -444,7 +444,6 @@ get_distribution_components() {
 			LLVMCoroutines
 			LLVMInstCombine
 			LLVMInstrumentation
-			LLVMMLPolicies
 			LLVMScalarOpts
 			LLVMTarget
 			LLVMTransformUtils

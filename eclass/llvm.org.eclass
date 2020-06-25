@@ -60,8 +60,9 @@ fi
 
 [[ ${_LLVM_SOURCE_TYPE} == git ]] && inherit git-r3
 
-[[ ${PV} == ${_LLVM_MASTER_MAJOR}.* && ${_LLVM_SOURCE_TYPE} == tar ]] &&
-	die "${ECLASS}: Release ebuild for master branch?!"
+# Disable this check to allow manual snapshots for deterministic and offline builds
+#[[ ${PV} == ${_LLVM_MASTER_MAJOR}.* && ${_LLVM_SOURCE_TYPE} == tar ]] &&
+#	die "${ECLASS}: Release ebuild for master branch?!"
 
 
 # == control variables ==
@@ -79,7 +80,10 @@ fi
 # @DEFAULT_UNSET
 # @DESCRIPTION:
 # List of additional components needed for tests.
-
+#
+# @ECLASS-VARIABLE: LLVM_COMMIT
+# @DESCRIPTION:
+# The specific commit to fetch, instead of the default tagged release.
 
 # == global scope logic ==
 
@@ -102,6 +106,42 @@ _llvm.org_get_archives() {
 		local a=${cn}-${PV}.src.tar.xz
 		has "${a}" "${archives[@]}" || archives+=( "${a}" )
 	done
+}
+
+# @FUNCTION: _llvm.org_tag
+# @USAGE:
+# @INTERNAL
+# @DESCRIPTION:
+# Construct the name of the release tag (or prefix for unreleased versions).
+_llvm.org_tag() {
+	echo "llvmorg-${PV/_/-}"
+}
+
+# @FUNCTION: _llvm.org_tarball
+# @USAGE:
+# @INTERNAL
+# @DESCRIPTION:
+# Construct the name of the source tarball.
+_llvm.org_tarball() {
+	local tag=$(_llvm.org_tag)
+	if  [[ -n "${LLVM_COMMIT}" ]]; then
+		echo "${tag}.${LLVM_COMMIT}.tar.gz"
+	else
+		echo "${tag}.tar.gz"
+	fi
+}
+
+# @FUNCTION: _llvm.org_git_ref
+# @USAGE:
+# @INTERNAL
+# @DESCRIPTION:
+# Git revision reference (tag name or commit hash).
+_llvm.org_git_ref() {
+	if  [[ -n "${LLVM_COMMIT}" ]]; then
+		echo "${LLVM_COMMIT}"
+	else
+		echo "$(_llvm.org_tag)"
+	fi
 }
 
 # @FUNCTION: llvm.org_set_globals
@@ -127,7 +167,7 @@ llvm.org_set_globals() {
 		if ver_test -ge 9.0.1_rc1; then
 			# 9.0.1 RCs as GitHub archive
 			SRC_URI+="
-				https://github.com/llvm/llvm-project/archive/llvmorg-${PV/_/-}.tar.gz"
+				https://github.com/llvm/llvm-project/archive/$(_llvm.org_git_ref).tar.gz -> $(_llvm.org_tarball)"
 		else
 			local a archives=()
 			_llvm.org_get_archives "${LLVM_COMPONENTS[@]}"
@@ -193,11 +233,12 @@ llvm.org_src_unpack() {
 		git-r3_checkout '' . '' "${components[@]}"
 	else
 		if ver_test -ge 9.0.1_rc1; then
-			local archive=llvmorg-${PV/_/-}.tar.gz
+			local archive=$(_llvm.org_tarball)
+			local ref=$(_llvm.org_git_ref)
 			ebegin "Unpacking from ${archive}"
 			tar -x -z -o --strip-components 1 \
 				-f "${DISTDIR}/${archive}" \
-				"${components[@]/#/llvm-project-${archive%.tar*}/}" || die
+				"${components[@]/#/llvm-project-${ref}/}" || die
 			eend ${?}
 		else
 			local c archives

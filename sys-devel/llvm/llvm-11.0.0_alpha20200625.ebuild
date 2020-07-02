@@ -58,10 +58,10 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	gold? ( sys-libs/binutils-libs )"
 # dep on llvm:10 is a workaround for build failure with GCC (v9 and v10),
-# package.env instructs to build llvm:11 with llvm:10, but we still need
-# to tell portage that llvm:10 needs to be built before llvm:11.
+# package.env instructs to build llvm:11 with clang/llvm:10, but we still need
+# to tell portage that clang/llvm:10 needs to be built before llvm:11.
 BDEPEND="
-	sys-devel/llvm:10
+	sys-devel/clang:10
 	dev-lang/perl
 	sys-devel/gnuconfig
 	kernel_Darwin? (

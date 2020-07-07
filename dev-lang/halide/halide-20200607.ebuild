@@ -47,6 +47,7 @@ PATCHES=(
 	"${FILESDIR}"/${P}-cmake-opengl-opt.patch
 	"${FILESDIR}"/${P}-cmake-openmp-opt.patch
 	"${FILESDIR}"/${P}-cmake-llvm-fix-linking-against-LLVM-shared-lib.patch
+	"${FILESDIR}"/${P}-cmake-pybind11.patch
 )
 
 src_configure() {

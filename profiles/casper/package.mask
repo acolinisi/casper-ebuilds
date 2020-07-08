@@ -17,4 +17,9 @@ dev-lang/python:3.9
 sys-libs/pam
 
 # Binaries don't work (libc issues), need to build from source (dev-java/openjdk)
+# Note: silly, but the only way to select the one we need is to mask all the rest
 dev-java/openjdk-bin
+dev-java/icedtea-bin
+dev-java/icedtea
+dev-java/openjdk-bin
+dev-java/oracle-jdk-bin

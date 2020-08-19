@@ -79,10 +79,15 @@ src_configure() {
 }
 
 src_install() {
+	# TODO: stuff gets installed into /usr/share/tools
 	cmake_src_install
 	mkdir -p ${ED}/usr/share/doc/${P}/
 	mv ${ED}/usr/share/doc{,s}
 	mv ${ED}/usr/share/{docs,tutorial,README_cmake.md} ${ED}/usr/share/doc/${P}/
 	insinto /usr/share/${P}
 	doins -r apps
+
+	# internal headers
+	insinto /usr/include/Halide
+	doins src/*.h
 }

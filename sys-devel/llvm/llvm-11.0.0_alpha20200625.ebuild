@@ -190,6 +190,7 @@ src_prepare() {
 	pushd ..
 	eapply "${FILESDIR}"/9999/cmake-mlir-targets.patch
 	eapply "${FILESDIR}"/9999/cmake-mlir-config-paths.patch
+	eapply "${FILESDIR}"/9999/llvm-11.0.0-mlir-address-of.patch
 	popd
 
 	# disable use of SDK on OSX, bug #568758

@@ -1,0 +1,51 @@
+--- a/mlir/lib/Target/LLVMIR/ModuleTranslation.cpp	2020-08-17 01:47:38.692512722 -0000
++++ b/mlir/lib/Target/LLVMIR/ModuleTranslation.cpp	2020-08-17 01:51:08.416046664 -0000
+@@ -447,10 +447,19 @@
+   // emit any LLVM instruction.
+   if (auto addressOfOp = dyn_cast<LLVM::AddressOfOp>(opInst)) {
+     LLVM::GlobalOp global = addressOfOp.getGlobal();
++#if 0
+     // The verifier should not have allowed this.
+     assert(global && "referencing an undefined global");
+-
+     valueMapping[addressOfOp.getResult()] = globalsMapping.lookup(global);
++#else
++    llvm::Value *addr;
++    if (global) { // global created with GlobalOp
++      addr = globalsMapping.lookup(global);
++    } else { // function created with FuncOp
++      addr = functionMapping.lookup(addressOfOp.global_name());
++    }
++    valueMapping[addressOfOp.getResult()] = addr;
++#endif
+     return success();
+   }
+ 
+--- a/mlir/lib/Dialect/LLVMIR/IR/LLVMDialect.cpp	2020-08-17 01:57:17.233537181 -0000
++++ b/mlir/lib/Dialect/LLVMIR/IR/LLVMDialect.cpp	2020-08-17 01:57:59.498853958 -0000
+@@ -868,14 +868,18 @@
+ 
+ static LogicalResult verify(AddressOfOp op) {
+   auto global = op.getGlobal();
+-  if (!global)
+-    return op.emitOpError(
+-        "must reference a global defined by 'llvm.mlir.global'");
++  if (global) { // a global defined by GlobalOp
++    if (!global)
++      return op.emitOpError(
++          "must reference a global defined by 'llvm.mlir.global'");
+ 
+-  if (global.getType().getPointerTo(global.addr_space().getZExtValue()) !=
+-      op.getResult().getType())
+-    return op.emitOpError(
+-        "the type must be a pointer to the type of the referred global");
++    if (global.getType().getPointerTo(global.addr_space().getZExtValue()) !=
++        op.getResult().getType())
++      return op.emitOpError(
++          "the type must be a pointer to the type of the referred global");
++  } else { // a function defined by FuncOp
++    // TODO: any way to check that function is valid?
++  }
+ 
+   return success();
+ }

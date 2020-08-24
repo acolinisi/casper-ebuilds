@@ -46,4 +46,6 @@ sci-libs/scikits_learn
 
 # Choices for virtual packages
 # dep of sci-libs/tensorflow <- dev-util/bazel
+# sci-libs/tensorflow (or one of its dependencies) requires v8, not picked up
+# from ::casper with v11
 dev-java/openjdk:8

@@ -17,9 +17,13 @@ dev-lang/python:3.9
 sys-libs/pam
 
 # Binaries don't work (libc issues), need to build from source (dev-java/openjdk)
+# To build openjdk from source, an JDK is needed (chicke-and-egg), we use
+# dev-java/openjdk-bin to boostrap (hence, openjdk-bin is not masked).
 # Note: silly, but the only way to select the one we need is to mask all the rest
-dev-java/openjdk-bin
 dev-java/icedtea-bin
 dev-java/icedtea
-dev-java/openjdk-bin
+# sci-libs/tensorflow::casper (or one of its deps) requires openjdk:8 (with :11
+# the tensorflow package fails to be picked up from ::casper at all)
+dev-java/openjdk:11
+dev-java/openjdk-bin:11
 dev-java/oracle-jdk-bin

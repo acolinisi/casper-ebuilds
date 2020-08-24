@@ -177,9 +177,15 @@ src_configure() {
 }
 
 src_compile() {
+	# Force DTRACE_ENABLED to undef, because makefile tries to detect
+	# presence of DTRACE in the system, and detects wrongly when building
+	# in a prefix, since it looks outside of EPREFIX.
+	# Alternatively, in prepare patch to add $EPREFIX to the path in
+	#   hotspot-jdk8u252-ga/make/linux/makefiles/dtrace.make
 	local myemakeargs=(
 		JOBS=$(makeopts_jobs)
 		LOG=debug
+		DTRACE_ENABLED=
 		$(usex doc docs '')
 		$(usex jbootstrap bootcycle-images images)
 	)

@@ -4,6 +4,10 @@
 EAPI=7
 
 PYTHON_COMPAT=( python{3_6,3_7,3_8} )
+# During compile, bazel uses python, so would have to wrap
+# the whole build into python_foreach_iml, let's not.
+DISTUTILS_SINGLE_IMPL=1
+
 MY_PN="estimator"
 MY_PV=${PV/_rc/-rc}
 MY_P=${MY_PN}-${MY_PV}
@@ -26,7 +30,7 @@ bazel_external_uris="
 SRC_URI="https://github.com/tensorflow/${MY_PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz
 	${bazel_external_uris}"
 
-RDEPEND="sci-libs/tensorflow[python,${PYTHON_USEDEP}]"
+RDEPEND="sci-libs/tensorflow[python,${PYTHON_SINGLE_USEDEP}]"
 DEPEND="${RDEPEND}"
 BDEPEND="
 	dev-java/java-config"
@@ -48,6 +52,9 @@ src_prepare() {
 src_compile() {
 	export JAVA_HOME=$(java-config --jre-home)
 
+	python_setup
+	export PYTHON_BIN_PATH="${PYTHON}"
+
 	ebazel build //tensorflow_estimator/tools/pip_package:build_pip_package
 	ebazel shutdown
 
@@ -57,12 +64,10 @@ src_compile() {
 }
 
 src_install() {
-	do_install() {
-		cd "${T}/src" || die
-		esetup.py install
-		python_optimize
-	}
-	python_foreach_impl do_install
+	cd "${T}/src" || die
+	python_setup
+	esetup.py install
+	python_optimize
 
 	cd "${S}" || die
 	einstalldocs

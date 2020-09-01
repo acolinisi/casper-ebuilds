@@ -11,7 +11,7 @@ SRC_URI="https://github.com/pmix/pmix/releases/download/v${PV}/${P}.tar.bz2"
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="debug +munge pmi"
+IUSE="debug +munge pmi +hwloc"
 
 # TODO: if add a pmi use flag to sys-cluster/slurm, then update
 # the conflict here to sys-cluster/slurm[!pmi]
@@ -20,6 +20,7 @@ IUSE="debug +munge pmi"
 RDEPEND="
 	dev-libs/libevent:0=
 	sys-libs/zlib:0=
+	hwloc? ( sys-apps/hwloc )
 	munge? ( sys-auth/munge )
 	pmi? ( !sys-cluster/slurm )
 	"
@@ -29,5 +30,7 @@ src_configure() {
 	econf \
 		$(use_enable debug) \
 		$(use_enable pmi pmi-backward-compatibility) \
-		$(use_with munge)
+		$(use_with munge munge ${EPREFIX}/usr) \
+		$(use_with hwloc hwloc ${EPREFIX}/usr) \
+		--with-libevent=${EPREFIX}/usr
 }

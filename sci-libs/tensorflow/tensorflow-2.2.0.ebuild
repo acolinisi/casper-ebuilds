@@ -4,6 +4,7 @@
 EAPI=7
 
 DISTUTILS_OPTIONAL=1
+DISTUTILS_SINGLE_IMPL=1 # because depend on single-impl tensorflow-estimator
 PYTHON_COMPAT=( python{3_6,3_7,3_8} )
 MY_PV=${PV/_rc/-rc}
 MY_P=${PN}-${MY_PV}
@@ -85,6 +86,7 @@ RDEPEND="
 	mpi? ( virtual/mpi )
 	python? (
 		${PYTHON_DEPS}
+		$(python_gen_cond_dep '
 		>=dev-libs/flatbuffers-1.8.0
 		dev-python/absl-py[${PYTHON_USEDEP}]
 		>=dev-python/astor-0.7.1[${PYTHON_USEDEP}]
@@ -101,7 +103,8 @@ RDEPEND="
 		>=net-libs/google-cloud-cpp-0.10.0
 		>=sci-libs/keras-applications-1.0.8[${PYTHON_USEDEP}]
 		>=sci-libs/keras-preprocessing-1.1.0[${PYTHON_USEDEP}]
-		>=sci-visualization/tensorboard-2.0.0[${PYTHON_USEDEP}]
+		')
+		>=sci-visualization/tensorboard-2.0.0[${PYTHON_SINGLE_USEDEP}]
 	)"
 DEPEND="${RDEPEND}
 	python? (
@@ -109,7 +112,7 @@ DEPEND="${RDEPEND}
 		dev-python/setuptools
 	)"
 PDEPEND="python? (
-		>=sci-libs/tensorflow-estimator-2.0.0[${PYTHON_USEDEP}]
+		>=sci-libs/tensorflow-estimator-2.0.0[${PYTHON_SINGLE_USEDEP}]
 	)"
 BDEPEND="
 	app-arch/unzip
@@ -149,12 +152,7 @@ pkg_setup() {
 	ewarn "with TensorFlow 1.x. For more information about migrating to TF2.0 see:"
 	ewarn "https://www.tensorflow.org/guide/migrate"
 
-	local num_pythons_enabled
-	num_pythons_enabled=0
-	count_impls(){
-		num_pythons_enabled=$((${num_pythons_enabled} + 1))
-	}
-	use python && python_foreach_impl count_impls
+	local num_pythons_enabled=1 # ebuild changed to single-impl
 
 	# 10G to build C/C++ libs, 5G per python impl
 	CHECKREQS_DISK_BUILD="$((10 + 6 * ${num_pythons_enabled}))G"
@@ -180,8 +178,6 @@ src_prepare() {
 	sed -i "/^    '/s/==/>=/g" tensorflow/tools/pip_package/setup.py
 
 	default
-	use python && python_copy_sources
-
 	use cuda && cuda_add_sandbox
 }
 
@@ -288,10 +284,9 @@ src_configure() {
 		echo 'build --define tensorflow_mkldnn_contraction_kernel=0' >> .bazelrc || die
 	}
 	if use python; then
-		python_foreach_impl run_in_build_dir do_configure
-	else
-		do_configure
+		python_setup
 	fi
+	do_configure
 }
 
 src_compile() {
@@ -299,8 +294,6 @@ src_compile() {
 
 	if use python; then
 		python_setup
-		BUILD_DIR="${S}-${EPYTHON/./_}"
-		cd "${BUILD_DIR}"
 	fi
 
 	# fail early if any deps are missing
@@ -320,7 +313,10 @@ src_compile() {
 	}
 	BUILD_DIR="${S}"
 	cd "${BUILD_DIR}"
-	use python && python_foreach_impl run_in_build_dir do_compile
+	if use python; then
+		python_setup
+		do_compile
+	fi
 	ebazel shutdown
 }
 
@@ -330,30 +326,28 @@ src_install() {
 
 	do_install() {
 		einfo "Installing ${EPYTHON} files"
-		local srcdir="${T}/src-${MULTIBUILD_VARIANT}"
+		local srcdir="${T}/src-py"
 		mkdir -p "${srcdir}" || die
 		bazel-bin/tensorflow/tools/pip_package/build_pip_package --src "${srcdir}" || die
-		cd "${srcdir}" || die
+		pushd "${srcdir}" || die
 		esetup.py install
 
 		# libtensorflow_framework.so is in /usr/lib already
 		rm -f "${D}/$(python_get_sitedir)"/${PN}/lib${PN}_framework.so* || die
 		rm -f "${D}/$(python_get_sitedir)"/${PN}_core/lib${PN}_framework.so* || die
 		python_optimize
+		popd
 	}
 
 	if use python; then
-		python_foreach_impl run_in_build_dir do_install
+		python_setup
+		do_install
 
 		# Symlink to python-exec scripts
 		for i in "${ED}"/usr/lib/python-exec/*/*; do
 			n="${i##*/}"
 			[[ -e "${ED}/usr/bin/${n}" ]] || dosym ../lib/python-exec/python-exec2 "/usr/bin/${n}"
 		done
-
-		python_setup
-		local BUILD_DIR="${S}-${EPYTHON/./_}"
-		cd "${BUILD_DIR}" || die
 	fi
 
 	einfo "Installing headers"

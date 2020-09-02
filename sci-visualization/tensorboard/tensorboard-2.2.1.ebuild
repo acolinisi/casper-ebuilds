@@ -4,7 +4,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{6,7,8} )
-inherit python-r1
+inherit python-single-r1
 
 DESCRIPTION="TensorFlow's Visualization Toolkit"
 HOMEPAGE="https://www.tensorflow.org/"
@@ -18,6 +18,7 @@ REQUIRED_USE=${PYTHON_REQUIRED_USE}
 
 RDEPEND="
 	${PYTHON_DEPS}
+	$(python_gen_cond_dep '
 	dev-python/bleach[${PYTHON_USEDEP}]
 	>=dev-python/google-auth-1.6.3[${PYTHON_USEDEP}]
 	>=dev-python/google-auth-oauthlib-0.4.1[${PYTHON_USEDEP}]
@@ -30,10 +31,11 @@ RDEPEND="
 	>=dev-python/setuptools-41[${PYTHON_USEDEP}]
 	dev-python/werkzeug[${PYTHON_USEDEP}]
 	dev-python/wheel[${PYTHON_USEDEP}]
-	>=sci-libs/scipy-1.4.1[${PYTHON_USEDEP}]"
+	>=sci-libs/scipy-1.4.1[${PYTHON_USEDEP}]
+	')"
 BDEPEND="app-arch/unzip
 	${PYTHON_DEPS}"
-PDEPEND="sci-libs/tensorflow[python,${PYTHON_USEDEP}]"
+PDEPEND="sci-libs/tensorflow[python,${PYTHON_SINGLE_USEDEP}]"
 
 S="${WORKDIR}"
 
@@ -59,5 +61,6 @@ src_install() {
 		python_domodule "${PN}"
 		python_domodule "${P}.dist-info"
 	}
-	python_foreach_impl do_install
+	python_setup
+	do_install
 }

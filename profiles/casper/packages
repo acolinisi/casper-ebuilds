@@ -44,6 +44,9 @@ dev-python/pandas
 dev-python/seaborn
 sci-libs/scikits_learn
 
+# Firedrake benchmarks
+dev-python/pybench
+
 # Choices for virtual packages
 # dep of sci-libs/tensorflow <- dev-util/bazel
 # sci-libs/tensorflow (or one of its dependencies) requires v8, not picked up

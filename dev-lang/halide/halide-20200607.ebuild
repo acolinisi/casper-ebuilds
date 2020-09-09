@@ -48,7 +48,10 @@ PATCHES=(
 	"${FILESDIR}"/${P}-cmake-openmp-opt.patch
 	"${FILESDIR}"/${P}-cmake-llvm-fix-linking-against-LLVM-shared-lib.patch
 	"${FILESDIR}"/${P}-cmake-pybind11.patch
+	"${FILESDIR}"/${P}-generator-param-info.patch
+	"${FILESDIR}"/${P}-throw-on-compile-warn.patch
 )
+	#"${FILESDIR}"/${P}-generator-registry-lookup.patch
 
 src_configure() {
 	# Halide build relies on -DNDEBUG flag being set by CMake, but

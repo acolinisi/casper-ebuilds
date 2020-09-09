@@ -1,0 +1,22 @@
+--- a/src/Generator.h	2020-09-02 17:43:35.823559805 -0400
++++ b/src/Generator.h	2020-09-02 17:44:48.121820495 -0400
+@@ -3084,6 +3084,9 @@
+      */
+     Module build_gradient_module(const std::string &function_name);
+ 
++    // Return our GeneratorParamInfo.
++    GeneratorParamInfo &param_info();
++
+     /**
+      * set_inputs is a variadic wrapper around set_inputs_vector, which makes usage much simpler
+      * in many cases, as it constructs the relevant entries for the vector for you, which
+@@ -3278,9 +3281,6 @@
+     std::string generator_registered_name, generator_stub_name;
+     Pipeline pipeline;
+ 
+-    // Return our GeneratorParamInfo.
+-    GeneratorParamInfo &param_info();
+-
+     Internal::GeneratorOutputBase *find_output_by_name(const std::string &name);
+ 
+     void check_scheduled(const char *m) const;

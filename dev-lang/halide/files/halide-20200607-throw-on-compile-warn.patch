@@ -1,0 +1,10 @@
+--- a/src/Simplify_Stmts.cpp	2020-09-08 11:47:17.530742277 -0400
++++ b/src/Simplify_Stmts.cpp	2020-09-08 11:47:20.290828424 -0400
+@@ -134,6 +134,7 @@
+         if (!const_false_conditions_expected) {
+             user_warning << "This pipeline is guaranteed to fail an assertion at runtime: \n"
+                          << message << "\n";
++            throw std::runtime_error("compilation failure");
+         }
+     } else if (is_one(cond)) {
+         return Evaluate::make(0);

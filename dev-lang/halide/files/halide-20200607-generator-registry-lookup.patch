@@ -1,0 +1,69 @@
+--- a/src/Generator.h	2020-09-02 14:10:45.587373943 -0400
++++ b/src/Generator.h	2020-09-02 14:17:58.433838087 -0400
+@@ -3454,6 +3454,7 @@
+     static void register_factory(const std::string &name, GeneratorFactory generator_factory);
+     static void unregister_factory(const std::string &name);
+     static std::vector<std::string> enumerate();
++    static GeneratorFactory& lookup(const std::string &name);
+     // Note that this method will never return null:
+     // if it cannot return a valid Generator, it should assert-fail.
+     static std::unique_ptr<GeneratorBase> create(const std::string &name,
+@@ -3470,6 +3471,8 @@
+     GeneratorRegistry() = default;
+     GeneratorRegistry(const GeneratorRegistry &) = delete;
+     void operator=(const GeneratorRegistry &) = delete;
++
++    GeneratorFactory& lookupFactory(const std::string &name);
+ };
+ 
+ }  // namespace Internal
+--- a/src/Generator.cpp	2020-09-02 14:10:43.945322856 -0400
++++ b/src/Generator.cpp	2020-09-02 14:17:26.279839427 -0400
+@@ -1095,17 +1095,8 @@
+                                                          const GeneratorContext &context) {
+     GeneratorRegistry &registry = get_registry();
+     std::lock_guard<std::mutex> lock(registry.mutex);
+-    auto it = registry.factories.find(name);
+-    if (it == registry.factories.end()) {
+-        std::ostringstream o;
+-        o << "Generator not found: " << name << "\n";
+-        o << "Did you mean:\n";
+-        for (const auto &n : registry.factories) {
+-            o << "    " << n.first << "\n";
+-        }
+-        user_error << o.str();
+-    }
+-    std::unique_ptr<GeneratorBase> g = it->second(context);
++    GeneratorFactory &factory = registry.lookupFactory(name);
++    std::unique_ptr<GeneratorBase> g = factory(context);
+     internal_assert(g != nullptr);
+     return g;
+ }
+@@ -1121,6 +1112,27 @@
+     return result;
+ }
+ 
++/* static */
++GeneratorFactory& GeneratorRegistry::lookup(const std::string &name) {
++    GeneratorRegistry &registry = get_registry();
++    std::lock_guard<std::mutex> lock(registry.mutex);
++    return registry.lookupFactory(name);
++}
++
++GeneratorFactory& GeneratorRegistry::lookupFactory(const std::string &name) {
++    auto it = factories.find(name);
++    if (it == factories.end()) {
++        std::ostringstream o;
++        o << "Generator not found: " << name << "\n";
++        o << "Did you mean:\n";
++        for (const auto &n : factories) {
++            o << "    " << n.first << "\n";
++        }
++        user_error << o.str();
++    }
++    return it->second;
++}
++
+ GeneratorBase::GeneratorBase(size_t size, const void *introspection_helper)
+     : size(size) {
+     ObjectInstanceRegistry::register_instance(this, size, ObjectInstanceRegistry::Generator, this, introspection_helper);

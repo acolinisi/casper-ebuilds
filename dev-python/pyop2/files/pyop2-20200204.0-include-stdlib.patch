@@ -1,0 +1,11 @@
+--- a/pyop2/codegen/rep2loopy.py	2020-09-10 00:26:32.258795751 -0400
++++ b/pyop2/codegen/rep2loopy.py	2020-09-10 00:26:44.667182369 -0400
+@@ -460,7 +460,7 @@
+     # register kernel
+     kernel = builder.kernel
+     headers = set(kernel._headers)
+-    headers = headers | set(["#include <math.h>"])
++    headers = headers | set(["#include <math.h>", "#include <stdlib.h>"])
+     preamble = "\n".join(sorted(headers))
+ 
+     from coffee.base import Node

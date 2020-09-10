@@ -57,6 +57,10 @@ RDEPEND="${DEPEND}
 	')
 	"
 
+# include stdlib is a workaround for firedrake-benchmarks, somehow
+# RAND_MAX ends up in the generated code, but the header is not added.
+PATCHES=("${FILESDIR}"/${P}-include-stdlib.patch)
+
 python_test()
 {
 	pushd test/unit

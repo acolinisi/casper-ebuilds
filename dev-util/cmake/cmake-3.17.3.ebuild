@@ -54,6 +54,7 @@ PATCHES=(
 	# prefix
 	"${FILESDIR}"/${PN}-3.16.0_rc4-darwin-bundle.patch
 	"${FILESDIR}"/${PN}-3.14.0_rc3-prefix-dirs.patch
+	"${FILESDIR}"/${PN}-3.17.3-not-debian.patch
 	# Next patch requires new work from prefix people
 	#"${FILESDIR}"/${PN}-3.1.0-darwin-isysroot.patch
 

@@ -234,4 +234,10 @@ src_install() {
 
 pkg_postinst() {
 	java-vm-2_pkg_postinst
+
+	# Set system vm to this one unconditionally (the hook above
+	# sets only if none was set before). We need this in order to
+	# stop using the jdk package used to bootstrap this package.
+	eselect java-vm set system "${VMHANDLE}"
+	einfo "${VMHANDLE} (${P}) set as the default system-vm."
 }

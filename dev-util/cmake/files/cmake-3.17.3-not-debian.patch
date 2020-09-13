@@ -30,3 +30,114 @@
        endif()
      endif()
    endif()
+--- a/Modules/Platform/Linux.cmake	2020-09-13 16:29:47.709157000 -0400
++++ b/Modules/Platform/Linux.cmake	2020-09-13 16:34:44.269420023 -0400
+@@ -37,23 +37,11 @@
+   # checking the platform every time.  This option is advanced enough
+   # that only package maintainers should need to adjust it.  They are
+   # capable of providing a setting on the command line.
+-  if(EXISTS "/etc/debian_version")
+-    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  else()
+-    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  endif()
++  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
+ endif()
+ 
+ # Match multiarch library directory names.
+ set(CMAKE_LIBRARY_ARCHITECTURE_REGEX "[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*")
+ 
+ include(Platform/UnixPaths)
+-
+-# Debian has lib32 and lib64 paths only for compatibility so they should not be
+-# searched.
+-if(NOT CMAKE_CROSSCOMPILING AND EXISTS "/etc/debian_version")
+-  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS FALSE)
+-  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-endif()
+--- a/Modules/Platform/GNU.cmake	2020-09-13 16:33:34.973255738 -0400
++++ b/Modules/Platform/GNU.cmake	2020-09-13 16:33:46.572618015 -0400
+@@ -26,13 +26,8 @@
+   # checking the platform every time.  This option is advanced enough
+   # that only package maintainers should need to adjust it.  They are
+   # capable of providing a setting on the command line.
+-  if(EXISTS "/etc/debian_version")
+-    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  else()
+-    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  endif()
++  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
+ endif()
+ 
+ set(CMAKE_LIBRARY_ARCHITECTURE_REGEX "[a-z0-9_]+(-[a-z0-9_]+)?-gnu[a-z0-9_]*")
+--- a/Modules/CMakeFindPackageMode.cmake	2020-09-13 16:30:28.671436596 -0400
++++ b/Modules/CMakeFindPackageMode.cmake	2020-09-13 16:30:50.441116646 -0400
+@@ -92,23 +92,6 @@
+       endif()
+     endif()
+   endif()
+-
+-  # guess Debian multiarch if it has not been set:
+-  if(EXISTS /etc/debian_version)
+-    if(NOT CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE )
+-      file(GLOB filesInLib RELATIVE /lib /lib/*-linux-gnu* )
+-      foreach(file ${filesInLib})
+-        if("${file}" MATCHES "${CMAKE_LIBRARY_ARCHITECTURE_REGEX}")
+-          set(CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE ${file})
+-          break()
+-        endif()
+-      endforeach()
+-    endif()
+-    if(NOT CMAKE_LIBRARY_ARCHITECTURE)
+-      set(CMAKE_LIBRARY_ARCHITECTURE ${CMAKE_${LANGUAGE}_LIBRARY_ARCHITECTURE})
+-    endif()
+-  endif()
+-
+ endif()
+ 
+ set(CMAKE_${LANGUAGE}_COMPILER "dummy")
+--- a/Modules/FindPkgConfig.cmake	2020-09-13 16:31:04.580558340 -0400
++++ b/Modules/FindPkgConfig.cmake	2020-09-13 16:31:48.070916909 -0400
+@@ -299,24 +299,18 @@
+     if(NOT DEFINED CMAKE_SYSTEM_NAME
+         OR (CMAKE_SYSTEM_NAME MATCHES "^(Linux|kFreeBSD|GNU)$"
+             AND NOT CMAKE_CROSSCOMPILING))
+-      if(EXISTS "/etc/debian_version") # is this a debian system ?
+-        if(CMAKE_LIBRARY_ARCHITECTURE)
+-          list(APPEND _lib_dirs "lib/${CMAKE_LIBRARY_ARCHITECTURE}/pkgconfig")
+-        endif()
+-      else()
+-        # not debian, check the FIND_LIBRARY_USE_LIB32_PATHS and FIND_LIBRARY_USE_LIB64_PATHS properties
+-        get_property(uselib32 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS)
+-        if(uselib32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+-          list(APPEND _lib_dirs "lib32/pkgconfig")
+-        endif()
+-        get_property(uselib64 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS)
+-        if(uselib64 AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+-          list(APPEND _lib_dirs "lib64/pkgconfig")
+-        endif()
+-        get_property(uselibx32 GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS)
+-        if(uselibx32 AND CMAKE_INTERNAL_PLATFORM_ABI STREQUAL "ELF X32")
+-          list(APPEND _lib_dirs "libx32/pkgconfig")
+-        endif()
++      # not debian, check the FIND_LIBRARY_USE_LIB32_PATHS and FIND_LIBRARY_USE_LIB64_PATHS properties
++      get_property(uselib32 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB32_PATHS)
++      if(uselib32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
++        list(APPEND _lib_dirs "lib32/pkgconfig")
++      endif()
++      get_property(uselib64 GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS)
++      if(uselib64 AND CMAKE_SIZEOF_VOID_P EQUAL 8)
++        list(APPEND _lib_dirs "lib64/pkgconfig")
++      endif()
++      get_property(uselibx32 GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS)
++      if(uselibx32 AND CMAKE_INTERNAL_PLATFORM_ABI STREQUAL "ELF X32")
++        list(APPEND _lib_dirs "libx32/pkgconfig")
+       endif()
+     endif()
+     if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" AND NOT CMAKE_CROSSCOMPILING)

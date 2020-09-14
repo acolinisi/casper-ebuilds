@@ -1,3 +1,24 @@
+# Casper's deps
+# Note: these pull in a lot of dependencies, which are not 'selected'
+# explicitly, so if you remove these, those deps will be gone too.
+dev-python/firedrake
+dev-python/dolfin
+dev-libs/boost
+dev-lang/halide
+# The CUDA slot is not a hard dep of anything, so list here
+sci-libs/superlu_dist:cuda
+
+# CASPER auto-scheduling predictor
+sci-libs/tensorflow
+dev-python/pandas
+dev-python/seaborn
+sci-libs/scikits_learn
+
+# For Firedrake benchmarks
+dev-python/pybench
+
+# System-level stuff
+
 dev-lang/python:3.8
 dev-python/pkgconfig
 dev-python/pytest
@@ -13,8 +34,6 @@ sys-devel/gcc:8.3.0
 # in the deps spec inside the ebuild so doesn't affect the list here.
 sys-devel/clang:10
 sys-devel/llvm:11
-
-dev-lang/halide
 
 dev-util/nvidia-cuda-toolkit
 
@@ -37,15 +56,6 @@ app-portage/gentoolkit
 app-portage/layman
 app-portage/repo-commit
 app-portage/repoman
-
-# CASPER auto-scheduling predictor
-sci-libs/tensorflow
-dev-python/pandas
-dev-python/seaborn
-sci-libs/scikits_learn
-
-# Firedrake benchmarks
-dev-python/pybench
 
 # Choices for virtual packages
 # dep of sci-libs/tensorflow <- dev-util/bazel

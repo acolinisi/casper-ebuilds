@@ -61,7 +61,7 @@ RDEPEND="
 	scotch? ( sci-libs/scotch[mpi?,index-64bit=] )
 	sparse? ( >=sci-libs/suitesparse-5.6.0 >=sci-libs/cholmod-1.7.0 )
 	superlu? ( >=sci-libs/superlu-5:= )
-	superlu_dist? ( >=sci-libs/superlu_dist-6:=[index-64bit=] )
+	superlu_dist? ( >=sci-libs/superlu_dist-6:0=[index-64bit=] )
 	tetgen? ( sci-libs/tetgen )
 	X? ( x11-libs/libX11 )
 "

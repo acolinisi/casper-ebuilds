@@ -1,0 +1,3 @@
+# The headers have been packaged manually since the tarballs in gentoo
+# repository are too new, look in the ebuild
+*=sys-kernel/linux-headers-3.10

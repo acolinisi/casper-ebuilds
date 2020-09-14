@@ -55,7 +55,6 @@ sci-libs/hypre mpi openmp -index-64bit
 # trilinos breaks with hypre with 64-bit types (TODO: does trilinos expose a flag?)
 sci-libs/trilinos arprec boost clp hdf5 metis mumps scalapack scotch sparse tbb yaml zlib matio qd taucs tvmet hwloc adolc -hypre gtest eigen netcdf threads
 dev-cpp/eigen openmp c++11
-sys-cluster/openmpi cxx heterogeneous romio pmi ucx -internal_pmix openmpi_rm_slurm
 sys-cluster/pmix -pmi
 # TODO: petsc hypre
 sci-mathematics/petsc -complex-scalars cxx boost eigen -index-64bit hwloc threads mpi metis parmetis pastix scotch sparse -superlu superlu_dist mumps hdf5 hypre fftw debug

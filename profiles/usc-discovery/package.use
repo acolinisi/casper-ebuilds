@@ -1,0 +1,1 @@
+sys-cluster/openmpi cxx heterogeneous romio -pmi ucx -internal_pmix openmpi_rm_slurm

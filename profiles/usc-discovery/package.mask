@@ -1,0 +1,8 @@
+>sys-kernel/linux-headers-3.10
+>sys-kernel/vanilla-sources-3.10.0
+#>sys-kernel/vanilla-sources-3.16.82
+sys-kernel/gentoo-sources
+
+# Discovery cluster does not use PMIv2 to talk between OpenMPI and SLURM, it
+# uses PMIx (which is an independent package).
+sys-cluster/libmpi2-slurm

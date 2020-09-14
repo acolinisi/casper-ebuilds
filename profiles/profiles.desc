@@ -5,3 +5,6 @@ amd64-linux casper-usc-hpcc-ivybridge dev
 amd64-linux casper-usc-hpcc-broadwell dev
 amd64-linux casper-usc-hpcc-skylake dev
 amd64-linux casper-usc-hpcc-opteron dev
+amd64-linux casper-usc-discovery-amd64 dev
+amd64-linux casper-usc-discovery-broadwell dev
+amd64-linux casper-usc-discovery-skylake dev

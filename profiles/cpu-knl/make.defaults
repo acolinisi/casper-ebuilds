@@ -1,0 +1,4 @@
+CFLAGS="-O3 -march=knl -mtune=knl"
+CXXFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+FFLAGS="${CFLAGS}"

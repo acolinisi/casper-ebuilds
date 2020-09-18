@@ -1,0 +1,4 @@
+# The kernel on Theta is actually 4.12, but hopefully 4.14 will do
+>sys-kernel/linux-headers-4.14-r1
+>sys-kernel/vanilla-sources-4.14.183
+sys-kernel/gentoo-sources

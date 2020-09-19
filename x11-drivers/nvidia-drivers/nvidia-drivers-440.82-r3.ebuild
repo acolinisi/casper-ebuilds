@@ -108,7 +108,9 @@ pkg_setup() {
 		# is set (so that KV_DIR is populated).
 		linux-mod_pkg_setup
 
-		BUILD_PARAMS="IGNORE_CC_MISMATCH=yes V=1 SYSSRC=${KV_DIR} \
+		BUILD_PARAMS="IGNORE_CC_MISMATCH=yes \
+		IGNORE_MISSING_MODULE_SYMVERS=1 \
+		V=1 SYSSRC=${KV_DIR} \
 		SYSOUT=${KV_OUT_DIR} CC=$(tc-getBUILD_CC) NV_VERBOSE=1"
 
 		# linux-mod_src_compile calls set_arch_to_kernel, which

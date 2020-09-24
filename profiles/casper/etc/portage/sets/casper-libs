@@ -1,7 +1,6 @@
 dev-cpp/catch
 dev-cpp/eigen
 dev-libs/starpu
-dev-python/dolfin
 dev-python/firedrake
 dev-python/h5py
 dev-python/matplotlib
@@ -45,7 +44,6 @@ sci-libs/taucs
 sci-libs/tetgen
 sci-libs/umfpack
 sci-libs/vtk
-sci-mathematics/dolfin
 sci-mathematics/glpk
 sci-mathematics/petsc
 sci-mathematics/slepc

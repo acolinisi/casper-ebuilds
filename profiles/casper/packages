@@ -2,7 +2,8 @@
 # Note: these pull in a lot of dependencies, which are not 'selected'
 # explicitly, so if you remove these, those deps will be gone too.
 dev-python/firedrake
-dev-python/dolfin
+# TODO: disabled because build broken when cross-compiling
+#dev-python/dolfin
 dev-libs/boost
 dev-lang/halide
 # The CUDA slot is not a hard dep of anything, so list here

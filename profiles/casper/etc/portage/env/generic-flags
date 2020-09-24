@@ -1,0 +1,5 @@
+# "exclude" -march/-mtune
+CFLAGS="-O2"
+CXXFLAGS="${CFLAGS}"
+FCFLAGS="${CFLAGS}"
+FFLAGS="${CFLAGS}"

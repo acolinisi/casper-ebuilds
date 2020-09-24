@@ -1,0 +1,29 @@
+--- a/configure.ac	2020-09-20 06:22:06.340937785 -0000
++++ b/configure.ac	2020-09-20 06:22:13.476937537 -0000
+@@ -540,7 +540,7 @@
+    git log -n 1 --pretty="%H" $srcdir > ./STARPU-REVISION
+ fi
+ 
+-AM_CONDITIONAL([STARPU_CROSS_COMPILING], [test "x$cross_compiling" = "xyes"])
++AM_CONDITIONAL([STARPU_CROSS_COMPILING], [test "x$cross_compiling" = "xyes" || test -n "$CROSS_COMPILING" ])
+ 
+ ###############################################################################
+ #                                                                             #
+--- a/tools/Makefile.am	2020-09-20 06:29:10.536923036 -0000
++++ b/tools/Makefile.am	2020-09-20 06:31:25.632918338 -0000
+@@ -452,6 +452,7 @@
+ endif
+ 
+ if STARPU_HAVE_HELP2MAN
++if !STARPU_CROSS_COMPILING
+ starpu_calibrate_bus.1: starpu_calibrate_bus$(EXEEXT)
+ 	help2man --no-discard-stderr -N -n "Force StarPU bus calibration" --output=$@ ./$<
+ starpu_machine_display.1: starpu_machine_display$(EXEEXT)
+@@ -517,6 +518,7 @@
+ 	$(RM) $(dist_man1_MANS)
+ 
+ endif
++endif
+ 
+ if STARPU_SIMGRID
+ dist_pkgdata_DATA += starpu_smpi.xslt

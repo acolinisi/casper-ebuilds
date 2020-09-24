@@ -44,6 +44,8 @@ DEPEND="
 	test? ( gcc-plugin? ( dev-scheme/guile ) )
 "
 
+PATCHES=("${FILESDIR}"/${P}-cross-compile.patch)
+
 src_prepare() {
 	default
 
@@ -59,7 +61,8 @@ src_configure() {
 
 	# TODO: no flag for magma (but do have MAGMA_LIBS)? $(use cuda &&
 		# use_enable blas magma)
-	econf \
+	# CROSS_COMPILING set by profile
+	CROSS_COMPILING=${CROSS_COMPILING} econf \
 		$(use mpi && use_enable test mpi-check) \
 		$(use_enable cuda) \
 		$(use cuda && use_with cuda cuda-dir "${EPREFIX}/opt/cuda") \

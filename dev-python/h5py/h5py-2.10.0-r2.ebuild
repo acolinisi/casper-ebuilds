@@ -55,8 +55,25 @@ python_prepare_all() {
 }
 
 python_configure() {
-#	esetup.py configure $(usex mpi --mpi '')
-	esetup.py configure
+	local args=()
+	# args+=( $(usex mpi --mpi '') )
+
+	# Our setup.py can autodetect version by loading the library, but we can't
+	# load a lib compiled for foreign arch when cross compiling.
+	if [[ -n "${CROSS_COMPILING}" ]] # set by profile (non-crossdev)
+	then
+
+		local settings_file=${EPREFIX}/usr/$(get_libdir)/libhdf5.settings
+		if [[ ! -e "${settings_file}" ]]
+		then
+			die "ERROR: HDF5 settings file not found at: ${settings_file}" 1>&2
+		fi
+		local hdf5vers=$(sed -n 's/.*HDF5 Version:\s*\(.*\)\s*/\1/p' \
+			${settings_file})
+		args+=("--hdf5-version=${hdf5vers}")
+	fi
+
+	esetup.py configure ${args[@]}
 }
 
 python_test() {

@@ -81,7 +81,7 @@ app-portage/layman sync-plugin-portage git
 
 sci-libs/scipy sparse
 
-x11-drivers/nvidia-drivers -X libglvnd -kms -tools -wayland -gtk3 uvm
+x11-drivers/nvidia-drivers -X libglvnd -driver -kms -tools -wayland -gtk3 uvm
 
 dev-lang/python sqlite
 

@@ -1,0 +1,24 @@
+--- a/build/linux_shared/makefile	2020-09-20 16:46:07.851635923 -0000
++++ b/build/linux_shared/makefile	2020-09-20 16:47:18.175633478 -0000
+@@ -20,6 +20,13 @@
+ 
+ include config/std.mk
+ 
++ifneq ($(CROSS_COMPILING),)
++build/linux_shared/taucs_config_tests.h: $(DIROBJ)exists.log
++	echo '/* Definition for BLAS functions */' >> $@
++	echo '#define TAUCS_BLAS_UNDERSCORE' >> $@
++	echo '/* Does the compiler support C99 complex numbers? */' >> $@
++	echo '#define TAUCS_C99_COMPLEX' >> $@
++else
+ build/linux_shared/taucs_config_tests.h: $(DIROBJ)exists.log $(DIRPROGS)taucs_blas_underscore_test.c $(DIRPROGS)taucs_blas_nounderscore_test.c $(DIRPROGS)taucs_c99_complex_test.c $(DIRPROGS)taucs_cilk_test.c
+ 	- $(CC) -c $(CFLAGS) $(STDDEFS) $(STDINCS) \
+ 	  $(DIRPROGS)taucs_blas_underscore_test.c \
+@@ -49,6 +56,7 @@
+ 	  $(LOUTFLG)$(DIROBJ)taucs_cilk_test$(EXEEXT) \
+ 	  $(DIROBJ)taucs_cilk_test$(OBJEXT) $(LIBS)
+ 	- $(DIROBJ)taucs_cilk_test$(EXEEXT) build/linux_shared/taucs_config_tests.h
++endif
+ $(DIROBJ)taucs_sn_llt$(OBJEXT): $(DIRSRC)taucs_sn_llt.c $(INCS) $(STDDEPS)
+ 	$(CILKC) -c $(CILKFLAGS) $(STDDEFS) $(STDINCS) \
+ 	-DTAUCS_CORE_GENERAL \

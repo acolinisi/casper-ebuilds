@@ -1,0 +1,24 @@
+--- a/config/std.mk     2020-09-20 16:31:39.383666120 -0000
++++ b/config/std.mk     2020-09-20 16:32:59.015663351 -0000
+@@ -135,6 +135,13 @@
+ #      - $(DIREXE)taucs_blas_link_test_yes$(EXEEXT) $(DIRBLD)taucs_config_tests.h
+ #      - $(DIREXE)taucs_blas_link_test_no$(EXEEXT) $(DIRBLD)taucs_config_tests.h
+ 
++ifneq ($(CROSS_COMPILING),)
++$(DIRBLD)OLD_taucs_config_tests.h: $(DIREXE)exists.log $(DIROBJ)exists.log
++	echo '/* Definition for BLAS functions */' >> $@
++	echo '#define TAUCS_BLAS_UNDERSCORE' >> $@
++	echo '/* Does the compiler support C99 complex numbers? */' >> $@
++	echo '"#define TAUCS_C99_COMPLEX' >> $@
++else
+ $(DIRBLD)OLD_taucs_config_tests.h: $(DIRPROGS)taucs_blas_link_test.c $(DIREXE)exists.log $(DIROBJ)exists.log
+ 	$(CC) -c $(CFLAGS) $(STDDEFS) $(STDINCS) \
+ 	$(COUTFLG)$(DIROBJ)taucs_blas_underscore_test$(OBJEXT) $(DIRPROGS)taucs_blas_underscore_test.c
+@@ -162,6 +169,7 @@
+ 	$(LOUTFLG)$(DIREXE)taucs_cilk_test$(EXEEXT) \
+ 	$(DIROBJ)taucs_cilk_test$(OBJEXT) $(LIBS)
+	- $(DIREXE)taucs_cilk_test$(EXEEXT) $(DIRBLD)taucs_config_tests.h
++endif
+
+ STD_PRE_TARGETS=
+

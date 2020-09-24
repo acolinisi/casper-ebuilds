@@ -25,8 +25,10 @@ DEPEND="${RDEPEND}"
 S="${WORKDIR}"
 
 # test with cilk has memory leaks
+# Update: actually, cilk test does not even build (error is ignored though)
 PATCHES=(
 	"${FILESDIR}"/${P}-no-test-cilk.patch
+	"${FILESDIR}"/${P}-cross-compile.patch
 )
 
 src_prepare() {
@@ -55,14 +57,20 @@ src_prepare() {
 		> config/linux_static.mk || die
 }
 
-src_compile() {
+src_configure() {
 	# not autotools configure
 	if use static-libs; then
 		./configure variant=_static || die
-		emake
+	else
+		./configure variant=_shared || die
 	fi
-	./configure variant=_shared || die
-	emake
+	# Patching a generated file
+	eapply "${FILESDIR}"/${P}-cross-compile-mk.patch
+}
+
+src_compile() {
+	# CROSS_COMPILING is set by profile (see comments there)
+	emake CROSS_COMPILING=${CROSS_COMPILING}
 
 	cd lib/linux_shared
 	$(tc-getFC) ${LDFLAGS} -shared -Wl,-soname=libtaucs.so.1 \

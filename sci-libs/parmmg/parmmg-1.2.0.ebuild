@@ -38,6 +38,7 @@ PATCHES=(
 	"${FILESDIR}"/${P}-cmake-optional-libs.patch
 	"${FILESDIR}"/${P}-cmake-optional-doc.patch
 	"${FILESDIR}"/${P}-cmake-libdir.patch
+	"${FILESDIR}"/${P}-cmake-cross-compile.patch
 	)
 
 src_configure() {
@@ -45,6 +46,8 @@ src_configure() {
 	# static and shared are exclusive, so choose shared
 	local mmg_src="${EPREFIX}/usr/src/sci-libs/mmg"
 	local mycmakeargs=(
+		# CROSS_COMPILNG set by profile (see comments there)
+		-DCROSS_COMPILING=${CROSS_COMPILING}
 		-DDOWNLOAD_METIS=OFF
 		-DDOWNLOAD_MMG=OFF
 		-DBUILD_TESTING=$(usex test)

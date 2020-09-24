@@ -1,0 +1,72 @@
+--- a/Demo/Makefile	2020-09-19 19:08:45.214342554 +0000
++++ b/Demo/Makefile	2020-09-19 19:11:46.694336244 +0000
+@@ -28,24 +28,36 @@
+ 
+ amd_demo: amd_demo.c library
+ 	$(C) -o amd_demo amd_demo.c $(LIB2)
++
++test_amd_demo: amd_demo
+ 	./amd_demo > my_amd_demo.out
+ 	- diff amd_demo.out my_amd_demo.out
++test: test_amd_demo
+ 
+ amd_l_demo: amd_l_demo.c library
+ 	$(C) -o amd_l_demo amd_l_demo.c $(LIB2)
++
++test_amd_l_demo: amd_l_demo
+ 	./amd_l_demo > my_amd_l_demo.out
+ 	- diff amd_l_demo.out my_amd_l_demo.out
++test: test_amd_l_demo
+ 
+ amd_demo2: amd_demo2.c library
+ 	$(C) -o amd_demo2 amd_demo2.c $(LIB2)
++
++test_amd_demo2: amd_demo2
+ 	./amd_demo2 > my_amd_demo2.out
+ 	- diff amd_demo2.out my_amd_demo2.out
++test: test_amd_demo2
+ 
+ amd_simple: amd_simple.c library
+ 	echo $(LD_LIBRARY_PATH)
+ 	$(C) -o amd_simple amd_simple.c $(LIB2)
++
++test_amd_simple: amd_simple
+ 	./amd_simple > my_amd_simple.out
+ 	- diff amd_simple.out my_amd_simple.out
++test: test_amd_simple
+ 
+ #------------------------------------------------------------------------------
+ # compile the Fortran demo
+@@ -58,14 +70,20 @@
+ amd_f77demo: amd_f77demo.f f77lib
+ 	$(F77) $(F77FLAGS) -o amd_f77demo amd_f77demo.f ../Lib/libamdf77.a \
+ 	    $(F77LIB)
++
++test_amd_f77demo: amd_f77demo
+ 	./amd_f77demo > my_amd_f77demo.out
+ 	- diff amd_f77demo.out my_amd_f77demo.out
++test: test_amd_f77demo
+ 
+ amd_f77simple: amd_f77simple.f f77lib
+ 	$(F77) $(F77FLAGS) -o amd_f77simple amd_f77simple.f \
+ 	    ../Lib/libamdf77.a $(F77LIB)
++
++test_amd_f77simple: amd_f77simple
+ 	./amd_f77simple > my_amd_f77simple.out
+ 	- diff amd_f77simple.out my_amd_f77simple.out
++test: test_amd_f77simple
+ 
+ amd_f77wrapper.o: amd_f77wrapper.c
+ 	$(C) -DDINT -c amd_f77wrapper.c
+@@ -73,8 +91,11 @@
+ amd_f77cross:  amd_f77cross.f amd_f77wrapper.o ../Lib/libamd.a
+ 	$(F77) $(F77FLAGS) -o amd_f77cross amd_f77cross.f amd_f77wrapper.o \
+ 	    ../Lib/libamd.a $(F77LIB)
++
++test_amd_f77cross: amd_f77cross
+ 	./amd_f77cross > my_amd_f77cross.out
+ 	- diff amd_f77cross.out my_amd_f77cross.out
++test: test_amd_f77cross
+ 
+ #------------------------------------------------------------------------------
+ # Remove all but the files in the original distribution

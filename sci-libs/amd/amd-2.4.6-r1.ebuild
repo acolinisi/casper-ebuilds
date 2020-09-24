@@ -19,6 +19,8 @@ IUSE="fortran"
 DEPEND=">=sci-libs/suitesparseconfig-${SUITESPARSE_VER}"
 RDEPEND="${DEPEND}"
 
+PATCHES=("${FILESDIR}"/${P}-test-target.patch)
+
 src_compile() {
 	suitesparse_src_compile $(usev fortran)
 }

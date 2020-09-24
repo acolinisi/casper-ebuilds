@@ -1,0 +1,12 @@
+--- a/orte/mca/ras/alps/ras_alps_component.c	2020-09-23 04:49:28.000000000 -0000
++++ b/orte/mca/ras/alps/ras_alps_component.c	2020-09-23 04:50:10.000000000 -0000
+@@ -104,7 +104,8 @@
+     if (NULL != (id = getenv("BATCH_PARTITION_ID"))) {
+         return strtoul(id, NULL, 10);
+     }
+-    if (NULL != (id = getenv("PBS_JOBID"))) {
++    if (NULL != (id = getenv("PBS_JOBID")) ||
++        (NULL != (id = getenv("COBALT_JOBID")))) {
+         char *prepped_jid = prep_job_id(id);
+         if (NULL == prepped_jid) {
+             /* out of resources */

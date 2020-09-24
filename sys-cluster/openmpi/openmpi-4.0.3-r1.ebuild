@@ -31,7 +31,7 @@ SRC_URI="http://www.open-mpi.org/software/ompi/v$(ver_cut 1-2)/downloads/${MY_P}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-IUSE="cma cuda cxx debug fortran heterogeneous ipv6 java romio pmi
+IUSE="alps cma cuda cxx debug fortran heterogeneous ipv6 java romio pmi
 	internal_pmix ucx
 	${IUSE_OPENMPI_FABRICS} ${IUSE_OPENMPI_RM} ${IUSE_OPENMPI_OFED_FEATURES}"
 
@@ -70,6 +70,11 @@ RDEPEND="${CDEPEND}
 DEPEND="${CDEPEND}
 	java? ( >=virtual/jdk-1.6 )"
 
+PATCHES=(
+	"${FILESDIR}"/${P}-alps-install.patch
+	"${FILESDIR}"/${P}-alps-cobalt.patch
+)
+
 MULTILIB_WRAPPED_HEADERS=(
 	/usr/include/mpi.h
 	/usr/include/openmpi/ompi/mpi/java/mpiJava.h
@@ -103,6 +108,15 @@ multilib_src_configure() {
 		export ac_cv_path_JAVAC="$(java-pkg_get-javac) $(java-pkg_javac-args)"
 	fi
 
+	if use alps ; then
+		# ALPS is provided by the host OS outside of Prefix
+		# (configure doesn't let us override pkgconfig path per lib)
+		if [[ -n "${EPREFIX}" ]]; then
+			PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${EPREFIX}/usr/$(get_libdir)/pkgconfig"
+			PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/$(get_libdir)/pkgconfig"
+			export PKG_CONFIG_PATH
+		fi
+	fi
 	ECONF_SOURCE=${S} econf \
 		--sysconfdir="${EPREFIX}/etc/${PN}" \
 		--enable-pretty-print-stacktrace \
@@ -134,7 +148,8 @@ multilib_src_configure() {
 		$(multilib_native_use_enable openmpi_ofed_features_udcm openib-udcm) \
 		$(multilib_native_use_enable openmpi_ofed_features_dynamic-sl openib-dynamic-sl) \
 		$(multilib_native_use_with openmpi_rm_pbs tm) \
-		$(multilib_native_use_with openmpi_rm_slurm slurm)
+		$(multilib_native_use_with openmpi_rm_slurm slurm) \
+		$(use_with alps)
 }
 
 multilib_src_test() {

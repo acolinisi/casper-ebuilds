@@ -1,0 +1,11 @@
+--- a/orte/mca/ras/alps/Makefile.in	2020-09-23 02:28:40.000000000 -0000
++++ b/orte/mca/ras/alps/Makefile.in	2020-09-23 02:28:54.000000000 -0000
+@@ -2159,7 +2159,7 @@
+ 
+ 
+ install-data-hook:
+-	chmod +x $(ortedatadir)/ras-alps-command.sh
++	chmod +x $(DESTDIR)$(ortedatadir)/ras-alps-command.sh
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.

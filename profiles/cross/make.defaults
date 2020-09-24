@@ -1,0 +1,15 @@
+# Implement a "lean" cross-compilation, where the cross-compiled packages are
+# installed into the same system (prefix), as opposed to crossdev solution,
+# which cross-compiles an entire separate system. The crossdev tool is not
+# meant for the tuning use-case (and probably won't work to build another
+# prefix from a prefix). A potential alternative is to effectively implement
+# a "crossdev" for prefix, i.e. invoke emerge such that it builds using
+# tools in one prefix, but against libs in another prefix -- it's probably
+# hard to do, but it would be similar to what bootstrap-prefix.sh does.
+# There is no real drawback to the "lean" method.
+#
+# We set a variable that ebuilds can use to find out if they should
+# run things they build during the compilation.
+#
+# To unset, must comment out completely, or set to empty (not 0).
+CROSS_COMPILING=1

@@ -281,7 +281,13 @@ then
 fi
 # do it!
 if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]] ; then
-	'@GENTOO_PORTAGE_EENV@' -i $RETAIN $SHELL --rcfile "${EPREFIX}"/.prefixrc -i "$@"
+	# interactive if no '-c command' args in $@ (so set --rcfile) and
+	# non-interactive otherwise (so set BASH_ENV); unlike a .bashrc,
+	# which is wanted only for interactive shells, we want our
+	# .prefixrc to be loaded for all shells, including non-interactive
+	RCFILE="${EPREFIX}/.prefixrc"
+        '@GENTOO_PORTAGE_EENV@' -i $RETAIN BASH_ENV="${RCFILE}" \
+                $SHELL --rcfile "${RCFILE}" "$@"
 elif [[ ' bash ' == *" ${SHELL##*/} "* ]] ; then
 	# shell coming from different prefix would load it's own
 	# etc/profile upon -l, so we have to override

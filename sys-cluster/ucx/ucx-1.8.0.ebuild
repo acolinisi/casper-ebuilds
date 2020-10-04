@@ -7,9 +7,7 @@ DESCRIPTION="Unified Communication X"
 HOMEPAGE="http://www.openucx.org"
 SRC_URI="https://github.com/openucx/ucx/releases/download/v${PV}/${P}.tar.gz"
 
-#TODO: use subslot because openmpi needs to be rebuilt,
-# openmpi prints a message about incompatibility:
-# ucp_context.c:1184 UCX  WARN  UCP version is incompatible, required: 1.8, actual: 1.5 (release 2 /staging/jnw2/acolin/casper/glprefix/usr/lib/libucp.so.0)
+# subslotted because openmpi needs to be rebuilt when UCX minor changes
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"

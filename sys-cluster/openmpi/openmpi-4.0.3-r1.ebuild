@@ -108,6 +108,10 @@ src_prepare() {
 	# http://www.open-mpi.org/community/lists/users/2008/09/6514.php
 	echo 'oob_tcp_listen_mode = listen_thread' \
 		>> opal/etc/openmpi-mca-params.conf || die
+
+	if use openmpi_fabrics_ofi; then
+		eapply "${FILESDIR}"/${P}-odls-keep-fds-for-ofi-ugni.patch
+	fi
 }
 
 multilib_src_configure() {
@@ -118,31 +122,22 @@ multilib_src_configure() {
 		export ac_cv_path_JAVAC="$(java-pkg_get-javac) $(java-pkg_javac-args)"
 	fi
 
-	# TODO: libfabric linked against these, but when we link
-	# against libfabric, we fail... should use 'rpath' when building
-	# libfabric
+	# TODO: if libfabric has gni use flag, it is linked against cray
+	# libs that live outside of EPREFIX, so when ./configure tests
+	# linking against libfabric, linker fails; so add -rpath-link ld
+	# arg. It's a libfabric ebuild problem: try fiddle with 'rpath'?
 	if use openmpi_fabrics_ofi; then
 		local gni_libs=(cray-ugni cray-xpmem cray-alpsutil cray-alpslli
-				cray-udreg cray-wlm_detect cray-pmi)
-		$(tc-getPKG_CONFIG) --with-path="${host_pc_path}" \
-			--exists ${gni_libs[@]} || die
-		# TODO: the -L is extra-workaround... somehow the build
-		# is not looking for -lpmi in path passed to
-		# --with-pmi-libdir
+				cray-udreg cray-wlm_detect)
+		$(tc-getPKG_CONFIG) --exists ${gni_libs[@]} || die
 		local gni_ldflags="$($(tc-getPKG_CONFIG) \
-			--with-path="${host_pc_path}" \
 			--libs-only-L ${gni_libs[@]} \
-			| sed 's/-L\(\S\+\)/-L\1 -Wl,-rpath-link -Wl,\1/g')"
-		local gni_cflags="$($(tc-getPKG_CONFIG) \
-			--with-path="${host_pc_path}" \
-			--cflags-only-I ${gni_libs[@]})"
+			| sed 's/-L\(\S\+\)/-Wl,-rpath-link -Wl,\1/g')"
 	fi
 
 	unset F77 FFLAGS # configure warns that unused, FC, FCFLAGS is used
 
 	echo LDFLAGS="${LDFLAGS} ${gni_ldflags}"
-	echo CFLAGS="${CFLAGS} ${gni_cflags}"
-	CFLAGS="${CFLAGS} ${gni_cflags}" \
 	LDFLAGS="${LDFLAGS} ${gni_ldflags}" \
 	ECONF_SOURCE=${S} econf \
 		--sysconfdir="${EPREFIX}/etc/${PN}" \

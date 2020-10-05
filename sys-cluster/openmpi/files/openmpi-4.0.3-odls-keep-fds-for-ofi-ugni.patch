@@ -1,0 +1,54 @@
+--- a/./orte/mca/odls/pspawn/odls_pspawn.c	2020-10-05 04:01:31.878677605 -0000
++++ b/./orte/mca/odls/pspawn/odls_pspawn.c	2020-10-05 04:01:48.130678425 -0000
+@@ -292,6 +292,7 @@
+         child->exit_code = 1;
+         return ORTE_ERROR;
+     }
++#if 0 /* breaks OFI PML because OFI queries alpslli API for credentials */
+     if (ORTE_SUCCESS != close_open_file_descriptors(&factions)) {
+         posix_spawn_file_actions_destroy(&factions);
+         posix_spawnattr_destroy(&attrs);
+@@ -299,6 +300,7 @@
+         child->exit_code = 1;
+         return ORTE_ERROR;
+     }
++#endif
+     /* close the parent end of the pipes in the child */
+     if (opts->connect_stdin) {
+         posix_spawn_file_actions_addclose(&factions, opts->p_stdin[1]);
+--- a/./orte/mca/odls/default/odls_default_module.c	2020-10-05 04:00:31.294674551 -0000
++++ b/./orte/mca/odls/default/odls_default_module.c	2020-10-05 04:00:56.774675836 -0000
+@@ -396,6 +396,7 @@
+ #endif
+     }
+ 
++#if 0 /* breaks OFI PML because OFI queries alpslli API for credentials */
+     /* close all open file descriptors w/ exception of stdin/stdout/stderr,
+        the pipe used for the IOF INTERNAL messages, and the pipe up to
+        the parent. */
+@@ -411,6 +412,7 @@
+             }
+         }
+     }
++#endif
+ 
+     if (cd->argv == NULL) {
+         cd->argv = malloc(sizeof(char*)*2);
+--- a/./orte/mca/odls/alps/odls_alps_module.c	2020-10-05 03:59:01.402670019 -0000
++++ b/./orte/mca/odls/alps/odls_alps_module.c	2020-10-05 04:00:15.302673745 -0000
+@@ -386,13 +386,14 @@
+ #endif
+     }
+ 
++#if 0 /* breaks OFI PML because OFI queries alpslli API for credentials */
+     if (ORTE_SUCCESS != close_open_file_descriptors(write_fd, cd->opts)) {
+         send_error_show_help(write_fd, 1, "help-orte-odls-alps.txt",
+                              "close fds",
+                              orte_process_info.nodename, cd->app->app,
+                              __FILE__, __LINE__);
+     }
+-
++#endif
+ 
+     if (cd->argv == NULL) {
+         cd->argv = malloc(sizeof(char*)*2);

@@ -32,6 +32,7 @@ DEPEND=">=virtual/mpi-2
 PATCHES=(
 	"${FILESDIR}/${P}-cmake-lib.patch"
 	"${FILESDIR}/${PN}-1.0.1-cxx11.patch"
+	"${FILESDIR}/${P}-mpi-get-extent.patch"
 	)
 
 src_configure() {

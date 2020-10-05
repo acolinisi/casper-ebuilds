@@ -11,10 +11,18 @@ DESCRIPTION="Reference implementation of the Process Management Interface Exasca
 HOMEPAGE="https://openpmix.org/"
 EGIT_REPO_URI="https://github.com/openpmix/openpmix.git"
 
+if [[ "$(ver_cut 4 ${PV})" = "p" ]]
+then
+	MY_D="$(ver_cut 5 ${PV})"
+	EGIT_COMMIT_DATE="${MY_D:0:4}-${MY_D:4:2}-${MY_D:6:2}"
+	KEYWORDS="~amd64 ~amd64-linux"
+else # live
+	KEYWORDS=""
+fi
+
 # TODO: confirm that openmpi complains, and needs rebuild
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
-KEYWORDS=""
 IUSE="debug +munge pmi +hwloc"
 
 # TODO: if add a pmi use flag to sys-cluster/slurm, then update

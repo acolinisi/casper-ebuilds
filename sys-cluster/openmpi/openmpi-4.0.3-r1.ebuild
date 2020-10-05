@@ -13,7 +13,10 @@ S=${WORKDIR}/${MY_P}
 IUSE_OPENMPI_FABRICS="
 	openmpi_fabrics_ofed
 	openmpi_fabrics_knem
-	openmpi_fabrics_psm"
+	openmpi_fabrics_ofi
+	openmpi_fabrics_psm
+	openmpi_fabrics_ugni
+	"
 
 IUSE_OPENMPI_RM="
 	openmpi_rm_alps
@@ -57,6 +60,7 @@ CDEPEND="
 	cuda? ( >=dev-util/nvidia-cuda-toolkit-6.5.19-r1:= )
 	openmpi_fabrics_ofed? ( sys-fabric/ofed:* )
 	openmpi_fabrics_knem? ( sys-cluster/knem )
+	openmpi_fabrics_ofi? ( sys-fabric/libfabric )
 	openmpi_fabrics_psm? ( sys-fabric/infinipath-psm:* )
 	openmpi_rm_pbs? ( sys-cluster/torque )
 	pmi? ( virtual/pmi )
@@ -74,6 +78,7 @@ DEPEND="${CDEPEND}
 PATCHES=(
 	"${FILESDIR}"/${P}-alps-install.patch
 	"${FILESDIR}"/${P}-alps-cobalt.patch
+	"${FILESDIR}"/${P}-alps-odls-prio.patch
 )
 
 MULTILIB_WRAPPED_HEADERS=(
@@ -109,7 +114,7 @@ multilib_src_configure() {
 		export ac_cv_path_JAVAC="$(java-pkg_get-javac) $(java-pkg_javac-args)"
 	fi
 
-	if use openmpi_rm_alps; then
+	if use openmpi_rm_alps || use openmpi_fabrics_ugni; then
 		# ALPS is provided by the host OS outside of Prefix
 		# (configure doesn't let us override pkgconfig path per lib)
 		if [[ -n "${EPREFIX}" ]]; then
@@ -118,6 +123,30 @@ multilib_src_configure() {
 			export PKG_CONFIG_PATH
 		fi
 	fi
+	# TODO: libfabric linked against these, but when we link
+	# against libfabric, we fail... should use 'rpath' when building
+	# libfabric
+	if use openmpi_fabrics_ofi; then
+		local gni_libs=(cray-ugni cray-xpmem cray-alpsutil cray-alpslli
+				cray-udreg cray-wlm_detect cray-pmi)
+		$(tc-getPKG_CONFIG) --with-path="${host_pc_path}" \
+			--exists ${gni_libs[@]} || die
+		# TODO: the -L is extra-workaround... somehow the build
+		# is not looking for -lpmi in path passed to
+		# --with-pmi-libdir
+		local gni_ldflags="$($(tc-getPKG_CONFIG) \
+			--with-path="${host_pc_path}" \
+			--libs-only-L ${gni_libs[@]} \
+			| sed 's/-L\(\S\+\)/-L\1 -Wl,-rpath-link -Wl,\1/g')"
+		local gni_cflags="$($(tc-getPKG_CONFIG) \
+			--with-path="${host_pc_path}" \
+			--cflags-only-I ${gni_libs[@]})"
+	fi
+
+	echo LDFLAGS="${LDFLAGS} ${gni_ldflags}"
+	echo CFLAGS="${CFLAGS} ${gni_cflags}"
+	CFLAGS="${CFLAGS} ${gni_cflags}" \
+	LDFLAGS="${LDFLAGS} ${gni_ldflags}" \
 	ECONF_SOURCE=${S} econf \
 		--sysconfdir="${EPREFIX}/etc/${PN}" \
 		--enable-pretty-print-stacktrace \
@@ -143,7 +172,9 @@ multilib_src_configure() {
 		$(multilib_native_use_enable java mpi-java) \
 		$(multilib_native_use_with openmpi_fabrics_ofed verbs "${EPREFIX}"/usr) \
 		$(multilib_native_use_with openmpi_fabrics_knem knem "${EPREFIX}"/usr) \
+		$(multilib_native_use_with openmpi_fabrics_ofi ofi "${EPREFIX}"/usr) \
 		$(multilib_native_use_with openmpi_fabrics_psm psm "${EPREFIX}"/usr) \
+		$(multilib_native_use_with openmpi_fabrics_ugni ugni) \
 		$(multilib_native_use_enable openmpi_ofed_features_control-hdr-padding openib-control-hdr-padding) \
 		$(multilib_native_use_enable openmpi_ofed_features_rdmacm openib-rdmacm) \
 		$(multilib_native_use_enable openmpi_ofed_features_udcm openib-udcm) \

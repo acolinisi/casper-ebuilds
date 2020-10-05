@@ -1,0 +1,11 @@
+--- a/orte/mca/odls/default/odls_default_component.c	2020-10-01 20:21:03.000000000 -0000
++++ b/orte/mca/odls/default/odls_default_component.c	2020-10-01 20:21:10.000000000 -0000
+@@ -86,7 +86,7 @@
+      * if we do. Hence, we only get here if we CAN build - in which
+      * case, we definitely should be considered for selection
+      */
+-    *priority = 10; /* let others override us - we are the default */
++    *priority = 5; /* let others override us - we are the default */
+     *module = (mca_base_module_t *) &orte_odls_default_module;
+     return ORTE_SUCCESS;
+ }

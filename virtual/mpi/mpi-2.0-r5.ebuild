@@ -11,7 +11,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-l
 IUSE="cxx fortran romio threads"
 
 RDEPEND="|| (
-	>=sys-cluster/openmpi-1.10.2-r1[${MULTILIB_USEDEP},cxx?,fortran?,romio?,threads(+)?]
+	>=sys-cluster/openmpi-1.10.2-r1[${MULTILIB_USEDEP},cxx(-)?,fortran?,romio?,threads(+)?]
 	>=sys-cluster/mpich-3.2-r1[${MULTILIB_USEDEP},cxx?,fortran?,romio?,threads?]
 	sys-cluster/mpich2[${MULTILIB_USEDEP},cxx?,fortran?,romio?,threads?]
 	sys-cluster/mvapich2[${MULTILIB_USEDEP},cxx(-)?,fortran?,romio?,threads?]

@@ -16,6 +16,7 @@ IUSE_OPENMPI_FABRICS="
 	openmpi_fabrics_psm"
 
 IUSE_OPENMPI_RM="
+	openmpi_rm_alps
 	openmpi_rm_pbs
 	openmpi_rm_slurm"
 
@@ -31,7 +32,7 @@ SRC_URI="http://www.open-mpi.org/software/ompi/v$(ver_cut 1-2)/downloads/${MY_P}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-IUSE="alps cma cuda cxx debug fortran heterogeneous ipv6 java romio pmi
+IUSE="cma cuda cxx debug fortran heterogeneous ipv6 java romio pmi
 	internal_pmix ucx
 	${IUSE_OPENMPI_FABRICS} ${IUSE_OPENMPI_RM} ${IUSE_OPENMPI_OFED_FEATURES}"
 
@@ -108,7 +109,7 @@ multilib_src_configure() {
 		export ac_cv_path_JAVAC="$(java-pkg_get-javac) $(java-pkg_javac-args)"
 	fi
 
-	if use alps ; then
+	if use openmpi_rm_alps; then
 		# ALPS is provided by the host OS outside of Prefix
 		# (configure doesn't let us override pkgconfig path per lib)
 		if [[ -n "${EPREFIX}" ]]; then
@@ -147,9 +148,9 @@ multilib_src_configure() {
 		$(multilib_native_use_enable openmpi_ofed_features_rdmacm openib-rdmacm) \
 		$(multilib_native_use_enable openmpi_ofed_features_udcm openib-udcm) \
 		$(multilib_native_use_enable openmpi_ofed_features_dynamic-sl openib-dynamic-sl) \
+		$(multilib_native_use_with openmpi_rm_alps alps) \
 		$(multilib_native_use_with openmpi_rm_pbs tm) \
-		$(multilib_native_use_with openmpi_rm_slurm slurm) \
-		$(use_with alps)
+		$(multilib_native_use_with openmpi_rm_slurm slurm)
 }
 
 multilib_src_test() {

@@ -55,7 +55,7 @@ RDEPEND="
 	hypre? ( >=sci-libs/hypre-2.18.0[mpi?,index-64bit=] )
 	parmetis? ( >=sci-libs/parmetis-4[index-64bit=] )
 	!parmetis? ( metis? ( sci-libs/metis ) )
-	mpi? ( virtual/mpi[cxx?,fortran?] )
+	mpi? ( virtual/mpi[fortran?] )
 	mumps? ( sci-libs/mumps[mpi?] sci-libs/scalapack )
 	pastix? ( >=sci-libs/pastix-5[index-64bit=] )
 	scotch? ( sci-libs/scotch[mpi?,index-64bit=] )

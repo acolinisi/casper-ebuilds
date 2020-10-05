@@ -13,7 +13,10 @@ KEYWORDS="~amd64 ~amd64-linux"
 IUSE="cuda openacc"
 
 # TODO: OpenACC deps?
-RDEPEND="cuda? ( dev-util/nvidia-cuda-toolkit )"
+RDEPEND="
+	virtual/mpi
+	cuda? ( dev-util/nvidia-cuda-toolkit )
+	"
 DEPEND="${RDEPEND}"
 
 PATCHES=()

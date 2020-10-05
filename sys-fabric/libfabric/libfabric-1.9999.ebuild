@@ -8,9 +8,18 @@ inherit autotools toolchain-funcs git-r3
 DESCRIPTION="OpenFabrics Interfaces (OFI) framework for exporting fabric communication services to applications"
 HOMEPAGE="http://libfabric.org"
 EGIT_REPO_URI="https://github.com/ofiwg/libfabric.git"
+
+if [[ "$(ver_cut 4 ${PV})" = "p" ]]
+then
+	MY_D="$(ver_cut 5 ${PV})"
+	EGIT_COMMIT_DATE="${MY_D:0:4}-${MY_D:4:2}-${MY_D:6:2}"
+	KEYWORDS="~amd64 ~amd64-linux"
+else # live
+	KEYWORDS=""
+fi
+
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS=""
 # TODO: netdir
 IUSE="bgq debug efa gni mrail perf
 	psm psm2 rstream rxd rxm shm sockets tcp udp

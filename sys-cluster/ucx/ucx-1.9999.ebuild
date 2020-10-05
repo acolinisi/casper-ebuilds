@@ -9,10 +9,18 @@ DESCRIPTION="Unified Communication X"
 HOMEPAGE="http://www.openucx.org"
 EGIT_REPO_URI="https://github.com/openucx/ucx.git"
 
+if [[ "$(ver_cut 4 ${PV})" = "p" ]]
+then
+	MY_D="$(ver_cut 5 ${PV})"
+	EGIT_COMMIT_DATE="${MY_D:0:4}-${MY_D:4:2}-${MY_D:6:2}"
+	KEYWORDS="~amd64 ~amd64-linux"
+else # live
+	KEYWORDS=""
+fi
+
 # subslotted because openmpi needs to be rebuilt when UCX minor changes
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
-KEYWORDS=""
 IUSE="cm cuda debug gdrcopy java knem +numa +openmp rocm rdmacm ugni verbs xpmem"
 
 RDEPEND="

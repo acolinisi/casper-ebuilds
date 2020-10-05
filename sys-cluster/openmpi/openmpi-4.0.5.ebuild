@@ -35,8 +35,8 @@ SRC_URI="http://www.open-mpi.org/software/ompi/v$(ver_cut 1-2)/downloads/${MY_P}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-IUSE="cma cray-pmi cuda cxx debug fortran heterogeneous ipv6 java romio pmi
-	internal_pmix ucx
+IUSE="cma cray-pmi cuda cxx debug fortran heterogeneous ipv6 java mpi1
+	romio pmi internal_pmix ucx
 	${IUSE_OPENMPI_FABRICS} ${IUSE_OPENMPI_RM} ${IUSE_OPENMPI_OFED_FEATURES}"
 
 REQUIRED_USE="
@@ -153,6 +153,7 @@ multilib_src_configure() {
 		$(use_with cma) \
 		$(multilib_native_use_with cuda cuda "${EPREFIX}"/opt/cuda) \
 		$(use_enable debug) \
+		$(use_enable mpi1 mpi1-compatibility) \
 		$(use_enable romio io-romio) \
 		$(use_enable heterogeneous) \
 		$(use_enable ipv6) \

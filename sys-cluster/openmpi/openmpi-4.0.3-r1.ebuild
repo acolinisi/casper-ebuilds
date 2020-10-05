@@ -145,6 +145,8 @@ multilib_src_configure() {
 			--cflags-only-I ${gni_libs[@]})"
 	fi
 
+	unset F77 FFLAGS # configure warns that unused, FC, FCFLAGS is used
+
 	echo LDFLAGS="${LDFLAGS} ${gni_ldflags}"
 	echo CFLAGS="${CFLAGS} ${gni_cflags}"
 	CFLAGS="${CFLAGS} ${gni_cflags}" \

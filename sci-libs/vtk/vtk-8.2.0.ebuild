@@ -73,7 +73,7 @@ RDEPEND="
 	gdal? ( sci-libs/gdal )
 	java? ( >=virtual/jdk-1.7:* )
 	mpi? (
-		virtual/mpi[cxx,romio]
+		virtual/mpi[romio]
 		$(python_gen_cond_dep '
 			python? ( dev-python/mpi4py[${PYTHON_MULTI_USEDEP}] )
 		')

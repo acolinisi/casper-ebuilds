@@ -116,15 +116,6 @@ multilib_src_configure() {
 		export ac_cv_path_JAVAC="$(java-pkg_get-javac) $(java-pkg_javac-args)"
 	fi
 
-	if use openmpi_rm_alps || use openmpi_fabrics_ugni; then
-		# ALPS is provided by the host OS outside of Prefix
-		# (configure doesn't let us override pkgconfig path per lib)
-		if [[ -n "${EPREFIX}" ]]; then
-			PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${EPREFIX}/usr/$(get_libdir)/pkgconfig"
-			PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/$(get_libdir)/pkgconfig"
-			export PKG_CONFIG_PATH
-		fi
-	fi
 	# TODO: libfabric linked against these, but when we link
 	# against libfabric, we fail... should use 'rpath' when building
 	# libfabric

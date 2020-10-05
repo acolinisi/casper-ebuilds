@@ -25,7 +25,7 @@ src_compile() {
 
 src_install() {
 	local libs=(cray-ugni cray-gni-headers cray-xpmem
-		cray-alpsutil cray-alpslli
+		cray-alps cray-alpsutil cray-alpslli
 		cray-udreg cray-wlm_detect
 		cray-pmi cray-rca cray-krca cray-sysutils lsb-cray-hss)
 	for lib in ${libs[@]}

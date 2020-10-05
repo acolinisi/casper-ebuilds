@@ -35,7 +35,7 @@ SRC_URI="http://www.open-mpi.org/software/ompi/v$(ver_cut 1-2)/downloads/${MY_P}
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-IUSE="cma cuda cxx debug fortran heterogeneous ipv6 java romio pmi
+IUSE="cma cray-pmi cuda cxx debug fortran heterogeneous ipv6 java romio pmi
 	internal_pmix ucx
 	${IUSE_OPENMPI_FABRICS} ${IUSE_OPENMPI_RM} ${IUSE_OPENMPI_OFED_FEATURES}"
 
@@ -64,6 +64,7 @@ CDEPEND="
 	openmpi_fabrics_psm? ( sys-fabric/infinipath-psm:* )
 	openmpi_rm_pbs? ( sys-cluster/torque )
 	pmi? ( virtual/pmi )
+	cray-pmi? ( sys-cluster/cray-libs )
 	internal_pmix? ( !sys-cluster/pmix )
 	!internal_pmix? ( sys-cluster/pmix:= )
 	ucx? ( sys-cluster/ucx:= )
@@ -167,6 +168,7 @@ multilib_src_configure() {
 		$(use_enable ipv6) \
 		$(use_with pmi pmi "${EPREFIX}/usr/include") \
 		$(usex pmi --with-pmi-libdir="${EPREFIX}/usr/lib64" "") \
+		$(use_with cray-pmi) \
 		$(usex internal_pmix --with-pmix="internal" --with-pmix="${EPREFIX}/usr" ) \
 		$(use_with ucx ucx "${EPREFIX}/usr") \
 		$(usex ucx --with-ucx-libdir="${EPREFIX}/usr/$(get_libdir)" "") \

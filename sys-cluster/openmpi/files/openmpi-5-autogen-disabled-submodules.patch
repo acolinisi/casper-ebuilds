@@ -1,0 +1,61 @@
+--- a/autogen.pl	2020-10-02 21:56:37.924862410 -0000
++++ b/autogen.pl	2020-10-02 22:06:23.580891935 -0000
+@@ -1200,6 +1200,12 @@
+     $ENV{'AUTOMAKE_JOBS'} = $automake_jobs;
+ }
+ 
++my @enabled_3rdparty_packages = ();
++my @disabled_3rdparty_packages = split(/,/, $no_3rdparty_arg);
++if ($no_prrte_arg) {
++    push(@disabled_3rdparty_packages, "prrte");
++}
++
+ #---------------------------------------------------------------------------
+ 
+ $m4 = "dnl
+@@ -1246,6 +1252,19 @@
+ ++$step;
+ verbose "\n$step. Checking for git submodules\n\n";
+ 
++# For submodules that are 3rd-party packages, return the package name
++sub submodule_to_package {
++    $_[0] =~ m/^3rd-party\/(.*)$/;
++    my $dir = $1;
++    if ("$dir" eq "openpmix") {
++        return "pmix";
++    } elsif ("$dir" ne "") {
++        return "$dir";
++    } else {
++        return "";
++    }
++}
++
+ # Make sure we got a submodule-full clone.  If not, abort and let a
+ # human figure it out.
+ if (-f ".gitmodules") {
+@@ -1261,6 +1280,12 @@
+ 
+         print("=== Submodule: $path\n");
+ 
++        my $pkg = submodule_to_package($path);
++        if ("$pkg" ne "" and "$pkg" ~~ @disabled_3rdparty_packages) {
++            print("    ==> excluded from build\n");
++            next;
++        }
++
+         # Make sure the submodule is there
+         if ($status eq "-") {
+             print("    ==> ERROR: Missing
+@@ -1425,12 +1450,6 @@
+ ++$step;
+ verbose "\n$step. Setup for 3rd-party packages\n";
+ 
+-my @enabled_3rdparty_packages = ();
+-my @disabled_3rdparty_packages = split(/,/, $no_3rdparty_arg);
+-if ($no_prrte_arg) {
+-    push(@disabled_3rdparty_packages, "prrte");
+-}
+-
+ $m4 .= "\n$dnl_line
+ $dnl_line
+ $dnl_line

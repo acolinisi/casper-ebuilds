@@ -1,0 +1,35 @@
+--- a/3rd-party/prrte/src/mca/odls/default/odls_default_module.c	2020-10-05 04:00:31.294674551 -0000
++++ b/3rd-party/prrte/src/mca/odls/default/odls_default_module.c	2020-10-05 04:00:56.774675836 -0000
+@@ -396,6 +396,7 @@
+ #endif
+     }
+ 
++#if 0 /* breaks OFI PML because OFI queries alpslli API for credentials */
+     /* close all open file descriptors w/ exception of stdin/stdout/stderr,
+        the pipe used for the IOF INTERNAL messages, and the pipe up to
+        the parent. */
+@@ -411,6 +412,7 @@
+             }
+         }
+     }
++#endif
+ 
+     if (cd->argv == NULL) {
+         cd->argv = malloc(sizeof(char*)*2);
+--- a/3rd-party/prrte/src/mca/odls/alps/odls_alps_module.c	2020-10-05 05:31:57.210951115 -0000
++++ b/3rd-party/prrte/src/mca/odls/alps/odls_alps_module.c	2020-10-05 05:32:43.022953425 -0000
+@@ -397,12 +397,14 @@
+         }
+     }
+ 
++#if 0 /* breaks OFI PML because OFI queries alpslli API for credentials */
+     if (PRTE_SUCCESS != close_open_file_descriptors(write_fd, cd->opts)) {
+         send_error_show_help(write_fd, 1, "help-prte-odls-alps.txt",
+                              "close fds",
+                              prte_process_info.nodename, cd->app->app,
+                              __FILE__, __LINE__);
+     }
++#endif
+ 
+ 
+     if (cd->argv == NULL) {

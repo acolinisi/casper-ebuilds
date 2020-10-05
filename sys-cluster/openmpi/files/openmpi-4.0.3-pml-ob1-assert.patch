@@ -1,0 +1,14 @@
+--- a/ompi/mca/pml/ob1/pml_ob1_sendreq.h	2020-10-01 20:22:55.000000000 -0000
++++ b/ompi/mca/pml/ob1/pml_ob1_sendreq.h	2020-10-01 20:23:10.000000000 -0000
+@@ -216,7 +216,11 @@
+ {
+     /*  Let the base handle the reference counts */
+     MCA_PML_BASE_SEND_REQUEST_FINI((&(sendreq)->req_send));
++#if 0
+     assert( NULL == sendreq->rdma_frag );
++#else
++    sendreq->rdma_frag = NULL;
++#endif
+ }
+ 
+ /*

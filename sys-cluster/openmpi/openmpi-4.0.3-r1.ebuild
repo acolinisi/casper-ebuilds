@@ -79,6 +79,7 @@ PATCHES=(
 	"${FILESDIR}"/${P}-alps-install.patch
 	"${FILESDIR}"/${P}-alps-cobalt.patch
 	"${FILESDIR}"/${P}-alps-odls-prio.patch
+	#"${FILESDIR}"/${P}-pml-ob1-assert.patch
 )
 
 MULTILIB_WRAPPED_HEADERS=(

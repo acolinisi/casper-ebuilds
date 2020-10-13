@@ -1,2 +1,5 @@
-sys-cluster/openmpi -cxx heterogeneous romio pmi ucx -internal_pmix -openmpi_rm_slurm alps
 virtual/mpi -cxx romio
+sys-cluster/openmpi -cxx heterogeneous romio -pmi -cray-pmi -ucx -internal_pmix -openmpi_rm_slurm openmpi_rm_alps -debug -openmpi_fabrics_ofi openmpi_fabrics_ugni -mpi1
+sys-fabric/libfabric gni -debug -tcp -udp -sockets
+sys-cluster/ucx -debug ugni xpmem
+sys-cluster/pmix -debug

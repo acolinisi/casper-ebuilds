@@ -77,6 +77,7 @@ PATCHES=(
 	"${FILESDIR}"/${P}-try-run-rpath.patch
 	"${FILESDIR}"/${P}-include-alg.patch
 	"${FILESDIR}"/${P}-boost-endian.patch
+	"${FILESDIR}"/${P}-cmake-cross-compile.patch
 )
 
 #pkg_setup() {
@@ -95,6 +96,8 @@ src_configure() {
 	# TODO: reported as unused
 	#-DDOLFIN_ENABLE_VTK="$(usex vtk)"
 	mycmakeargs=(
+		# CROSS_COMPILNG set by profile (see comments there)
+		-DCROSS_COMPILING=${CROSS_COMPILING}
 		-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=OFF
 		-DCMAKE_SKIP_RPATH=ON
 		-DDOLFIN_TRY_RUN_CMAKE_FLAGS="-DCMAKE_SKIP_RPATH:BOOL=ON"

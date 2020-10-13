@@ -116,3 +116,5 @@ dev-libs/libxml2 python
 # which is used by Firedrake benchmarks
 media-gfx/graphviz -cairo
 media-libs/gd fontconfig jpeg png truetype
+
+dev-lang/ghc -profile

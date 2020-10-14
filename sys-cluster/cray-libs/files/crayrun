@@ -1,0 +1,11 @@
+#!@__PREFIX__@/bin/bash
+
+# mpirun needs to talk to ALPS, so it neds to load its libs at runtime
+alps_libs=(@__LIBS__@)
+alps_libs_paths="$(/usr/bin/pkg-config ${alps_libs[@]} --libs-only-L | sed 's/ \?-L/:/g' | cut -d':' -f2- )"
+
+run() {
+	echo "$@"
+	"$@"
+}
+exec env LD_LIBRARY_PATH=${alps_libs_paths} "$@"

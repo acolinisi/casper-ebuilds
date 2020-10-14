@@ -33,4 +33,9 @@ src_install() {
 		dosym /usr/lib64/pkgconfig/${lib}.pc \
 			/usr/$(get_libdir)/pkgconfig/${lib}.pc
 	done
+
+	dobin "${FILESDIR}"/crayrun
+	local expr="s:@__LIBS__@:${libs[@]}:g"
+	sed -i -e "${expr}" -e "s:@__PREFIX__@:${EPREFIX}:g" \
+		${ED}/usr/bin/crayrun
 }

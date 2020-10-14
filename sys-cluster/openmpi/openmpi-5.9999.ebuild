@@ -14,8 +14,12 @@ if [[ "$(ver_cut 4 ${PV})" = "pre" ]]
 then
 	MY_D="$(ver_cut 5 ${PV})"
 	EGIT_COMMIT_DATE="${MY_D:0:4}-${MY_D:4:2}-${MY_D:6:2}"
+	# TODO: will go away once prrte is separate pkg
+	# TODO: doesn't work anyway.... (acknowledged, but not checked out)
+	# EGIT_OVERRIDE_COMMIT_DATE_OPENPMIX_PRRTE=${EGIT_COMMIT_DATE}
 	KEYWORDS="~amd64 ~amd64-linux"
 else # live
+	#EGIT_OVERRIDE_BRANCH_OPENPMIX_PRRTE=master
 	KEYWORDS=""
 fi
 
@@ -125,12 +129,24 @@ my_get_submodule_url()
 }
 
 src_prepare() {
-	# Optional: update prrte submodule to latest
-	local prrte_url="$(my_get_submodule_url prrte)"
+	# Optional: update prrte submodule to latest (regardless of submodule ref)
+	# TODO: this is aggressive, but it will go away once prrte is separate pkg
+	#local prrte_url="$(my_get_submodule_url prrte)"
+	local prrte_url="${EGIT3_STORE_DIR}/openpmix_prrte.git"
 	pushd 3rd-party/prrte
 	my_vrun git remote add up "${prrte_url}"
-	my_vrun git fetch up master
-	my_vrun git reset --hard up/master
+	my_vrun git fetch up
+	if [[ -n "${EGIT_COMMIT}" ]]; then
+		COMMIT=${EGIT_COMMIT}
+	elif [[ -n "${EGIT_COMMIT_DATE}" ]]; then
+		my_vrun git rev-list -1 --before ${EGIT_COMMIT_DATE} up/master
+		COMMIT=$(git rev-list -1 --before ${EGIT_COMMIT_DATE} up/master)
+	else
+		my_vrun git rev-list -1 up/master
+		COMMIT=$(git rev-list -1 up/master)
+	fi
+	my_vrun git fetch up "${COMMIT}" # just in case
+	my_vrun git reset --hard "${COMMIT}"
 	popd
 
 	default

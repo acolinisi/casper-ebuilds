@@ -1,0 +1,12 @@
+--- a/firedrake_suite/pyop2/compilation.py.orig2	2020-10-15 17:00:18.000000000 -0000
++++ b/firedrake_suite/pyop2/compilation.py	2020-10-15 17:13:54.000000000 -0000
+@@ -182,6 +182,9 @@
+         self.comm = compilation_comm(comm)
+         self._cc = os.environ.get(ccenv, cc)
+         self._ld = os.environ.get('LDSHARED', ld)
++        self._ver = os.environ.get('CCVER')
++        if self._ver is not None:
++            Compiler.compiler_versions.setdefault(self._cc, CompilerInfo(self._cc, self._ver))
+         self._cppargs = cppargs + configuration['cflags'].split() + self.workaround_cflags
+         self._ldargs = ldargs + configuration['ldflags'].split()
+ 

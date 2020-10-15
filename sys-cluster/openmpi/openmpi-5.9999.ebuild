@@ -27,7 +27,6 @@ MY_P=${P/-mpi}
 S=${WORKDIR}/${MY_P}
 
 IUSE_OPENMPI_FABRICS="
-	openmpi_fabrics_ofed
 	openmpi_fabrics_knem
 	openmpi_fabrics_ofi
 	openmpi_fabrics_psm
@@ -38,12 +37,6 @@ IUSE_OPENMPI_RM="
 	openmpi_rm_alps
 	openmpi_rm_pbs
 	openmpi_rm_slurm"
-
-IUSE_OPENMPI_OFED_FEATURES="
-	openmpi_ofed_features_control-hdr-padding
-	openmpi_ofed_features_udcm
-	openmpi_ofed_features_rdmacm
-	openmpi_ofed_features_dynamic-sl"
 
 DESCRIPTION="A high-performance message passing library (MPI)"
 HOMEPAGE="http://www.open-mpi.org"
@@ -57,11 +50,6 @@ IUSE="cma cray-pmi cuda debug fortran heterogeneous ipv6 java ltdl +man
 REQUIRED_USE="
 	openmpi_rm_slurm? ( !openmpi_rm_pbs )
 	openmpi_rm_pbs? ( !openmpi_rm_slurm )
-	openmpi_fabrics_psm? ( openmpi_fabrics_ofed )
-	openmpi_ofed_features_control-hdr-padding? ( openmpi_fabrics_ofed )
-	openmpi_ofed_features_udcm? ( openmpi_fabrics_ofed )
-	openmpi_ofed_features_rdmacm? ( openmpi_fabrics_ofed )
-	openmpi_ofed_features_dynamic-sl? ( openmpi_fabrics_ofed )
 	"
 
 # TODO: check whether should depend on subslot of hwloc
@@ -74,7 +62,6 @@ CDEPEND="
 	>=sys-apps/hwloc-2.0.2[${MULTILIB_USEDEP}]
 	>=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
 	cuda? ( >=dev-util/nvidia-cuda-toolkit-6.5.19-r1:= )
-	openmpi_fabrics_ofed? ( sys-fabric/ofed:* )
 	openmpi_fabrics_knem? ( sys-cluster/knem )
 	openmpi_fabrics_ofi? ( sys-fabric/libfabric )
 	openmpi_fabrics_psm? ( sys-fabric/infinipath-psm:* )
@@ -86,7 +73,7 @@ CDEPEND="
 	internal_pmix? ( !sys-cluster/pmix )
 	!internal_pmix? ( >sys-cluster/pmix-3.2.0:= )
 	ucx? ( sys-cluster/ucx:= )
-	openmpi_ofed_features_rdmacm? ( sys-fabric/librdmacm:* )"
+	"
 
 RDEPEND="${CDEPEND}
 	java? ( >=virtual/jre-1.6 )"

@@ -4,7 +4,6 @@ dev-libs/starpu
 sci-mathematics/petsc
 sci-mathematics/slepc
 sci-libs/scalapack
-sci-libs/parmmg
 sci-libs/parmetis
 sci-libs/libsupermesh
 sci-libs/libspatialindex

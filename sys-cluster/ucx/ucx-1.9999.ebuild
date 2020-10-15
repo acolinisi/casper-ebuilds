@@ -21,11 +21,12 @@ fi
 # subslotted because openmpi needs to be rebuilt when UCX minor changes
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
-IUSE="cuda debug gdrcopy java knem +numa +openmp rocm rdmacm ugni verbs xpmem"
+IUSE="cuda debug gdrcopy java knem +numa ofed +openmp rocm rdmacm ugni xpmem"
 
 RDEPEND="
 	sys-libs/binutils-libs:=
 	numa? ( sys-process/numactl )
+	ofed? ( sys-fabric/ofed:* )
 "
 DEPEND="${RDEPEND}"
 
@@ -58,7 +59,7 @@ src_configure() {
 		$(use_with rdmacm) \
 		$(use_with rocm) \
 		$(use_with ugni) \
-		$(use_with verbs) \
+		$(use_with ofed verbs) \
 		$(use_with xpmem)
 }
 

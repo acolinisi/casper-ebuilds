@@ -21,7 +21,7 @@ fi
 # subslotted because openmpi needs to be rebuilt when UCX minor changes
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
-IUSE="cm cuda debug gdrcopy java knem +numa +openmp rocm rdmacm ugni verbs xpmem"
+IUSE="cuda debug gdrcopy java knem +numa +openmp rocm rdmacm ugni verbs xpmem"
 
 RDEPEND="
 	sys-libs/binutils-libs:=
@@ -51,7 +51,6 @@ src_configure() {
 		$(use_enable debug assertions) \
 		$(use_enable numa) \
 		$(use_enable openmp) \
-		$(use_with cm) \
 		$(use_with cuda) \
 		$(use_with gdrcopy) \
 		$(use_with java) \

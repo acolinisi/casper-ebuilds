@@ -22,10 +22,9 @@ BDEPEND="
 	doc? ( >=dev-python/sphinx-1.8[${PYTHON_USEDEP}] )
 	>=dev-python/pytest-4[${PYTHON_USEDEP}]
 	"
+# need numpy headers at compile time
 DEPEND="
 	>=dev-python/cython-0.26[${PYTHON_USEDEP}]
-	"
-RDEPEND="
 	>=dev-python/numpy-1.13[${PYTHON_USEDEP}]
 	"
 

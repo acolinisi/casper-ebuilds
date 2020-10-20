@@ -38,19 +38,24 @@ LIST=
 if [[ "$#" = 0 ]]
 then
 	LIST=1
-elif [[ "$#" -ge 1 ]]
+elif [[ "$#" -ge 2 ]]
 then
-	RE=$1
-	shift
+	RE_INCLUDE=$1
+	RE_EXCLUDE=$2
+	shift 2
 	if [[ "$#" = 0 ]]
 	then
 		LIST=1
 	fi
 fi
 
-if [ -z "${RE}" ]
+if [ -z "${RE_INCLUDE}" ]
 then
-	RE=".*"
+	RE_INCLUDE=".*"
+fi
+if [ -z "${RE_EXCLUDE}" ]
+then
+	RE_EXCLUDE="^$"
 fi
 
 # Don't use find because it swallows return code
@@ -59,7 +64,7 @@ fi
 NUM=0
 for bench in ${DIR}/**/*
 do
-	if [[ -f "${bench}" && -x "${bench}" && "${bench}" =~ ${RE} ]]
+	if [[ -f "${bench}" && -x "${bench}" && "${bench}" =~ ${RE_INCLUDE} && ! "${bench}" =~ ${RE_EXCLUDE} ]]
 	then
 		if [[ -z "${LIST}" ]]
 		then

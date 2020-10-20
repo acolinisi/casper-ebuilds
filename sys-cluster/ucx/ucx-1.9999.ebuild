@@ -21,14 +21,15 @@ fi
 # subslotted because openmpi needs to be rebuilt when UCX minor changes
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
-IUSE="cuda debug gdrcopy java knem +numa ofed +openmp rocm rdmacm ugni xpmem"
+IUSE="cuda debug doc gdrcopy java knem +numa ofed +openmp rocm rdmacm ugni xpmem"
 
 RDEPEND="
 	sys-libs/binutils-libs:=
 	numa? ( sys-process/numactl )
 	ofed? ( sys-fabric/ofed:* )
 "
-DEPEND="${RDEPEND}"
+DEPEND="${RDEPEND}
+	doc? ( app-doc/doxygen )"
 
 src_prepare() {
 	default
@@ -50,6 +51,7 @@ src_configure() {
 		$(use_enable debug) \
 		$(use_enable debug logging) \
 		$(use_enable debug assertions) \
+		$(use_enable doc doxygen-doc) \
 		$(use_enable numa) \
 		$(use_enable openmp) \
 		$(use_with cuda) \

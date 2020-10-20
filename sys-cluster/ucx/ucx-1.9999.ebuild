@@ -21,7 +21,16 @@ fi
 # subslotted because openmpi needs to be rebuilt when UCX minor changes
 SLOT="0/$(ver_cut 1-2)"
 LICENSE="BSD"
-IUSE="cuda debug doc gdrcopy java knem +numa ofed +openmp rocm rdmacm ugni xpmem"
+IUSE_UCX_IB="
+	ucx_ib_cm
+	ucx_ib_rc
+	ucx_ib_ud
+	ucx_ib_dc
+	ucx_ib_mlx5-dv
+	ucx_ib_hw-tm
+	ucx_ib_dm
+"
+IUSE="cuda debug doc gdrcopy java knem +numa ofed +openmp rocm rdmacm ugni xpmem ${IUSE_UCX_IB}"
 
 RDEPEND="
 	sys-libs/binutils-libs:=
@@ -54,6 +63,13 @@ src_configure() {
 		$(use_enable doc doxygen-doc) \
 		$(use_enable numa) \
 		$(use_enable openmp) \
+		$(use_with ucx_ib_cm cm) \
+		$(use_with ucx_ib_rc rc) \
+		$(use_with ucx_ib_ud ud) \
+		$(use_with ucx_ib_dc dc) \
+		$(use_with ucx_ib_mlx5-dv mlx5-dv) \
+		$(use_with ucx_ib_hw-tm ib-hw-tm) \
+		$(use_with ucx_ib_dm dm) \
 		$(use_with cuda) \
 		$(use_with gdrcopy) \
 		$(use_with java) \

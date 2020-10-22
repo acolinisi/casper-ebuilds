@@ -30,12 +30,14 @@ IUSE_UCX_IB="
 	ucx_ib_hw-tm
 	ucx_ib_dm
 "
-IUSE="cuda debug doc gdrcopy java knem +mt +numa ofed +openmp rocm rdmacm ugni xpmem ${IUSE_UCX_IB}"
+IUSE="cuda debug doc gdrcopy java knem +mt +numa +openmp rdma-core rocm rdmacm ugni verbs xpmem ${IUSE_UCX_IB}"
 
 RDEPEND="
 	sys-libs/binutils-libs:=
 	numa? ( sys-process/numactl )
-	ofed? ( sys-fabric/ofed:* )
+	verbs? ( || (
+		sys-fabric/ofed:*
+		sys-cluster/rdma-core:* ) )
 "
 DEPEND="${RDEPEND}
 	doc? ( app-doc/doxygen )"
@@ -78,7 +80,7 @@ src_configure() {
 		$(use_with rdmacm) \
 		$(use_with rocm) \
 		$(use_with ugni) \
-		$(use_with ofed verbs) \
+		$(use_with verbs) \
 		$(use_with xpmem)
 }
 

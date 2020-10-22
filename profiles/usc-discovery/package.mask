@@ -6,3 +6,10 @@ sys-kernel/gentoo-sources
 # Discovery cluster does not use PMIv2 to talk between OpenMPI and SLURM, it
 # uses PMIx (which is an independent package).
 sys-cluster/libmpi2-slurm
+
+# The OFED bundle no longer ships userspace libraries (libibvers, libmlx{4,5},
+# etc), instead they are provided by sys-cluster/rdma-core
+sys-cluster/ofed
+sys-fabric/libmlx4
+sys-fabric/libmlx5
+sys-fabric/libibverbs

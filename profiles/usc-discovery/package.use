@@ -1,4 +1,16 @@
 virtual/mpi -cxx romio
+
 sys-cluster/openmpi -cxx heterogeneous romio -pmi ucx -internal_pmix openmpi_rm_slurm
-sys-cluster/ucx ofed
-sys-fabric/ofed
+
+# Perferred option: use userspace libraries from sys-cluster/rdma-core
+# # Note: must have ucx_ib_mlx5-db (otherwise build fails due to a non-existant
+# header -- looks like an upstream bug); must not have ucx_ib_cm because not
+# shipped in rdma-core (?).
+sys-cluster/ucx mt verbs ucx_ib_rc ucx_ib_ud ucx_ib_dm ucx_ib_hw-tm -ucx_ib_cm ucx_ib_mlx5-dv
+sys-cluster/pmix
+
+
+# Alternative: use libibverbs (and libmlx{4,5}) from OFED bundle
+# This is deprecated, all the userspace libraries moved to rdma-core
+# sys-cluster/ucx mt verbs ucx_ib_rc ucx_ib_ud ucx_ib_dm ucx_ib_hw-tm ucx_ib_cm
+# sys-fabric/ofed

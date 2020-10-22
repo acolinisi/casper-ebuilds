@@ -3,5 +3,13 @@
 #>sys-kernel/vanilla-sources-3.16.82
 sys-kernel/gentoo-sources
 
+
 # On HPCC cluster, need PMI, but it was removed from v5
 >=sys-cluster/openmpi-5
+
+# The OFED bundle no longer ships userspace libraries (libibvers, libmlx{4,5},
+# etc), instead they are provided by sys-cluster/rdma-core
+sys-cluster/ofed
+sys-fabric/libmlx4
+sys-fabric/libmlx5
+sys-fabric/libibverbs

@@ -30,7 +30,7 @@ IUSE_UCX_IB="
 	ucx_ib_hw-tm
 	ucx_ib_dm
 "
-IUSE="cuda debug doc gdrcopy java knem +numa ofed +openmp rocm rdmacm ugni xpmem ${IUSE_UCX_IB}"
+IUSE="cuda debug doc gdrcopy java knem +mt +numa ofed +openmp rocm rdmacm ugni xpmem ${IUSE_UCX_IB}"
 
 RDEPEND="
 	sys-libs/binutils-libs:=
@@ -61,6 +61,7 @@ src_configure() {
 		$(use_enable debug logging) \
 		$(use_enable debug assertions) \
 		$(use_enable doc doxygen-doc) \
+		$(use_enable mt) \
 		$(use_enable numa) \
 		$(use_enable openmp) \
 		$(use_with ucx_ib_cm cm) \

@@ -49,6 +49,7 @@ sys-apps/man-pages
 sys-process/htop
 #dev-vcs/hub
 dev-python/gdown
+sys-devel/gdb
 
 # Useful portage helpers
 app-portage/cpuid2cpuflags

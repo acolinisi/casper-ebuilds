@@ -1,0 +1,7 @@
+>sys-kernel/linux-headers-3.10
+>sys-kernel/vanilla-sources-3.10.0
+#>sys-kernel/vanilla-sources-3.16.82
+sys-kernel/gentoo-sources
+
+# OpenMPI v5.x no longer supports PMI-1/PMI-2
+sys-cluster/libmpi2-slurm

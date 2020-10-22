@@ -3,9 +3,9 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
-inherit cmake-utils python-single-r1 udev systemd
+inherit cmake python-single-r1 udev systemd
 
 DESCRIPTION="Userspace components for the Linux Kernel's drivers/infiniband subsystem"
 HOMEPAGE="https://github.com/linux-rdma/rdma-core"
@@ -15,7 +15,7 @@ if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/linux-rdma/rdma-core"
 else
 	SRC_URI="https://github.com/linux-rdma/rdma-core/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 x86"
+	KEYWORDS="~alpha amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sparc x86"
 fi
 
 LICENSE="|| ( GPL-2 ( CC0-1.0 MIT BSD BSD-with-attribution ) )"
@@ -59,14 +59,14 @@ BDEPEND="virtual/pkgconfig"
 PATCHES=( "${FILESDIR}"/optional_pandoc.patch )
 
 pkg_setup() {
-	python-single-r1_pkg_setup
+	use python && python-single-r1_pkg_setup
 
 }
 
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_SYSCONFDIR=/etc
-		-DCMAKE_INSTALL_FULL_RUNDIR=/run
+		-DCMAKE_INSTALL_RUNDIR=/run
 		-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib
 		-DCMAKE_INSTALL_UDEV_RULESDIR="$(get_udevdir)"/rules.d
 		-DCMAKE_INSTALL_SYSTEMD_SERVICEDIR="$(systemd_get_systemunitdir)"
@@ -84,19 +84,21 @@ src_configure() {
 		mycmakeargs+=( -DNO_PYVERBS=ON )
 	fi
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
-	cmake-utils_src_install
+	cmake_src_install
 
 	udev_dorules "${D}"/etc/udev/rules.d/70-persistent-ipoib.rules
 	rm -r "${D}"/etc/{udev,init.d} || die
 
-	newinitd "${FILESDIR}"/ibacm.init ibacm
+	if use neigh; then
+		newinitd "${FILESDIR}"/ibacm.init ibacm
+	fi
+
 	newinitd "${FILESDIR}"/iwpmd.init iwpmd
 	newinitd "${FILESDIR}"/srpd.init srpd
 
 	use python && python_optimize
-
 }

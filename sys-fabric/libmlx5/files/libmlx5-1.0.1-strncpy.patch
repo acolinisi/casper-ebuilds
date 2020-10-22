@@ -1,0 +1,11 @@
+--- a/src/mlx5.c	2020-10-22 02:55:48.000000000 -0000
++++ b/src/mlx5.c	2020-10-22 02:55:53.000000000 -0000
+@@ -203,7 +203,7 @@
+ 
+ 	env_value = getenv("MLX5_LOCAL_CPUS");
+ 	if (env_value)
+-		strncpy(buf, env_value, sizeof(buf));
++		strncpy(buf, env_value, sizeof(buf) - 1);
+ 	else {
+ 		char fname[MAXPATHLEN];
+ 		FILE *fp;

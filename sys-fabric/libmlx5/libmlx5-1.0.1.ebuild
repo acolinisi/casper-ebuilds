@@ -20,3 +20,8 @@ DEPEND="
 RDEPEND="
 		!sys-fabric/openib-userspace"
 block_other_ofed_versions
+
+src_prepare() {
+	default
+	epatch "${FILESDIR}"/${P}-strncpy.patch
+}

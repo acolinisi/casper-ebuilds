@@ -2,3 +2,6 @@
 >sys-kernel/vanilla-sources-3.10.0
 #>sys-kernel/vanilla-sources-3.16.82
 sys-kernel/gentoo-sources
+
+# On HPCC cluster, need PMI, but it was removed from v5
+>=sys-cluster/openmpi-5

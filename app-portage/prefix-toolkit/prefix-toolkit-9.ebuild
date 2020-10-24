@@ -267,10 +267,17 @@ if [[ -d /proc/registry ]]; then # we're on Cygwin
 	# some Windows programs (e.g. devenv.exe) need TMP or TEMP
 	[[ -n ${TEMP} ]] && RETAIN+=(TEMP=$TEMP)
 fi
-# retain variables optinally listed in a file
-ENV_FILE="${ENV_FILE:-${EPREFIX}/.prefixenv}"
-if [[ -f "${ENV_FILE}" ]]
-then
+# retain variables whose names match patterns listed in a file
+ENV_FILES=(
+	"${EPREFIX}/etc/prefix-tools/prefixenv"
+	"${EPREFIX}/.prefixenv"
+)
+for ENV_FILE in ${ENV_FILES[@]}
+do
+	if [[ ! -f "${ENV_FILE}" ]]
+	then
+		continue
+	fi
 	SET_VARS=( $(env | cut -d'=' -f1) )
 	RETAIN_PATTERNS=( $(cat "${ENV_FILE}" | sed -e '/^#.*/d' -e '/^\s*$/d') )
 
@@ -284,14 +291,14 @@ then
 			fi
 		done
 	done
-fi
+done
 # do it!
 if [[ ${SHELL#${EPREFIX}} != ${SHELL} ]] ; then
 	# interactive if no '-c command' args in $@ (so set --rcfile) and
 	# non-interactive otherwise (so set BASH_ENV); unlike a .bashrc,
 	# which is wanted only for interactive shells, we want our
 	# .prefixrc to be loaded for all shells, including non-interactive
-	RCFILE="${EPREFIX}/.prefixrc"
+	RCFILE="${EPREFIX}/etc/prefix-tools/prefixrc"
         '@GENTOO_PORTAGE_EENV@' -i "${RETAIN[@]}" BASH_ENV="${RCFILE}" \
                 $SHELL --rcfile "${RCFILE}" "$@"
 elif [[ ' bash ' == *" ${SHELL##*/} "* ]] ; then

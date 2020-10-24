@@ -1,5 +1,5 @@
---- a/firedrake_suite/pyop2/compilation.py	2020-10-15 16:53:45.000000000 -0000
-+++ b/firedrake_suite/pyop2/compilation.py	2020-10-15 16:58:53.000000000 -0000
+--- a/pyop2/compilation.py	2020-10-15 16:53:45.000000000 -0000
++++ b/pyop2/compilation.py	2020-10-15 16:58:53.000000000 -0000
 @@ -69,13 +69,13 @@
      except (subprocess.CalledProcessError, UnicodeDecodeError):
          return CompilerInfo("unknown", version.LooseVersion("unknown"))

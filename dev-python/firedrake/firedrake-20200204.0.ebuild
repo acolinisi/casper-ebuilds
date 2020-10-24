@@ -68,8 +68,6 @@ PATCHES=(
 	"${FILESDIR}/${P}-mesh-partitioner-config.patch"
 	"${FILESDIR}/${P}-no-venv.patch"
 	"${FILESDIR}/${P}-no-hdf5.patch"
-	"${FILESDIR}/${P}-sniff-compiler.patch"
-	"${FILESDIR}/${P}-CCVER-var.patch"
 	)
 #"${FILESDIR}/${P}-slot-pypath.patch"
 

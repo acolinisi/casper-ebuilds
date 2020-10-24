@@ -20,7 +20,7 @@ inherit git-r3
 DESCRIPTION="Tools for running commands within Gentoo Prefix"
 HOMEPAGE="https://github.com/ISI-apex/casper-utils"
 SLOT="0"
-LICENSE="GPL"
+LICENSE="GPL-3"
 IUSE=""
 
 S="${WORKDIR}/${P}/prefix-tools"

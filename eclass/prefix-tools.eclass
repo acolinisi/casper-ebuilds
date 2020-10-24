@@ -32,7 +32,7 @@ inherit git-r3
 DESCRIPTION="Tools for running Gentoo Prefix on ${PREFIX_TOOLS_CLUSTER} cluster"
 HOMEPAGE="https://github.com/ISI-apex/casper-utils"
 SLOT="0"
-LICENSE="GPL"
+LICENSE="GPL-3"
 IUSE=""
 
 # TODO: rename bin dir to prefix-tools

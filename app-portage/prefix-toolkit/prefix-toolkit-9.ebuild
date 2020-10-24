@@ -29,6 +29,7 @@ BDEPEND="${DEPEND}
 # fixing all uses that expect them in EPREFIX rather than BROOT.
 # See als: pkg_preinst
 RDEPEND="${DEPEND}
+	app-portage/prefix-tools
 	prefix-stack? (
 		>=sys-apps/baselayout-prefix-2.6
 		sys-devel/gcc-config

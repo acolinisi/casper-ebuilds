@@ -10,10 +10,11 @@ fi
 
 usage()
 {
-	echo "USAGE: $0 [regexp [command [arg...]]]"
+	echo "USAGE: $0 [inculde_regexp exclude_regexp [command [arg...]]]"
 	echo "  Executes given command with args followed by the "
 	echo "  path to benchmark executable for each benchmark "
-	echo "  whose path matches the given regexp."
+	echo "  whose path matches the given include_regexp and does not "
+	echo "  match the given exclude_regexp."
 	echo
 	echo "  If command not given, then list matching benchmarks."
 	echo "  If regexp not given, then list all benchmarks."

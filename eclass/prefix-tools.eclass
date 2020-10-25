@@ -35,8 +35,7 @@ SLOT="0"
 LICENSE="GPL-3"
 IUSE=""
 
-# TODO: rename bin dir to prefix-tools
-S="${WORKDIR}/${P}/bin"
+S="${WORKDIR}/${P}/prefix-tools/clusters"
 
 EXPORT_FUNCTIONS src_install
 

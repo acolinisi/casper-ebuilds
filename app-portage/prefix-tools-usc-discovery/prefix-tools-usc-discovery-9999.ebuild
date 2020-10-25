@@ -8,5 +8,5 @@ inherit prefix-tools
 
 src_install() {
 	prefix-tools_src_install
-	doexe discovery/mpirun
+	doexe usc-discovery/mpirun
 }

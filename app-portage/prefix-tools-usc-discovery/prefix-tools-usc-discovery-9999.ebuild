@@ -4,9 +4,16 @@
 EAPI=7
 
 PREFIX_TOOLS_CLUSTER="USC Discovery"
+MY_CLUSTER="usc-discovery"
 inherit prefix-tools
 
 src_install() {
 	prefix-tools_src_install
-	doexe usc-discovery/mpirun
+	doexe ${MY_CLUSTER}/mpirun
+
+	prefix-tools_config_host_install
+	for b in ${MY_CLUSTER}/host/*; do
+		doexe ${b}
+	done
+	ins ${MY_CLUSTER}/host/pscommon.sh
 }

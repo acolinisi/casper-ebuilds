@@ -15,5 +15,5 @@ src_install() {
 	for b in ${MY_CLUSTER}/host/*; do
 		doexe ${b}
 	done
-	ins ${MY_CLUSTER}/host/pscommon.sh
+	doins ${MY_CLUSTER}/host/pscommon.sh
 }

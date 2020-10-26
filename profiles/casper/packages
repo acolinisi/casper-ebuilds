@@ -18,6 +18,9 @@ sci-libs/scikits_learn
 # For Firedrake benchmarks
 dev-python/pybench
 
+# For testing OpenMPI transports
+app-benchmarks/osu-micro-benchmarks
+
 # System-level stuff
 
 dev-lang/python:3.8

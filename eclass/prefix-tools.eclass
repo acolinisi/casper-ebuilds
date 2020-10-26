@@ -15,6 +15,11 @@
 # @DESCRIPTION: List of supported clusters (suffixes of package names)
 PREFIX_TOOLS_CLUSTERS=(usc-discovery anl-theta)
 
+# @ECLASS-VARIABLE: PREFIX_TOOLS_HOST_DIR
+# @INTERNAL
+# @DESCRIPTION: Installation directory for host-side tools
+PREFIX_TOOLS_HOST_DIR="/ptools"
+
 EGIT_REPO_URI="https://github.com/ISI-apex/casper-utils.git"
 EGIT_SUBMODULES=()
 
@@ -58,6 +63,11 @@ prefix-tools_src_install() {
 	PATH="${EPREFIX}${exec_path}"
 	EOF
 	doenvd "${T}"/01prefix-tools
+}
+
+prefix-tools_config_host_install() {
+	insinto ${PREFIX_TOOLS_HOST_DIR}
+	exeinto ${PREFIX_TOOLS_HOST_DIR}
 }
 
 DEPEND="$(prefix-tools_get_conflicts)"

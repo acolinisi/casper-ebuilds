@@ -40,7 +40,9 @@ src_install() {
 		dobin $f
 	done
 
-	insinto /ptools
+	local ptools_dir=/ptools
+	insinto ${ptools_dir}
+	exeinto ${ptools_dir}
 	doins host/pscommon.sh
 	for f in host/*; do
 		doexe $f

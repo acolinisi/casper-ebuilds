@@ -39,4 +39,10 @@ src_install() {
 	for f in bin/*; do
 		dobin $f
 	done
+
+	insinto /ptools
+	doins host/pscommon.sh
+	for f in host/*; do
+		doexe $f
+	done
 }

@@ -7,6 +7,8 @@ FORTRAN_NEEDED=fortran
 
 inherit cuda flag-o-matic fortran-2 git-r3 java-pkg-opt-2 toolchain-funcs multilib multilib-minimal
 
+MY_UPDATE_PRRTE=
+
 EGIT_REPO_URI="https://github.com/open-mpi/ompi.git"
 EGIT_SUBMODULES=( 'prrte' ) # TODO: until it's a package too
 
@@ -116,25 +118,28 @@ my_get_submodule_url()
 }
 
 src_prepare() {
-	# Optional: update prrte submodule to latest (regardless of submodule ref)
-	# TODO: this is aggressive, but it will go away once prrte is separate pkg
-	#local prrte_url="$(my_get_submodule_url prrte)"
-	local prrte_url="${EGIT3_STORE_DIR}/openpmix_prrte.git"
-	pushd 3rd-party/prrte
-	my_vrun git remote add up "${prrte_url}"
-	my_vrun git fetch up
-	if [[ -n "${EGIT_COMMIT}" ]]; then
-		COMMIT=${EGIT_COMMIT}
-	elif [[ -n "${EGIT_COMMIT_DATE}" ]]; then
-		my_vrun git rev-list -1 --before ${EGIT_COMMIT_DATE} up/master
-		COMMIT=$(git rev-list -1 --before ${EGIT_COMMIT_DATE} up/master)
-	else
-		my_vrun git rev-list -1 up/master
-		COMMIT=$(git rev-list -1 up/master)
+	if [[ -z "${MY_UPDATE_PRRTE}" ]]; then
+		# Update prrte submodule to latest (regardless of submodule ref)
+		# TODO: this is aggressive, but it will go away once prrte is separate pkg
+		# TODO: get the submodule URL, the convert it to EGIT3 src dir
+		#local prrte_url="$(my_get_submodule_url prrte)"
+		local prrte_url="${EGIT3_STORE_DIR}/openpmix_prrte.git"
+		pushd 3rd-party/prrte
+		my_vrun git remote add up "${prrte_url}"
+		my_vrun git fetch up
+		if [[ -n "${EGIT_COMMIT}" ]]; then
+			COMMIT=${EGIT_COMMIT}
+		elif [[ -n "${EGIT_COMMIT_DATE}" ]]; then
+			my_vrun git rev-list -1 --before ${EGIT_COMMIT_DATE} up/master
+			COMMIT=$(git rev-list -1 --before ${EGIT_COMMIT_DATE} up/master)
+		else
+			my_vrun git rev-list -1 up/master
+			COMMIT=$(git rev-list -1 up/master)
+		fi
+		my_vrun git fetch up "${COMMIT}" # just in case
+		my_vrun git reset --hard "${COMMIT}"
+		popd
 	fi
-	my_vrun git fetch up "${COMMIT}" # just in case
-	my_vrun git reset --hard "${COMMIT}"
-	popd
 
 	default
 

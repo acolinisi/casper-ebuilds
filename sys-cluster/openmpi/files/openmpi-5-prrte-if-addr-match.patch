@@ -1,0 +1,74 @@
+--- a/./3rd-party/prrte/src/util/if.h.orig	2020-11-07 07:05:25.000000000 +0000
++++ b/./3rd-party/prrte/src/util/if.h	2020-11-07 07:12:29.000000000 +0000
+@@ -226,6 +226,7 @@
+  * Determine if a specified interface is included in a NULL-terminated argv array
+  */
+ PRTE_EXPORT int prte_ifmatches(int kidx, char **nets);
++PRTE_EXPORT int prte_ifaddrmatches(int kidx, struct sockaddr_storage *ss_addr, char **nets);
+ 
+ /*
+  * Provide a list of strings that contain all known aliases for this node
+--- a/./3rd-party/prrte/src/util/if.c.orig	2020-11-07 07:00:20.000000000 +0000
++++ b/./3rd-party/prrte/src/util/if.c	2020-11-07 07:26:37.000000000 +0000
+@@ -675,6 +675,50 @@
+     return PRTE_ERR_NOT_FOUND;
+ }
+ 
++int prte_ifaddrmatches(int kidx, struct sockaddr_storage *ss_addr, char **nets)
++{
++    bool named_if;
++    int i, rc;
++    size_t j;
++    int kindex;
++    struct sockaddr_in inaddr;
++    uint32_t addr, netaddr, netmask;
++
++    memcpy(&inaddr, ss_addr, sizeof(inaddr));
++    addr = ntohl(inaddr.sin_addr.s_addr);
++
++    for (i=0; NULL != nets[i]; i++) {
++        /* if the specified interface contains letters in it, then it
++         * was given as an interface name and not an IP tuple
++         */
++        named_if = false;
++        for (j=0; j < strlen(nets[i]); j++) {
++            if (isalpha(nets[i][j]) && '.' != nets[i][j]) {
++                named_if = true;
++                break;
++            }
++        }
++        if (named_if) {
++            if (0 > (kindex = prte_ifnametokindex(nets[i]))) {
++                continue;
++            }
++            if (kindex == kidx) {
++                return PRTE_SUCCESS;
++            }
++        } else {
++            if (PRTE_SUCCESS != (rc = prte_iftupletoaddr(nets[i], &netaddr, &netmask))) {
++                prte_show_help("help-prte-util.txt", "invalid-net-mask", true, nets[i]);
++                return rc;
++            }
++            if (netaddr == (addr & netmask)) {
++                return PRTE_SUCCESS;
++            }
++        }
++    }
++    /* get here if not found */
++    return PRTE_ERR_NOT_FOUND;
++}
++
+ void prte_ifgetaliases(char ***aliases)
+ {
+     prte_if_t* intf;
+--- a/./3rd-party/prrte/src/mca/oob/tcp/oob_tcp_component.c.orig	2020-11-07 07:36:16.000000000 +0000
++++ b/./3rd-party/prrte/src/mca/oob/tcp/oob_tcp_component.c	2020-11-07 07:36:21.000000000 +0000
+@@ -520,7 +520,7 @@
+         /* handle include/exclude directives */
+         if (NULL != interfaces) {
+             /* check for match */
+-            rc = prte_ifmatches(kindex, interfaces);
++            rc = prte_ifaddrmatches(kindex, &my_ss, interfaces);
+             /* if one of the network specifications isn't parseable, then
+              * error out as we can't do what was requested
+              */

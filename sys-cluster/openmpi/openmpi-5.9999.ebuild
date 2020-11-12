@@ -84,6 +84,7 @@ DEPEND="${CDEPEND}
 PATCHES=(
 	"${FILESDIR}"/${PN}-5-autogen-disabled-submodules.patch
 	"${FILESDIR}"/${PN}-5-autoconf-alps-cray-release.patch
+	"${FILESDIR}"/${PN}-5-prrte-if-addr-match.patch
 )
 
 MULTILIB_WRAPPED_HEADERS=(

@@ -3,10 +3,5 @@
 
 EAPI=7
 
-PREFIX_TOOLS_CLUSTER="Argonne Theta"
+PREFIX_TOOLS_CLUSTER="anl-theta"
 inherit prefix-tools
-
-src_install() {
-	prefix-tools_src_install
-	doexe anl-theta/mpirun
-}

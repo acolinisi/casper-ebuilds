@@ -8,7 +8,7 @@
 
 # @ECLASS-VARIABLE: PREFIX_TOOLS_CLUSTER
 # @REQUIRED
-# @DESCRIPTION: The name of the cluster that the tools are for (for display)
+# @DESCRIPTION: The name of the cluster that the tools are for
 
 # @ECLASS-VARIABLE: PREFIX_TOOLS_CLUSTERS
 # @INTERNAL
@@ -55,7 +55,19 @@ prefix-tools_get_conflicts() {
 	echo "${conflicts[@]}"
 }
 
+prefix-tools_doexe_dir() {
+	local dir="$1"
+	if [[ -d "${dir}" && -n "$(ls -A "${dir}")" ]]; then
+		for b in ${dir}/*; do
+			doexe ${b}
+		done
+	fi
+}
+
 prefix-tools_src_install() {
+	exeinto ${PREFIX_TOOLS_HOST_DIR}
+	prefix-tools_doexe_dir "${PREFIX_TOOLS_CLUSTER}/host"
+
 	local exec_path="/usr/libexec/prefix-tools/bin"
 	exeinto ${exec_path}
 
@@ -63,11 +75,8 @@ prefix-tools_src_install() {
 	PATH="${EPREFIX}${exec_path}"
 	EOF
 	doenvd "${T}"/01prefix-tools
-}
 
-prefix-tools_config_host_install() {
-	insinto ${PREFIX_TOOLS_HOST_DIR}
-	exeinto ${PREFIX_TOOLS_HOST_DIR}
+	prefix-tools_doexe_dir "${PREFIX_TOOLS_CLUSTER}/prefix"
 }
 
 DEPEND="$(prefix-tools_get_conflicts)"

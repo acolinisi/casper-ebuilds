@@ -10,3 +10,4 @@ amd64-linux casper-usc-discovery-broadwell dev
 amd64-linux casper-usc-discovery-skylake dev
 amd64-linux casper-anl-theta-knl dev
 amd64-linux casper-generic-amd64 dev
+amd64-linux casper-generic-sandybridge dev

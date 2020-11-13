@@ -1,0 +1,16 @@
+--- a/ompi/runtime/ompi_rte.c	2020-11-06 19:37:12.836219221 -0500
++++ b/ompi/runtime/ompi_rte.c	2020-11-06 19:38:52.696311065 -0500
+@@ -675,11 +675,8 @@
+     if (PMIX_SUCCESS == rc && NULL != ev1) {
+         opal_process_info.command = ev1;  // ev1 is an allocated string
+         ev1 = NULL;  // protect the string
+-    } else if (NULL != pargv) {
+-        tmp = *pargv;
+-        if (NULL != tmp) {
+-            opal_process_info.command = opal_argv_join(tmp, ' ');
+-        }
++    } else if (NULL != pargc && *pargc >= 1 && NULL != pargv && NULL != *pargv) {
++        opal_process_info.command = opal_argv_join(*pargv, ' ');
+     }
+ 
+     /* get our reincarnation number */
